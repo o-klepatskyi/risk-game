@@ -154,7 +154,7 @@ public class Menu extends JPanel {
         ImageIcon backgroundImage = new ImageIcon("res/menu_bg.jpg");
         g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
         ImageIcon menuPanel = new ImageIcon("res/woodSign.jpg");
-        g.drawImage(menuPanel.getImage(), 122, 225, 250, 200, null);
+        g.drawImage(menuPanel.getImage(), 125, 225, 250, 200, null);
     }
 
     private void resetButtons() {

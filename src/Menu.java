@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -7,19 +6,74 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class Menu extends JPanel {
-    private final JButton play, multiplayer, rules;
-    private int menuOptionChosen;
-    public Menu(JFrame frame) {
-        final int SIZE = 500;
+    private final JPanel panel;
+    private final JFrame frame;
+    private JButton play, multiplayer, rules;
+    private GridBagConstraints gbc;
 
+    private int menuOptionChosen;
+
+    public Menu(JFrame frame) {
+        this.frame = frame;
+        panel = this;
+
+        initWindow();
+        initButtons(frame);
+        setKeyListener();
+
+        menuOptionChosen = 1;
+        highlightOption(menuOptionChosen);
+    }
+
+    private void initWindow() {
+        setFocusable(true);
+        final int SIZE = 500;
         this.setPreferredSize(new Dimension(SIZE, SIZE));
         setLayout(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints();
+        gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(85, 0, -70, 0);
+    }
 
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        ImageIcon backgroundImage = new ImageIcon("res/menu_bg.jpg");
+        g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+        ImageIcon menuPanel = new ImageIcon("res/woodSign.jpg");
+        g.drawImage(menuPanel.getImage(), 125, 225, 250, 200, null);
+    }
+
+    private void resetButtons() {
+        play.setForeground(Color.WHITE);
+        play.setText("  Play  ");
+
+        multiplayer.setForeground(Color.WHITE);
+        multiplayer.setText("  Multiplayer  ");
+
+        rules.setForeground(Color.WHITE);
+        rules.setText("  Rules  ");
+    }
+
+    private void highlightOption(int option) {
+        resetButtons();
+        switch (option) {
+            case 1:
+                play.setForeground(Color.YELLOW);
+                play.setText("< Play >");
+                break;
+            case 2:
+                multiplayer.setForeground(Color.YELLOW);
+                multiplayer.setText("< Multiplayer >");
+                break;
+            case 3:
+                rules.setForeground(Color.YELLOW);
+                rules.setText("< Rules >");
+        }
+    }
+
+    private void initButtons(JFrame frame) {
         play = new JButton("  Play  ");
         play.setFont(new Font("Arial", Font.PLAIN, 30));
         play.setContentAreaFilled(false);
@@ -29,7 +83,7 @@ public class Menu extends JPanel {
         play.setForeground(Color.WHITE);
         play.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {
-                // TODO
+                gameWindowOpen();
             }
 
             public void mousePressed(MouseEvent e) {
@@ -46,8 +100,7 @@ public class Menu extends JPanel {
             }
 
             public void mouseExited(MouseEvent e) {
-                play.setForeground(Color.WHITE);
-                resetButtons();
+
             }
         });
 
@@ -76,7 +129,7 @@ public class Menu extends JPanel {
             }
 
             public void mouseExited(MouseEvent e) {
-                resetButtons();
+
             }
         });
 
@@ -105,18 +158,18 @@ public class Menu extends JPanel {
             }
 
             public void mouseExited(MouseEvent e) {
-                resetButtons();
+
             }
         });
 
         add(play, gbc);
         add(multiplayer, gbc);
         add(rules, gbc);
+    }
 
-        menuOptionChosen = 1;
-        highlightOption(menuOptionChosen);
 
-        this.addKeyListener(new KeyListener() {
+    private void setKeyListener() {
+        addKeyListener(new KeyListener() {
             public void keyTyped(KeyEvent e) {
 
             }
@@ -138,7 +191,15 @@ public class Menu extends JPanel {
                     highlightOption(menuOptionChosen);
                 }
                 else if(key == KeyEvent.VK_ENTER) {
-                    // TODO
+                    switch(menuOptionChosen){
+                        case 1:
+                            gameWindowOpen();
+                            break;
+                        case 2:
+                            // TODO
+                        case 3:
+                            // TODO
+                    }
                 }
 
             }
@@ -149,38 +210,10 @@ public class Menu extends JPanel {
         });
     }
 
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        ImageIcon backgroundImage = new ImageIcon("res/menu_bg.jpg");
-        g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
-        ImageIcon menuPanel = new ImageIcon("res/woodSign.jpg");
-        g.drawImage(menuPanel.getImage(), 125, 225, 250, 200, null);
-    }
-
-    private void resetButtons() {
-        play.setForeground(Color.WHITE);
-        play.setText("  Play  ");
-
-        multiplayer.setForeground(Color.WHITE);
-        multiplayer.setText("  Multiplayer  ");
-
-        rules.setForeground(Color.WHITE);
-        rules.setText("  Rules  ");
-    }
-
-    private void highlightOption(int option) {
-        resetButtons();
-        if(option == 1) {
-            play.setForeground(Color.YELLOW);
-            play.setText("< Play >");
-        }
-        else if(option == 2) {
-            multiplayer.setForeground(Color.YELLOW);
-            multiplayer.setText("< Multiplayer >");
-        }
-        else if(option == 3) {
-            rules.setForeground(Color.YELLOW);
-            rules.setText("< Rules >");
-        }
+    private void gameWindowOpen() {
+        frame.remove(panel);
+        GameWindow gameWindow = new GameWindow(frame);
+        frame.add(gameWindow);
+        frame.pack();
     }
 }

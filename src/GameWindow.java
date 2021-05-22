@@ -1,3 +1,4 @@
+import javax.print.attribute.standard.JobKOctets;
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,9 +11,10 @@ public class GameWindow extends JPanel {
         JPanel gamePanel = new JPanel();
         gamePanel.setOpaque(true);
         gamePanel.setBackground(Color.WHITE);
-        JPanel gameField = new JPanel();
-        gameField.setOpaque(true);
-        gameField.setBackground(Color.BLUE);
+
+        int mapX = (int) (WIDTH*0.25), mapY = (int) (HEIGHT*0.05);
+        int mapWidth = (int) (WIDTH*0.75), mapHeight = (int) (HEIGHT*0.95);
+        Map map = new Map();
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -45,7 +47,9 @@ public class GameWindow extends JPanel {
 
         gbc.weightx = 0.75;
         gbc.gridx = 1;
-        this.add(gameField, gbc);
+        this.add(map, gbc);
+
 
     }
+
 }

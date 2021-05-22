@@ -4,12 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
 
-public class ColorChooser extends JComboBox<ColorRectangle> {
+public class ColorComboBox extends JComboBox<ColorRectangle> {
     private final int SIZE = PlayerMenu.HEIGHT/10;
 
-    ColorChooser() {
+    ColorComboBox() {
         setSize(SIZE, SIZE);
-        setPreferredSize(new Dimension(SIZE*3,SIZE));
+        setPreferredSize(new Dimension(SIZE+20,SIZE));
         setEditable(false);
         Collection<Color> availableColors = ColorModel.getAvailableColors();
         for (Color color : availableColors) {

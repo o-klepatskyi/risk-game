@@ -8,7 +8,7 @@ public class PlayerPanel extends JPanel {
     private static final int HEIGHT = PlayerMenu.HEIGHT/10;
 
     private PlayerNameField playerNameField;
-    private ColorChooser colorChooser;
+    private ColorComboBox colorComboBox;
 
     PlayerPanel(int playerIndex) {
         setSize(WIDTH, HEIGHT);
@@ -24,7 +24,8 @@ public class PlayerPanel extends JPanel {
         playerNameField.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT-10));
         add(playerNameField);
 
-        colorChooser = new ColorChooser();
-        add(colorChooser);
+        colorComboBox = new ColorComboBox();
+        colorComboBox.setRenderer(new ColorComboBoxRenderer());
+        add(colorComboBox);
     }
 }

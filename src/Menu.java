@@ -11,6 +11,7 @@ public class Menu extends JPanel {
     private JButton play, multiplayer, rules;
     private GridBagConstraints gbc;
 
+    private final int SIZE = 500;
     private int menuOptionChosen;
 
     public Menu(JFrame frame) {
@@ -18,7 +19,7 @@ public class Menu extends JPanel {
         panel = this;
 
         initWindow();
-        initButtons(frame);
+        initButtons();
         setKeyListener();
 
         menuOptionChosen = 1;
@@ -27,7 +28,6 @@ public class Menu extends JPanel {
 
     private void initWindow() {
         setFocusable(true);
-        final int SIZE = 500;
         this.setPreferredSize(new Dimension(SIZE, SIZE));
         setLayout(new GridBagLayout());
 
@@ -42,7 +42,7 @@ public class Menu extends JPanel {
         ImageIcon backgroundImage = new ImageIcon("res/menu_bg.jpg");
         g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
         ImageIcon menuPanel = new ImageIcon("res/woodSign.jpg");
-        g.drawImage(menuPanel.getImage(), 125, 225, 250, 200, null); // TODO remove magic values
+        g.drawImage(menuPanel.getImage(), SIZE/4, SIZE/2 - SIZE/20, SIZE/2, SIZE/2 - SIZE/10, null);
     }
 
     private void resetButtons() {
@@ -73,7 +73,7 @@ public class Menu extends JPanel {
         }
     }
 
-    private void initButtons(JFrame frame) {
+    private void initButtons() {
         play = new JButton("  Play  ");
         play.setFont(new Font("Arial", Font.PLAIN, 30));
         play.setContentAreaFilled(false);
@@ -212,8 +212,8 @@ public class Menu extends JPanel {
 
     private void gameWindowOpen() {
         frame.remove(panel);
-        GameWindow gameWindow = new GameWindow(frame);
-        frame.add(gameWindow);
+        Game game = new Game(null);
+        frame.add(game.getGameWindow());
         frame.pack();
     }
 }

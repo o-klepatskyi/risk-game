@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class Menu extends JPanel {
     private final JPanel panel;
@@ -212,7 +213,12 @@ public class Menu extends JPanel {
 
     private void gameWindowOpen() {
         frame.remove(panel);
-        Game game = new Game(null);
+        ArrayList<Player> players = new ArrayList<>();
+        Player p1 = new Player("Ivan", Color.RED, false);
+        Player p2 = new Player("Oleh", Color.BLUE, false);
+        players.add(p1);
+        players.add(p2);
+        Game game = new Game(players);
         frame.add(game.getGameWindow());
         frame.pack();
     }

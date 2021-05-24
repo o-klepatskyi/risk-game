@@ -1,12 +1,12 @@
-import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Game {
     private final int numberOfTerritories = 42;
-    private int numberOfPlayers;
 
     private ArrayList<Player> players;
+    private int numberOfPlayers;
 
     private ArrayList<Territory> territories;
     private final String[] namesOfTerritories = {
@@ -31,15 +31,17 @@ public class Game {
     private GameWindow gameWindow;
     private Graph gameGraph;
 
+    private final Random rand = new Random();
+
     public Game(ArrayList<Player> players) {
         this.players = players;
-        //numberOfPlayers = players.size();
+        numberOfPlayers = players.size();
 
         initializeTerritories();
         gameGraph = new Graph();
         createGraphFromTerritories();
-        System.out.println(gameGraph);
 
+        distributeTerritories();
         gameWindow = new GameWindow(this);
     }
 
@@ -155,8 +157,56 @@ public class Game {
 
     private void distributeTerritories() {
         int territoriesLeft = numberOfTerritories;
-        for(Player player : players) {
+        for(int i = 0; i < numberOfPlayers; i++) {
+            int playerTeritorriesNumber = numberOfTerritories / numberOfPlayers;
+            int playerTroopsNumber;
+            switch (numberOfPlayers) {
+                case 2:
+                    playerTroopsNumber = 40;
+                    break;
+                case 3:
+                    playerTroopsNumber = 35;
+                    break;
+                case 4:
+                    playerTroopsNumber = 30;
+                    break;
+                case 5:
+                    playerTroopsNumber = 25;
+                    break;
+                case 6:
+                    playerTroopsNumber = 20;
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + numberOfPlayers);
+            }
 
+            int troopsLeft = playerTroopsNumber;
+            if(i == numberOfPlayers-1) {
+                playerTeritorriesNumber = territoriesLeft;
+            }
+            for(int j = 0; j < playerTeritorriesNumber; j++){
+                Territory territory = getRandomTerritory();
+                territory.setOwner(players.get(i));
+                int troopsOnTerritory = getRandomNumberOfTroops(troopsLeft-playerTeritorriesNumber-j);
+                if(j == playerTeritorriesNumber - 1) {
+                    troopsOnTerritory = troopsLeft;
+                }
+                territory.setTroops(troopsOnTerritory);
+                troopsLeft -= troopsOnTerritory;
+                territories.remove(territory);
+            }
+
+            territoriesLeft -= playerTeritorriesNumber;
         }
+    }
+
+    private Territory getRandomTerritory() {
+        return territories.get(rand.nextInt(territories.size()));
+    }
+
+    private int getRandomNumberOfTroops(int troopsLeft) {
+        if(troopsLeft <= 0)
+            return 1;
+        return 1 + rand.nextInt(troopsLeft);
     }
 }

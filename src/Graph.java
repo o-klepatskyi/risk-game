@@ -44,7 +44,11 @@ public class Graph {
         return null;
     }
 
-    public List<Territory> adjacentTerritories(String territoryName) {
+    public ArrayList<Territory> getTerritories() {
+        return new ArrayList<>(map.keySet());
+    }
+
+    public ArrayList<Territory> adjacentTerritories(String territoryName) {
         ArrayList<Territory> adjacencyList = new ArrayList<>();
         Territory territory = getVertex(territoryName);
         if(territory != null && map.containsKey(territory)) {
@@ -53,19 +57,4 @@ public class Graph {
         return null;
     }
 
-    @Override
-    public String toString()
-    {
-        StringBuilder builder = new StringBuilder();
-
-        for (Territory v : map.keySet()) {
-            builder.append(v.getName() + ": ");
-            for (Territory w : map.get(v)) {
-                builder.append(w.getName() + " ");
-            }
-            builder.append("\n");
-        }
-
-        return (builder.toString());
-    }
 }

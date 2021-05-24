@@ -5,13 +5,16 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class Map extends JPanel {
+    private final int BUTTON_WIDTH = 50, BUTTON_HEIGHT = 25;
+    private final int BUTTON_MARGIN_LEFT = 20, BUTTON_MARGIN_TOP = 10;
+    private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
 
     private Game game;
     private ArrayList<JButton> buttons;
     private JPanel panel;
 
-    private final int BUTTON_WIDTH = 50, BUTTON_HEIGHT = 25;
-    private final int BUTTON_MARGIN_LEFT = 20, BUTTON_MARGIN_TOP = 10;
+    private boolean buttonClicked = false;
+    private JButton chosenTerritory;
 
     public Map(Game game) {
         this.setLayout(null);
@@ -20,7 +23,7 @@ public class Map extends JPanel {
 
         setBackground(new Color(0, 145, 182));
         buttons = new ArrayList<>();
-        addButtons();
+        drawField();
     }
 
     protected void paintComponent(Graphics g) {
@@ -29,7 +32,7 @@ public class Map extends JPanel {
         g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
     }
 
-    private void addButtons(){
+    public void drawField(){
         Graph gameGraph = game.getGameGraph();
         ArrayList<Territory> territories = gameGraph.getTerritories();
         for(Territory territory : territories) {
@@ -39,9 +42,88 @@ public class Map extends JPanel {
                     BUTTON_WIDTH, BUTTON_HEIGHT);
             button.setForeground(Color.WHITE);
             button.setBackground(territory.getOwner().getColor());
+            button.setName(territory.getName());
+            button.setFocusPainted(false);
+
             panel.add(button);
             buttons.add(button);
+
+        }
+        addListeners();
+    }
+
+    private void addListeners() {
+        for(JButton button : buttons){
+            button.addMouseListener(new MouseListener() {
+                public void mouseClicked(MouseEvent e) {
+                    if(!buttonClicked) {
+                        highlighttButton(button);
+                    }
+                    else {
+                        if(button.getBackground() == DISABLED_COLOR) {
+                            resetButtons();
+                            highlighttButton(button);
+                        }
+                        else {
+                            if(!button.equals(chosenTerritory))
+                                System.out.println("Attack");
+                            // TODO - attack/cancel
+                        }
+                    }
+                }
+
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                public void mouseEntered(MouseEvent e) {
+                    button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
+                }
+
+                public void mouseExited(MouseEvent e) {
+                    if(!buttonClicked)
+                        resetButtons();
+                    else {
+                        if(!button.equals(chosenTerritory))
+                            button.setBorder(null);
+                    }
+                }
+            });
         }
     }
 
+    private void paintAdjacent(JButton button) {
+        Graph gameGraph = game.getGameGraph();
+        Territory src = gameGraph.getVertex(button.getName());
+        Territory dst;
+        for(JButton b : buttons) {
+            dst = gameGraph.getVertex(b.getName());
+            if(!src.equals(dst)) {
+                if(!gameGraph.hasEdge(src, dst) || button.getBackground().equals(b.getBackground())){
+                    b.setForeground(b.getBackground());
+                    b.setBackground(DISABLED_COLOR);
+                }
+            }
+        }
+    }
+
+    private void resetButtons() {
+        Graph gameGraph = game.getGameGraph();
+        for(JButton b : buttons) {
+            b.setBackground(gameGraph.getVertex(b.getName()).getOwner().getColor());
+            b.setBorder(null);
+            b.setForeground(Color.WHITE);
+        }
+    }
+
+    private void highlighttButton(JButton button) {
+        button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
+        paintAdjacent(button);
+        buttonClicked = true;
+        chosenTerritory = button;
+    }
 }

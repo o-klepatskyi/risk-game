@@ -2,10 +2,10 @@ import java.util.*;
 
 public class Graph {
 
-    private HashMap<Territory, List<Territory>> map = new HashMap<>();
+    private HashMap<Territory, ArrayList<Territory>> map = new HashMap<>();
 
     public void addVertex(Territory s) {
-        map.put(s, new LinkedList<>());
+        map.put(s, new ArrayList<>());
     }
 
     public void addEdge(Territory source, Territory destination) {
@@ -28,6 +28,10 @@ public class Graph {
         return map.get(s).contains(d);
     }
 
+    public boolean hasEdge(String s, String d) {
+        return map.get(getVertex(s)).contains(getVertex(d));
+    }
+
     public Territory getVertex(String territoryName) {
         for(Territory territory : map.keySet()) {
             if(territory.getName().equals(territoryName))
@@ -46,15 +50,6 @@ public class Graph {
 
     public ArrayList<Territory> getTerritories() {
         return new ArrayList<>(map.keySet());
-    }
-
-    public ArrayList<Territory> adjacentTerritories(String territoryName) {
-        ArrayList<Territory> adjacencyList = new ArrayList<>();
-        Territory territory = getVertex(territoryName);
-        if(territory != null && map.containsKey(territory)) {
-            map.get(territory);
-        }
-        return null;
     }
 
 }

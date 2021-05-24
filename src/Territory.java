@@ -60,8 +60,4 @@ public class Territory {
                 Objects.equals(name, territory.name) &&
                 Objects.equals(coordinates, territory.coordinates);
     }
-
-    public int hashCode() {
-        return Objects.hash(troops, owner, name, coordinates);
-    }
 }

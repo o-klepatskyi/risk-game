@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Objects;
 
 public class Player {
     private String name;
@@ -34,4 +35,14 @@ public class Player {
     public void setColor(Color color) {
         this.color = color;
     }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return isBot == player.isBot &&
+                Objects.equals(name, player.name) &&
+                Objects.equals(color, player.color);
+    }
+
 }

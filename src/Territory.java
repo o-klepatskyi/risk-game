@@ -12,6 +12,11 @@ public class Territory {
         this.coordinates = coordinates;
     }
 
+    public Territory(String name, Coordinates coordinates) {
+        this.name = name;
+        this.coordinates = coordinates;
+    }
+
     public int getTroops() {
         return troops;
     }

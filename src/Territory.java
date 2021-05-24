@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Territory {
     private int troops;
     private Player owner;
@@ -47,5 +49,19 @@ public class Territory {
 
     public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Territory territory = (Territory) o;
+        return troops == territory.troops &&
+                Objects.equals(owner, territory.owner) &&
+                Objects.equals(name, territory.name) &&
+                Objects.equals(coordinates, territory.coordinates);
+    }
+
+    public int hashCode() {
+        return Objects.hash(troops, owner, name, coordinates);
     }
 }

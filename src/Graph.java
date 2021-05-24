@@ -36,6 +36,14 @@ public class Graph {
         return null;
     }
 
+    public Territory getVertex(Territory territory) {
+        for(Territory t : map.keySet()) {
+            if(t.equals(territory))
+                return t;
+        }
+        return null;
+    }
+
     public List<Territory> adjacentTerritories(String territoryName) {
         ArrayList<Territory> adjacencyList = new ArrayList<>();
         Territory territory = getVertex(territoryName);

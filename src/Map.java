@@ -5,16 +5,15 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class Map extends JPanel {
-    private final int BUTTON_WIDTH = 50, BUTTON_HEIGHT = 25;
-    private final int BUTTON_MARGIN_LEFT = 20, BUTTON_MARGIN_TOP = 10;
     private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
+    private final int BORDER_MARGIN = 5;
 
-    private Game game;
+    private final Game game;
     private ArrayList<JButton> buttons;
-    private JPanel panel;
+    private final JPanel panel;
 
     private boolean buttonClicked = false;
-    private JButton chosenTerritory;
+    private JButton attack, defend;
 
     public Map(Game game) {
         this.setLayout(null);
@@ -35,10 +34,14 @@ public class Map extends JPanel {
     public void drawField(){
         Graph gameGraph = game.getGameGraph();
         ArrayList<Territory> territories = gameGraph.getTerritories();
+        int BUTTON_WIDTH = 50;
+        int BUTTON_HEIGHT = 25;
+        int BUTTON_MARGIN_LEFT = 20;
+        int BUTTON_MARGIN_TOP = 10;
         for(Territory territory : territories) {
             JButton button = new JButton(String.valueOf(territory.getTroops()));
             Coordinates territoryCoordinates = territory.getCoordinates();
-            button.setBounds(territoryCoordinates.getX()-BUTTON_MARGIN_LEFT, territoryCoordinates.getY()-BUTTON_MARGIN_TOP,
+            button.setBounds(territoryCoordinates.getX()- BUTTON_MARGIN_LEFT, territoryCoordinates.getY()- BUTTON_MARGIN_TOP,
                     BUTTON_WIDTH, BUTTON_HEIGHT);
             button.setForeground(Color.WHITE);
             button.setBackground(territory.getOwner().getColor());
@@ -57,17 +60,29 @@ public class Map extends JPanel {
             button.addMouseListener(new MouseListener() {
                 public void mouseClicked(MouseEvent e) {
                     if(!buttonClicked) {
-                        highlighttButton(button);
+                        highlighButton(button);
                     }
                     else {
                         if(button.getBackground() == DISABLED_COLOR) {
                             resetButtons();
-                            highlighttButton(button);
+                            highlighButton(button);
                         }
                         else {
-                            if(!button.equals(chosenTerritory))
-                                System.out.println("Attack");
-                            // TODO - attack/cancel
+                            if(!button.equals(attack)){
+                                if(defend != null)
+                                    defend.setBorder(null);
+
+                                if(defend != button) {
+                                    defend = button;
+                                    button.setBorder(BorderFactory.createLineBorder(Color.BLACK, BORDER_MARGIN));
+                                }
+                                else {
+                                    button.setBorder(null);
+                                }
+                            }
+                            else {
+                                resetButtons();
+                            }
                         }
                     }
                 }
@@ -81,14 +96,20 @@ public class Map extends JPanel {
                 }
 
                 public void mouseEntered(MouseEvent e) {
-                    button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
+                    if(attack == null || button.getBackground().equals(DISABLED_COLOR)) {
+                        button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
+                    }
+                    else {
+                        if(attack != button)
+                            button.setBorder(BorderFactory.createLineBorder(Color.BLACK, BORDER_MARGIN));
+                    }
                 }
 
                 public void mouseExited(MouseEvent e) {
                     if(!buttonClicked)
                         resetButtons();
                     else {
-                        if(!button.equals(chosenTerritory))
+                        if(!button.equals(attack) && !button.equals(defend))
                             button.setBorder(null);
                     }
                 }
@@ -118,12 +139,15 @@ public class Map extends JPanel {
             b.setBorder(null);
             b.setForeground(Color.WHITE);
         }
+        buttonClicked = false;
+        attack = null;
+        defend = null;
     }
 
-    private void highlighttButton(JButton button) {
-        button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
+    private void highlighButton(JButton button) {
+        button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
         paintAdjacent(button);
         buttonClicked = true;
-        chosenTerritory = button;
+        attack = button;
     }
 }

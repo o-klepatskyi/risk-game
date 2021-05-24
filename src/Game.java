@@ -160,6 +160,7 @@ public class Game {
         for(int i = 0; i < numberOfPlayers; i++) {
             int playerTeritorriesNumber = numberOfTerritories / numberOfPlayers;
             int playerTroopsNumber;
+            ArrayList<Territory> playerTerritories = new ArrayList<>();
             switch (numberOfPlayers) {
                 case 2:
                     playerTroopsNumber = 40;
@@ -180,33 +181,29 @@ public class Game {
                     throw new IllegalStateException("Unexpected value: " + numberOfPlayers);
             }
 
-            int troopsLeft = playerTroopsNumber;
             if(i == numberOfPlayers-1) {
                 playerTeritorriesNumber = territoriesLeft;
             }
+            int troopsLeft = playerTroopsNumber - playerTeritorriesNumber;
             for(int j = 0; j < playerTeritorriesNumber; j++){
-                Territory territory = getRandomTerritory();
+                Territory territory = getRandomTerritory(territories);
                 territory.setOwner(players.get(i));
-                int troopsOnTerritory = getRandomNumberOfTroops(troopsLeft-playerTeritorriesNumber-j);
-                if(j == playerTeritorriesNumber - 1) {
-                    troopsOnTerritory = troopsLeft;
-                }
-                territory.setTroops(troopsOnTerritory);
-                troopsLeft -= troopsOnTerritory;
+                territory.setTroops(1);
+                playerTerritories.add(territory);
                 territories.remove(territory);
+            }
+
+            while(troopsLeft != 0) {
+                Territory territoryToIncrement = getRandomTerritory(playerTerritories);
+                territoryToIncrement.setTroops(territoryToIncrement.getTroops()+1);
+                troopsLeft--;
             }
 
             territoriesLeft -= playerTeritorriesNumber;
         }
     }
 
-    private Territory getRandomTerritory() {
-        return territories.get(rand.nextInt(territories.size()));
-    }
-
-    private int getRandomNumberOfTroops(int troopsLeft) {
-        if(troopsLeft <= 0)
-            return 1;
-        return 1 + rand.nextInt(troopsLeft);
+    private Territory getRandomTerritory(ArrayList<Territory> t) {
+        return t.get(rand.nextInt(t.size()));
     }
 }

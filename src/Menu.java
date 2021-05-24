@@ -218,6 +218,7 @@ public class Menu extends JPanel {
         Player p2 = new Player("Oleh", Color.BLUE, false);
         players.add(p1);
         players.add(p2);
+        //players.add(new Player("Maksim", Color.GREEN, false));
         Game game = new Game(players);
         frame.add(game.getGameWindow());
         frame.pack();

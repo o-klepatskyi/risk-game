@@ -18,9 +18,9 @@ public class Map extends JPanel {
         this.game = game;
         panel = this;
 
+        setBackground(new Color(0, 145, 182));
         buttons = new ArrayList<>();
         addButtons();
-        setBackground(new Color(0, 145, 182));
     }
 
     protected void paintComponent(Graphics g) {

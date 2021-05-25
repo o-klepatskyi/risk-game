@@ -18,28 +18,20 @@ public class HeaderPanel extends JPanel {
         setLayout(new FlowLayout());
         setBackground(new Color(255, 255, 255, 123));
 
-
-
-        JLabel players = new JLabel("Players");
-        players.setFont(FONT);
-        players.setBorder(new BevelBorder(BevelBorder.LOWERED));
-        players.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT-10));
-        add(players);
-
-        JLabel army = new JLabel("Army");
-        army.setFont(FONT);
-        army.setHorizontalAlignment(SwingConstants.CENTER);
-        army.setBorder(new BevelBorder(BevelBorder.LOWERED));
-        army.setPreferredSize(new Dimension(WIDTH / 4 - 10, HEIGHT-10));
-        add(army);
-
-        JLabel bot = new JLabel("Bot?");
-        bot.setFont(FONT);
-        bot.setHorizontalAlignment(SwingConstants.CENTER);
-        bot.setBorder(new BevelBorder(BevelBorder.LOWERED));
-        bot.setPreferredSize(new Dimension(WIDTH / 4 - 10, HEIGHT-10));
-        add(bot);
+        add(getLabel("Players", new Dimension(WIDTH / 2, HEIGHT-10)));
+        add(getLabel("Army",    new Dimension((int) (WIDTH * (3.0 / 16.0)) - 10, HEIGHT-10)));
+        add(getLabel("Bot?",    new Dimension(WIDTH / 8 - 10, HEIGHT-10)));
+        add(getLabel("Remove",  new Dimension((int) (WIDTH * (3.0 / 16.0)) - 10, HEIGHT-10)));
 
         setVisible(true);
+    }
+
+    private JLabel getLabel(String text, Dimension size) {
+        JLabel label = new JLabel(text);
+        label.setFont(FONT);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        label.setPreferredSize(size);
+        return label;
     }
 }

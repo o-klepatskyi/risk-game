@@ -12,11 +12,9 @@ public class PlayerPanel extends JPanel {
     private final PlayerNameField playerNameField;
     private final ColorComboBox colorComboBox;
     private final JCheckBox botCheckBox;
-    private final PlayerMenu parent;
     private static int playerNumber = 1;
 
     PlayerPanel(PlayerMenu parent) {
-        this.parent = parent;
 
         setSize(WIDTH, HEIGHT);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));

@@ -23,11 +23,11 @@ public class ColorComboBox extends JComboBox<Color> implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("actionPerformed " + e.getActionCommand());
+        //System.out.println("actionPerformed " + e.getActionCommand());
         JComboBox cb = (JComboBox)e.getSource();
         Color selectedColor = (Color) cb.getSelectedItem();
-        System.out.println("Selected color: " + selectedColor);
-        System.out.println("Old selected color: " + oldSelectedColor);
+        //System.out.println("Selected color: " + selectedColor);
+        //System.out.println("Old selected color: " + oldSelectedColor);
         Color previousSelectedColor = oldSelectedColor;
         if (selectedColor != null) {
             oldSelectedColor = selectedColor;

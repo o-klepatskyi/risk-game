@@ -30,35 +30,39 @@ public class PlayerMenu extends JPanel {
     }
 
     private void updatePanels() {
-        removeAll();
-
-        add(new HeaderPanel());
-
         if (playerPanels.size() == 0) {
             for (int i = 0; i < MIN_PLAYER_NUMBER; i++) {
                 addPlayerPanel();
             }
 
             ColorModel.updateAll();
-        } else {
-            for (JPanel panel : playerPanels) {
-                add(panel);
-            }
+            updatePanels();
+            return;
+        }
+
+        removeAll();
+
+        add(new HeaderPanel());
+
+        for (JPanel panel : playerPanels) {
+            add(panel);
         }
 
         add(new FooterPanel(this));
+
+        repaint();
     }
 
     private void addPlayerPanel() {
-        PlayerPanel p = new PlayerPanel(currentPlayerNumber);
+        PlayerPanel p = new PlayerPanel(this);
         playerPanels.add(p);
-        add(p);
         currentPlayerNumber++;
+        System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
     }
 
     public void addPlayer() {
-        if (currentPlayerNumber != MAX_PLAYER_NUMBER) {
-            playerPanels.add(new PlayerPanel(currentPlayerNumber++));
+        if (currentPlayerNumber < MAX_PLAYER_NUMBER) {
+            addPlayerPanel();
             updatePanels();
         }
     }
@@ -77,5 +81,15 @@ public class PlayerMenu extends JPanel {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(new PlayerMenu());
         frame.validate();
+    }
+
+    public void removePlayer(Container playerPanel) {
+        if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
+            playerPanels.remove(playerPanel);
+            playerPanel.setVisible(false);
+            updatePanels();
+            currentPlayerNumber--;
+            System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
+        }
     }
 }

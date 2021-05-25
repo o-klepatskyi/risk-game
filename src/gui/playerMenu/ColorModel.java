@@ -30,8 +30,8 @@ public class ColorModel {
     }
 
     public static void chooseColor(Color newColor, Color oldColor) {
-        System.out.println("chooseColor");
-        System.out.println(availableColors);
+        //System.out.println("chooseColor");
+        //System.out.println(availableColors);
         if (availableColors.contains(newColor)
                 && colors.contains(oldColor)
                 && !newColor.equals(oldColor)) {
@@ -43,16 +43,16 @@ public class ColorModel {
     }
 
     public static void chooseColor(Color newColor) {
-        System.out.println("choose color");
-        System.out.println(availableColors);
+        //System.out.println("choose color");
+        //System.out.println(availableColors);
         availableColors.remove(newColor);
     }
 
     public static void update(ColorComboBox comboBox) {
-        System.out.println("update");
-        System.out.println("remove all");
+        //System.out.println("update");
+        //System.out.println("remove all");
         comboBox.removeAllItems();
-        System.out.println("addItem");
+        //System.out.println("addItem");
         comboBox.addItem(comboBox.getOldSelectedItem());
         for (Color c : availableColors) {
             comboBox.addItem(c);
@@ -60,20 +60,27 @@ public class ColorModel {
     }
 
     public static void updateAll() {
-        System.out.println("updateAll");
-        System.out.println(availableColors);
+       // System.out.println("updateAll");
+        //System.out.println(availableColors);
         for (ColorComboBox cb : comboBoxes) {
             update(cb);
         }
     }
 
     public static void addComboBox(ColorComboBox cb) {
-        System.out.println("addComboBox");
+        //System.out.println("addComboBox");
         if (colors.size() == comboBoxes.size()) {
             return;
         }
         cb.addActionListener(cb);
         comboBoxes.add(cb);
         updateAll();
+    }
+
+    public static void addColorToAvailable(Color color) {
+        if (colors.contains(color) && !availableColors.contains(color)) {
+            availableColors.add(color);
+            updateAll();
+        }
     }
 }

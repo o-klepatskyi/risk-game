@@ -7,15 +7,22 @@ import java.util.Collection;
 
 public class ColorModel {
     private static ArrayList<Color> colors = new ArrayList<>(Arrays.asList(
-            new Color(0,0,0),
-            new Color(255, 255, 255),
-            new Color(255,0,0),
-            new Color(0, 0, 255),
-            new Color(255, 255, 0),
-            new Color(20, 255,0)
+            new PlayerColor(0,0,0, "black"),
+            new PlayerColor(255, 255, 255, "white"),
+            new PlayerColor(255,0,0, "red"),
+            new PlayerColor(0, 0, 255, "blue"),
+            new PlayerColor(255, 255, 0, "yellow"),
+            new PlayerColor(20, 255,0, "green")
     ));
 
-    private static ArrayList<Color> availableColors = new ArrayList<>(colors);
+//            new Color(0,0,0),
+//            new Color(255, 255, 255),
+//            new Color(255,0,0),
+//            new Color(0, 0, 255),
+//            new Color(255, 255, 0),
+//            new Color(20, 255,0)
+
+    private static final ArrayList<Color> availableColors = new ArrayList<>(colors);
 
     public static Collection<Color> getAvailableColors() {
         return availableColors;

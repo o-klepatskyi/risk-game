@@ -25,7 +25,8 @@ public class PlayerPanel extends JPanel {
         add(playerNameField);
 
         colorComboBox = new ColorComboBox();
-        //colorComboBox.setRenderer(new ColorComboBoxRenderer());
+
         add(colorComboBox);
+        ColorModel.addComboBox(colorComboBox);
     }
 }

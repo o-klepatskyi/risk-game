@@ -10,6 +10,7 @@ public class PlayerColor extends Color {
 
     public PlayerColor(int r, int g, int b, String colorName) {
         super(r, g, b);
+        this.colorName = colorName;
     }
 
     @Override

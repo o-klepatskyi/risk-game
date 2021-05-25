@@ -10,7 +10,7 @@ public class PlayerMenu extends JPanel {
 
     public static final int WIDTH = 800;
     public static final int HEIGHT = 450;
-    private int playerNumber = 2;
+    private int playerNumber = 3; // can not be bigger than ColorModel availableColors length
     private final ArrayList<PlayerPanel> panels = new ArrayList<>();
 
     public PlayerMenu() {
@@ -26,6 +26,7 @@ public class PlayerMenu extends JPanel {
             panels.add(p);
             add(p);
         }
+        ColorModel.updateAll();
     }
 
     @Override

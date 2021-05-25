@@ -7,9 +7,9 @@ public class PlayerPanel extends JPanel {
     private static final int WIDTH = PlayerMenu.WIDTH-50;
     private static final int HEIGHT = PlayerMenu.HEIGHT/10;
 
-    private PlayerNameField playerNameField;
-    private ColorComboBox colorComboBox;
-    private JCheckBox botCheckBox;
+    private final PlayerNameField playerNameField;
+    private final ColorComboBox colorComboBox;
+    private final JCheckBox botCheckBox;
 
     PlayerPanel(int playerIndex) {
         setSize(WIDTH, HEIGHT);
@@ -31,9 +31,9 @@ public class PlayerPanel extends JPanel {
         add(colorComboBox);
         ColorModel.addComboBox(colorComboBox);
 
+        // TODO: make checkboxes bigger
         botCheckBox = new JCheckBox();
         botCheckBox.setOpaque(false);
-        //botCheckBox.setBackground(new Color(255, 255, 255, 123));
         botCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
         botCheckBox.setPreferredSize(new Dimension(WIDTH / 4 - 10, HEIGHT - 10));
         add(botCheckBox);

@@ -16,8 +16,6 @@ public class HeaderPanel extends JPanel {
         setMaximumSize(new Dimension(WIDTH, HEIGHT));
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setLayout(new FlowLayout());
-        setAlignmentX(0.5f);
-        setVisible(true);
         setBackground(new Color(255, 255, 255, 123));
 
 
@@ -41,5 +39,7 @@ public class HeaderPanel extends JPanel {
         bot.setBorder(new BevelBorder(BevelBorder.LOWERED));
         bot.setPreferredSize(new Dimension(WIDTH / 4 - 10, HEIGHT-10));
         add(bot);
+
+        setVisible(true);
     }
 }

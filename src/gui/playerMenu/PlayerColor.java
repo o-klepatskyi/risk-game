@@ -1,10 +1,7 @@
 package gui.playerMenu;
 
 import java.awt.*;
-
-
-// TODO: temporary class
-
+// TODO: add photos to colors in comboboxes
 public class PlayerColor extends Color {
     private String colorName;
 

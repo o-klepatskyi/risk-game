@@ -17,7 +17,7 @@ public class PlayerPanel extends JPanel {
         setMaximumSize(new Dimension(WIDTH, HEIGHT));
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setLayout(new FlowLayout());
-        setOpaque(true);
+        setOpaque(false);
         setBackground(new Color(255, 255, 255, 123));
 
 
@@ -32,12 +32,20 @@ public class PlayerPanel extends JPanel {
         ColorModel.addComboBox(colorComboBox);
 
         botCheckBox = new JCheckBox();
-        botCheckBox.setOpaque(true);
+        botCheckBox.setOpaque(false);
+        //botCheckBox.setBackground(new Color(255, 255, 255, 123));
         botCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
         botCheckBox.setPreferredSize(new Dimension(WIDTH / 4 - 10, HEIGHT - 10));
         add(botCheckBox);
 
         validate();
         setVisible(true);
+    }
+
+    protected void paintComponent(Graphics g)
+    {
+        g.setColor( getBackground() );
+        g.fillRect(0, 0, getWidth(), getHeight());
+        super.paintComponent(g);
     }
 }

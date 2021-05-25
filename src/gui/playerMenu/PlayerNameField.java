@@ -14,7 +14,9 @@ class PlayerNameField extends HintTextField {
 
     public PlayerNameField(final String hint) {
         super(hint);
-        setForeground(HINT_TEXT_COLOR);
+        // uncomment all lines to make this field nontransparent
+        //setForeground(HINT_TEXT_COLOR);
+        //setOpaque(false);
         setFont(FONT);
         setDocument(new PlainDocument() {
             @Override
@@ -32,23 +34,23 @@ class PlayerNameField extends HintTextField {
 
 
 
-    @Override
-    public void focusGained(FocusEvent e) {
-        if(this.getText().isEmpty()) {
-            super.setText("");
-            showingHint = false;
-            setForeground(REGULAR_TEXT_COLOR);
-        }
-    }
-
-    @Override
-    public void focusLost(FocusEvent e) {
-        if(this.getText().isEmpty()) {
-            super.setText(hint);
-            showingHint = true;
-            setForeground(HINT_TEXT_COLOR);
-        }
-    }
+//    @Override
+//    public void focusGained(FocusEvent e) {
+//        if(this.getText().isEmpty()) {
+//            super.setText("");
+//            showingHint = false;
+//            setForeground(REGULAR_TEXT_COLOR);
+//        }
+//    }
+//
+//    @Override
+//    public void focusLost(FocusEvent e) {
+//        if(this.getText().isEmpty()) {
+//            super.setText(hint);
+//            showingHint = true;
+//            setForeground(HINT_TEXT_COLOR);
+//        }
+//    }
 
     private static final Color REGULAR_TEXT_COLOR = new Color(0, 0, 0);
     private static final Color HINT_TEXT_COLOR = new Color(179, 179, 179);

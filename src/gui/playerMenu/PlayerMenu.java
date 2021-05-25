@@ -10,7 +10,7 @@ public class PlayerMenu extends JPanel {
 
     public static final int WIDTH = 800;
     public static final int HEIGHT = 450;
-    private int playerNumber = 6; // can not be bigger than ColorModel availableColors length
+    private final int MAX_PLAYER_NUMBER = 6; // can not be bigger than ColorModel availableColors length
     private final ArrayList<PlayerPanel> panels = new ArrayList<>();
 
     public PlayerMenu() {
@@ -22,13 +22,16 @@ public class PlayerMenu extends JPanel {
         setLayout(new FlowLayout());
         setOpaque(true);
         add(new HeaderPanel());
-        for (int i = 0; i < playerNumber; i++) {
+        for (int i = 0; i < 2; i++) {
             PlayerPanel p = new PlayerPanel(i);
             panels.add(p);
             add(p);
         }
         ColorModel.updateAll();
+        validate();
+        setVisible(true);
     }
+
 
     @Override
     public void paintComponent(Graphics g) {

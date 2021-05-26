@@ -37,11 +37,8 @@ class PlayerPanel extends JPanel {
         add(colorComboBox);
         ColorModel.addComboBox(colorComboBox);
 
-        // TODO: make checkboxes bigger
-        botCheckBox = new JCheckBox();
-        botCheckBox.setOpaque(false);
-        botCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
-        botCheckBox.setPreferredSize(new Dimension(WIDTH / 8 - 20, HEIGHT - 10));
+
+        botCheckBox = new JCheckBoxCustomIcon(WIDTH / 8 - 20,HEIGHT - 10);
         add(botCheckBox);
 
 

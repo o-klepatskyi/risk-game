@@ -83,12 +83,13 @@ public class PlayerMenu extends JPanel {
         frame.validate();
     }
 
-    public void removePlayer(Container playerPanel) {
+    public void removePlayer(PlayerPanel playerPanel) {
         if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
             playerPanels.remove(playerPanel);
             playerPanel.setVisible(false);
             updatePanels();
             currentPlayerNumber--;
+            ColorModel.removeComboBox(playerPanel.getColorComboBox());
             System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
         }
     }

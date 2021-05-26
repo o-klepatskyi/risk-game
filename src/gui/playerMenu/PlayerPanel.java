@@ -46,13 +46,12 @@ public class PlayerPanel extends JPanel {
         JButton removePlayerButton = new JButton("Remove player");
         removePlayerButton.setHorizontalAlignment(SwingConstants.CENTER);
         removePlayerButton.setPreferredSize(new Dimension((int) (WIDTH * (3.0 / 16.0)), HEIGHT - 10));
-        JPanel currentPanel = this;
+        PlayerPanel currentPanel = this;
         removePlayerButton.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
                 parent.removePlayer(currentPanel);
-                ColorModel.removeComboBox(colorComboBox);
             }
         });
         add(removePlayerButton);
@@ -65,5 +64,9 @@ public class PlayerPanel extends JPanel {
         g.setColor( getBackground() );
         g.fillRect(0, 0, getWidth(), getHeight());
         super.paintComponent(g);
+    }
+
+    public ColorComboBox getColorComboBox() {
+        return colorComboBox;
     }
 }

@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class PlayerPanel extends JPanel {
+class PlayerPanel extends JPanel {
     private static final int WIDTH = PlayerMenu.WIDTH-50;
     private static final int HEIGHT = PlayerMenu.HEIGHT/10;
 

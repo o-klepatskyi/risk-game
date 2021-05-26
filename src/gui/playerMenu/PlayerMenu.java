@@ -3,7 +3,7 @@ package gui.playerMenu;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-
+// TODO: what to do with names and incrementing values in players' names?
 public class PlayerMenu extends JPanel {
     private final Image bgImg = new ImageIcon("res/player-menu-bg-800-450.jpg").getImage();
 

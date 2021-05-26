@@ -1,11 +1,13 @@
 package gui.playerMenu;
 
+import gui.PlayerColor;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
+class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
     private final int SIZE = PlayerMenu.HEIGHT/10;
     private PlayerColor oldSelectedColor;
 

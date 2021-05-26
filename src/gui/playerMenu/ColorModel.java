@@ -1,12 +1,15 @@
 package gui.playerMenu;
 
+import gui.PlayerColor;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class ColorModel {
-    private static ArrayList<PlayerColor> colors = new ArrayList<>(Arrays.asList(
+class ColorModel {
+
+    private static final ArrayList<PlayerColor> colors = new ArrayList<>(Arrays.asList(
             new PlayerColor(0,0,0, "black"),
             new PlayerColor(255, 255, 255, "white"),
             new PlayerColor(255,0,0, "red"),
@@ -14,13 +17,6 @@ public class ColorModel {
             new PlayerColor(255, 255, 0, "yellow"),
             new PlayerColor(20, 255,0, "green")
     ));
-
-//            new Color(0,0,0),
-//            new Color(255, 255, 255),
-//            new Color(255,0,0),
-//            new Color(0, 0, 255),
-//            new Color(255, 255, 0),
-//            new Color(20, 255,0)
 
     private static final ArrayList<PlayerColor> availableColors = new ArrayList<>(colors);
     private static final ArrayList<ColorComboBox> comboBoxes = new ArrayList<>();
@@ -30,8 +26,6 @@ public class ColorModel {
     }
 
     public static void chooseColor(PlayerColor newColor, PlayerColor oldColor) {
-        //System.out.println("chooseColor");
-        //System.out.println(availableColors);
         if (availableColors.contains(newColor)
                 && colors.contains(oldColor)
                 && !newColor.equals(oldColor)) {
@@ -43,16 +37,11 @@ public class ColorModel {
     }
 
     public static void chooseColor(Color newColor) {
-        //System.out.println("choose color");
-        //System.out.println(availableColors);
         availableColors.remove(newColor);
     }
 
     public static void update(ColorComboBox comboBox) {
-        //System.out.println("update");
-        //System.out.println("remove all");
         comboBox.removeAllItems();
-        //System.out.println("addItem");
         comboBox.addItem(comboBox.getOldSelectedItem());
         for (PlayerColor c : availableColors) {
             comboBox.addItem(c);
@@ -60,8 +49,6 @@ public class ColorModel {
     }
 
     public static void updateAll() {
-       // System.out.println("updateAll");
-        //System.out.println(availableColors);
         for (ColorComboBox cb : comboBoxes) {
             update(cb);
         }

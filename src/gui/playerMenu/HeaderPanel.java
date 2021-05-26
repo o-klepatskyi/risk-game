@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 
-public class HeaderPanel extends JPanel {
+class HeaderPanel extends JPanel {
 
     private static final int WIDTH = PlayerMenu.WIDTH-50;
     private static final int HEIGHT = PlayerMenu.HEIGHT/10;

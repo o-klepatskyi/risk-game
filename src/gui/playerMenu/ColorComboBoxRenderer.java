@@ -31,6 +31,8 @@ package gui.playerMenu;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import gui.PlayerColor;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;

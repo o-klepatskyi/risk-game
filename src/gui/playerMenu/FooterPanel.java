@@ -5,11 +5,10 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class FooterPanel extends JPanel {
+class FooterPanel extends JPanel {
 
     private static final int WIDTH = PlayerMenu.WIDTH-50;
     private static final int HEIGHT = PlayerMenu.HEIGHT/10;
-    //private static final Font FONT = new Font("Arial", Font.BOLD, 25);
 
     private JButton addPlayerButton;
     private JButton startButton;

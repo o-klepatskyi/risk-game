@@ -1,4 +1,4 @@
-package gui.playerMenu;
+package gui;
 
 import javax.swing.*;
 import java.awt.*;

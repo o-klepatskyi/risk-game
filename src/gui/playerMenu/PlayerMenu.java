@@ -13,6 +13,8 @@ public class PlayerMenu extends JPanel {
     private final int MIN_PLAYER_NUMBER = 2;
     private int currentPlayerNumber = 0;
     private final ArrayList<PlayerPanel> playerPanels = new ArrayList<>();
+    private final FooterPanel fp = new FooterPanel(this);
+    private final HeaderPanel hp = new HeaderPanel();
 
     public PlayerMenu() {
         Dimension size = new Dimension(WIDTH, HEIGHT);
@@ -42,13 +44,18 @@ public class PlayerMenu extends JPanel {
 
         removeAll();
 
-        add(new HeaderPanel());
+        add(hp);
 
         for (JPanel panel : playerPanels) {
             add(panel);
         }
 
-        add(new FooterPanel(this));
+        if (currentPlayerNumber == MAX_PLAYER_NUMBER) {
+            fp.getAddPlayerButton().setEnabled(false);
+        } else {
+            fp.getAddPlayerButton().setEnabled(true);
+        }
+        add(fp);
 
         repaint();
     }
@@ -57,7 +64,6 @@ public class PlayerMenu extends JPanel {
         PlayerPanel p = new PlayerPanel(this);
         playerPanels.add(p);
         currentPlayerNumber++;
-        System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
     }
 
     public void addPlayer() {
@@ -85,10 +91,10 @@ public class PlayerMenu extends JPanel {
 
     public void removePlayer(PlayerPanel playerPanel) {
         if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
+            currentPlayerNumber--;
             playerPanels.remove(playerPanel);
             playerPanel.setVisible(false);
             updatePanels();
-            currentPlayerNumber--;
             ColorModel.removeComboBox(playerPanel.getColorComboBox());
             System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
         }

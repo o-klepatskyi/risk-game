@@ -31,7 +31,7 @@ public class FooterPanel extends JPanel {
         setVisible(true);
     }
 
-    private JButton getAddPlayerButton() {
+    public JButton getAddPlayerButton() {
         if (addPlayerButton == null) {
             addPlayerButton = new JButton("Add player");
             addPlayerButton.setPreferredSize(new Dimension(WIDTH/4, HEIGHT-10));
@@ -45,7 +45,7 @@ public class FooterPanel extends JPanel {
         return addPlayerButton;
     }
 
-    private JButton getStartButton() {
+    public JButton getStartButton() {
         if (startButton == null) {
             startButton = new JButton("Start game");
             startButton.setPreferredSize(new Dimension(WIDTH/4, HEIGHT-10));

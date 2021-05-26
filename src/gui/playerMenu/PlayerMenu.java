@@ -32,6 +32,7 @@ public class PlayerMenu extends JPanel {
     }
 
     private void updatePanels() {
+        // initial adding 2 player panels
         if (playerPanels.size() == 0) {
             for (int i = 0; i < MIN_PLAYER_NUMBER; i++) {
                 addPlayerPanel();
@@ -46,7 +47,13 @@ public class PlayerMenu extends JPanel {
 
         add(hp);
 
-        for (JPanel panel : playerPanels) {
+        for (PlayerPanel panel : playerPanels) {
+            if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
+                panel.getRemovePlayerButton().setEnabled(true);
+            }
+            if (currentPlayerNumber == MIN_PLAYER_NUMBER) {
+                panel.getRemovePlayerButton().setEnabled(false);
+            }
             add(panel);
         }
 
@@ -55,27 +62,40 @@ public class PlayerMenu extends JPanel {
         } else {
             fp.getAddPlayerButton().setEnabled(true);
         }
+
         add(fp);
 
         repaint();
+    }
+
+
+    public void addPlayer() {
+        if (currentPlayerNumber < MAX_PLAYER_NUMBER) {
+            addPlayerPanel();
+            updatePanels();
+            System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
+        }
     }
 
     private void addPlayerPanel() {
         PlayerPanel p = new PlayerPanel(this);
         playerPanels.add(p);
         currentPlayerNumber++;
-        if (currentPlayerNumber == MIN_PLAYER_NUMBER + 1) {
-            for (PlayerPanel pp : playerPanels) {
-                pp.getRemovePlayerButton().setEnabled(true);
-            }
+    }
+
+    public void removePlayer(PlayerPanel playerPanel) {
+        if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
+            removePlayerPanel(playerPanel);
+            updatePanels();
+            System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
         }
     }
 
-    public void addPlayer() {
-        if (currentPlayerNumber < MAX_PLAYER_NUMBER) {
-            addPlayerPanel();
-            updatePanels();
-        }
+    private void removePlayerPanel(PlayerPanel playerPanel) {
+        currentPlayerNumber--;
+        playerPanels.remove(playerPanel);
+        playerPanel.setVisible(false);
+        ColorModel.removeComboBox(playerPanel.getColorComboBox());
     }
 
     @Override
@@ -92,21 +112,5 @@ public class PlayerMenu extends JPanel {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(new PlayerMenu());
         frame.validate();
-    }
-
-    public void removePlayer(PlayerPanel playerPanel) {
-        if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
-            currentPlayerNumber--;
-            playerPanels.remove(playerPanel);
-            playerPanel.setVisible(false);
-            updatePanels();
-            ColorModel.removeComboBox(playerPanel.getColorComboBox());
-            System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
-            if (currentPlayerNumber == MIN_PLAYER_NUMBER) {
-                for (PlayerPanel pp : playerPanels) {
-                    pp.getRemovePlayerButton().setEnabled(false);
-                }
-            }
-        }
     }
 }

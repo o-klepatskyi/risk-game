@@ -31,7 +31,8 @@ public class PlayerPanel extends JPanel {
 
         colorComboBox = new ColorComboBox();
         colorComboBox.setPreferredSize(new Dimension((int) (WIDTH * (3.0 / 16.0)), HEIGHT - 10));
-        colorComboBox.setOpaque(true);
+        //colorComboBox.setOpaque(true);
+        colorComboBox.setRenderer(new ColorComboBoxRenderer());
         add(colorComboBox);
         ColorModel.addComboBox(colorComboBox);
 
@@ -51,7 +52,7 @@ public class PlayerPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 parent.removePlayer(currentPanel);
-                ColorModel.addColorToAvailable(colorComboBox.getOldSelectedItem());
+                ColorModel.removeComboBox(colorComboBox);
             }
         });
         add(removePlayerButton);

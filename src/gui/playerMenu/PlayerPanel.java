@@ -12,10 +12,12 @@ public class PlayerPanel extends JPanel {
     private final PlayerNameField playerNameField;
     private final ColorComboBox colorComboBox;
     private final JCheckBox botCheckBox;
+    private JButton removePlayerButton;
     private static int playerNumber = 1;
+    private PlayerMenu parent;
 
     PlayerPanel(PlayerMenu parent) {
-
+        this.parent = parent;
         setSize(WIDTH, HEIGHT);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setMaximumSize(new Dimension(WIDTH, HEIGHT));
@@ -43,18 +45,8 @@ public class PlayerPanel extends JPanel {
         botCheckBox.setPreferredSize(new Dimension(WIDTH / 8 - 20, HEIGHT - 10));
         add(botCheckBox);
 
-        JButton removePlayerButton = new JButton("Remove player");
-        removePlayerButton.setHorizontalAlignment(SwingConstants.CENTER);
-        removePlayerButton.setPreferredSize(new Dimension((int) (WIDTH * (3.0 / 16.0)), HEIGHT - 10));
-        PlayerPanel currentPanel = this;
-        removePlayerButton.addMouseListener(new MouseAdapter() {
 
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                parent.removePlayer(currentPanel);
-            }
-        });
-        add(removePlayerButton);
+        add(getRemovePlayerButton());
         validate();
         setVisible(true);
     }
@@ -68,5 +60,23 @@ public class PlayerPanel extends JPanel {
 
     public ColorComboBox getColorComboBox() {
         return colorComboBox;
+    }
+
+    public JButton getRemovePlayerButton() {
+        if (removePlayerButton == null) {
+            removePlayerButton = new JButton("Remove player");
+            removePlayerButton.setHorizontalAlignment(SwingConstants.CENTER);
+            removePlayerButton.setPreferredSize(new Dimension((int) (WIDTH * (3.0 / 16.0)), HEIGHT - 10));
+            removePlayerButton.setEnabled(false);
+            PlayerPanel currentPanel = this;
+            removePlayerButton.addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    parent.removePlayer(currentPanel);
+                }
+            });
+        }
+        return removePlayerButton;
     }
 }

@@ -23,11 +23,8 @@ public class ColorComboBox extends JComboBox<PlayerColor> implements ActionListe
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        //System.out.println("actionPerformed " + e.getActionCommand());
         JComboBox cb = (JComboBox)e.getSource();
         PlayerColor selectedColor = (PlayerColor) cb.getSelectedItem();
-        //System.out.println("Selected color: " + selectedColor);
-        //System.out.println("Old selected color: " + oldSelectedColor);
         PlayerColor previousSelectedColor = oldSelectedColor;
         if (selectedColor != null) {
             oldSelectedColor = selectedColor;

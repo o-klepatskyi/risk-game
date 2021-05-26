@@ -64,6 +64,11 @@ public class PlayerMenu extends JPanel {
         PlayerPanel p = new PlayerPanel(this);
         playerPanels.add(p);
         currentPlayerNumber++;
+        if (currentPlayerNumber == MIN_PLAYER_NUMBER + 1) {
+            for (PlayerPanel pp : playerPanels) {
+                pp.getRemovePlayerButton().setEnabled(true);
+            }
+        }
     }
 
     public void addPlayer() {
@@ -97,6 +102,11 @@ public class PlayerMenu extends JPanel {
             updatePanels();
             ColorModel.removeComboBox(playerPanel.getColorComboBox());
             System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
+            if (currentPlayerNumber == MIN_PLAYER_NUMBER) {
+                for (PlayerPanel pp : playerPanels) {
+                    pp.getRemovePlayerButton().setEnabled(false);
+                }
+            }
         }
     }
 }

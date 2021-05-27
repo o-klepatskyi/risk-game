@@ -8,7 +8,7 @@ class HeaderPanel extends JPanel {
 
     private static final int WIDTH = PlayerMenu.WIDTH-50;
     private static final int HEIGHT = PlayerMenu.HEIGHT/10;
-    private static final Font FONT = new Font("Arial", Font.BOLD, 25);
+    private final Font FONT = new Font("Blackadder ITC", Font.BOLD, 25);
 
     HeaderPanel() {
         setSize(WIDTH, HEIGHT);
@@ -20,7 +20,7 @@ class HeaderPanel extends JPanel {
 
         add(getLabel("Players", new Dimension(WIDTH / 2, HEIGHT-10)));
         add(getLabel("Army",    new Dimension((int) (WIDTH * (3.0 / 16.0)) - 10, HEIGHT-10)));
-        add(getLabel("Bot?",    new Dimension(WIDTH / 8 - 10, HEIGHT-10)));
+        add(getLabel("Bot",    new Dimension(WIDTH / 8 - 10, HEIGHT-10)));
         add(getLabel("Remove",  new Dimension((int) (WIDTH * (3.0 / 16.0)) - 10, HEIGHT-10)));
 
         setVisible(true);

@@ -14,6 +14,8 @@ class FooterPanel extends JPanel {
     private JButton startButton;
     private final PlayerMenu parent;
 
+    private final Font BUTTON_FONT  = new Font("Footlight MT Light", Font.PLAIN, HEIGHT-24);
+
     FooterPanel(PlayerMenu parent) {
         setSize(WIDTH, HEIGHT);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -34,6 +36,7 @@ class FooterPanel extends JPanel {
         if (addPlayerButton == null) {
             addPlayerButton = new JButton("Add player");
             addPlayerButton.setPreferredSize(new Dimension(WIDTH/4, HEIGHT-10));
+            addPlayerButton.setFont(BUTTON_FONT);
             addPlayerButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -48,6 +51,7 @@ class FooterPanel extends JPanel {
         if (startButton == null) {
             startButton = new JButton("Start game");
             startButton.setPreferredSize(new Dimension(WIDTH/4, HEIGHT-10));
+            startButton.setFont(BUTTON_FONT);
             startButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {

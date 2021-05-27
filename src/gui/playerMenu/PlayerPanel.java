@@ -18,6 +18,10 @@ class PlayerPanel extends JPanel {
     private static int playerNumber = 1;
     private final PlayerMenu parent;
 
+    private final Font TEXTFIELD_FONT = new Font("Footlight MT Light", Font.PLAIN, HEIGHT-20);
+    private final Font BUTTON_FONT  = new Font("Footlight MT Light", Font.PLAIN, HEIGHT-32);
+
+
     PlayerPanel(PlayerMenu parent) {
         this.parent = parent;
         setSize(WIDTH, HEIGHT);
@@ -31,6 +35,7 @@ class PlayerPanel extends JPanel {
 
         playerNameField = new PlayerNameField("Player " + playerNumber++);
         playerNameField.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT-10));
+        playerNameField.setFont(TEXTFIELD_FONT);
         add(playerNameField);
 
         colorComboBox = new ColorComboBox();
@@ -63,6 +68,7 @@ class PlayerPanel extends JPanel {
     public JButton getRemovePlayerButton() {
         if (removePlayerButton == null) {
             removePlayerButton = new JButton("Remove player");
+            removePlayerButton.setFont(BUTTON_FONT);
             removePlayerButton.setHorizontalAlignment(SwingConstants.CENTER);
             removePlayerButton.setPreferredSize(new Dimension((int) (WIDTH * (3.0 / 16.0)), HEIGHT - 10));
             removePlayerButton.setEnabled(false);

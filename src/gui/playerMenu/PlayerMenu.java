@@ -8,9 +8,9 @@ import gui.Game;
 import logic.Player;
 // TODO: size of the background image
 public class PlayerMenu extends JPanel {
-    private final Image bgImg = new ImageIcon("res/player-menu-bg-800-450.jpg").getImage();
+    private final Image bgImg = new ImageIcon("res/player-menu-bg.jpg").getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
 
-    public static final int WIDTH = 800;
+    public static final int WIDTH = 688;
     public static final int HEIGHT = 450;
     private final int MAX_PLAYER_NUMBER = 6; // can not be bigger than ColorModel availableColors length
     private final int MIN_PLAYER_NUMBER = 2;
@@ -33,7 +33,8 @@ public class PlayerMenu extends JPanel {
         updatePanels();
 
         validate();
-        setVisible(true);
+        repaint();
+        //setVisible(true);
     }
 
     private void updatePanels() {
@@ -106,7 +107,7 @@ public class PlayerMenu extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(bgImg, 0, 0, null);
+        g.drawImage(bgImg, 0, 0, this);
     }
 
     public void startGame() {

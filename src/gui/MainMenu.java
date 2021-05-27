@@ -1,3 +1,6 @@
+package gui;
+
+import gui.playerMenu.PlayerMenu;
 import logic.Player;
 
 import javax.swing.*;
@@ -8,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class Menu extends JPanel {
+public class MainMenu extends JPanel {
     private final JPanel panel;
     private final JFrame frame;
     private JButton play, multiplayer, rules;
@@ -17,7 +20,7 @@ public class Menu extends JPanel {
     private final int SIZE = 500;
     private int menuOptionChosen;
 
-    public Menu(JFrame frame) {
+    public MainMenu(JFrame frame) {
         this.frame = frame;
         panel = this;
 
@@ -86,7 +89,7 @@ public class Menu extends JPanel {
         play.setForeground(Color.WHITE);
         play.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {
-                gameWindowOpen();
+                openPlayerMenu();
             }
 
             public void mousePressed(MouseEvent e) {
@@ -170,7 +173,6 @@ public class Menu extends JPanel {
         add(rules, gbc);
     }
 
-
     private void setKeyListener() {
         addKeyListener(new KeyListener() {
             public void keyTyped(KeyEvent e) {
@@ -196,7 +198,7 @@ public class Menu extends JPanel {
                 else if(key == KeyEvent.VK_ENTER) {
                     switch(menuOptionChosen){
                         case 1:
-                            gameWindowOpen();
+                            openPlayerMenu();
                             break;
                         case 2:
                             // TODO
@@ -213,16 +215,9 @@ public class Menu extends JPanel {
         });
     }
 
-    private void gameWindowOpen() {
+    private void openPlayerMenu() {
         frame.remove(panel);
-        ArrayList<Player> players = new ArrayList<>();
-        Player p1 = new Player("Ivan", Color.RED, false);
-        Player p2 = new Player("Oleh", Color.BLUE, false);
-        players.add(p1);
-        players.add(p2);
-        //players.add(new Player("Maksim", Color.GREEN, false));
-        Game game = new Game(players);
-        frame.add(game.getGameWindow());
+        frame.add(new PlayerMenu(frame));
         frame.pack();
     }
 }

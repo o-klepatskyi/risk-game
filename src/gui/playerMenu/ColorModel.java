@@ -10,12 +10,12 @@ import java.util.Collection;
 class ColorModel {
 
     private static final ArrayList<PlayerColor> colors = new ArrayList<>(Arrays.asList(
-            new PlayerColor(0,0,0, "black"),
-            new PlayerColor(255, 255, 255, "white"),
             new PlayerColor(255,0,0, "red"),
             new PlayerColor(0, 0, 255, "blue"),
-            new PlayerColor(255, 255, 0, "yellow"),
-            new PlayerColor(20, 255,0, "green")
+            new PlayerColor(34, 177,76, "green"),
+            new PlayerColor(255, 201, 14, "yellow"),
+            new PlayerColor(255,127,39, "orange"),
+            new PlayerColor(255, 64, 127, "pink")
     ));
 
     private static final ArrayList<PlayerColor> availableColors = new ArrayList<>(colors);

@@ -3,7 +3,8 @@ package gui.playerMenu;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-// TODO: what to do with names and incrementing values in players' names?
+import logic.Player;
+
 public class PlayerMenu extends JPanel {
     private final Image bgImg = new ImageIcon("res/player-menu-bg-800-450.jpg").getImage();
 
@@ -112,5 +113,16 @@ public class PlayerMenu extends JPanel {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(new PlayerMenu());
         frame.validate();
+    }
+
+    public void startGame() {
+        // gather player info
+        ArrayList<Player> players = new ArrayList<>();
+
+        for (PlayerPanel pp : playerPanels) {
+            players.add(pp.getPlayerInfo());
+        }
+
+        System.out.println(players);
     }
 }

@@ -1,5 +1,7 @@
 package gui.playerMenu;
 
+import logic.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -14,7 +16,7 @@ class PlayerPanel extends JPanel {
     private final JCheckBox botCheckBox;
     private JButton removePlayerButton;
     private static int playerNumber = 1;
-    private PlayerMenu parent;
+    private final PlayerMenu parent;
 
     PlayerPanel(PlayerMenu parent) {
         this.parent = parent;
@@ -74,5 +76,9 @@ class PlayerPanel extends JPanel {
             });
         }
         return removePlayerButton;
+    }
+
+    public Player getPlayerInfo() {
+        return new Player(playerNameField.getPlayerName(), colorComboBox.getOldSelectedItem(), botCheckBox.isSelected());
     }
 }

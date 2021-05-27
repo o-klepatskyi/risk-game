@@ -1,5 +1,8 @@
 package gui;
 
+import gui.sidePanels.ReinforcementsPanel;
+import gui.sidePanels.SidePanel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,17 +12,15 @@ public class GameWindow extends JPanel {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setLayout(new GridBagLayout());
 
-        JPanel gamePanel = new JPanel();
-        gamePanel.setOpaque(true);
-        gamePanel.setBackground(Color.LIGHT_GRAY);
-
+        SidePanel reinforcementsPanel = new ReinforcementsPanel();
+        reinforcementsPanel.setPreferredSize(new Dimension((int) (WIDTH*0.25), (int) (HEIGHT*0.9)));
         Map map = new Map(game);
-
+        map.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 0.25;
-        gbc.weighty = 0.05;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
         gbc.gridx = 0;
         gbc.gridy = 0;
 
@@ -29,24 +30,26 @@ public class GameWindow extends JPanel {
         this.add(gameTitle, gbc);
 
         JPanel gameFlow = new JPanel();
-        gbc.weightx = 0.75;
-        gbc.weighty = 0.05;
+//        gbc.weightx = 1;
+//        gbc.weighty = 1;
         gbc.gridx = 1;
         gbc.gridy = 0;
         gameFlow.setOpaque(true);
         gameFlow.setBackground(Color.GREEN);
         this.add(gameFlow, gbc);
 
-
         gbc.gridx = 0;
-        gbc.weightx = 0.25;
-        gbc.weighty = 0.95;
+//        gbc.weightx = 0.25;
+//        gbc.weighty = 0.95;
         gbc.gridy = 1;
-        this.add(gamePanel, gbc);
+        this.add(reinforcementsPanel, gbc);
 
-        gbc.weightx = 0.75;
+//        gbc.weightx = 0.75;
         gbc.gridx = 1;
         this.add(map, gbc);
+
+
+        System.out.println(reinforcementsPanel.getWidth() + " " + reinforcementsPanel.getHeight());
     }
 
 }

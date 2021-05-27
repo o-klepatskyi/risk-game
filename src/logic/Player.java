@@ -1,3 +1,5 @@
+package logic;
+
 import java.awt.*;
 import java.util.Objects;
 
@@ -45,4 +47,12 @@ public class Player {
                 Objects.equals(color, player.color);
     }
 
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + name + '\'' +
+                ", color=" + color +
+                ", isBot=" + isBot +
+                '}';
+    }
 }

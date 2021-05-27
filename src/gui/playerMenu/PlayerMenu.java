@@ -3,7 +3,10 @@ package gui.playerMenu;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-// TODO: what to do with names and incrementing values in players' names?
+
+import gui.Game;
+import logic.Player;
+// TODO: size of the background image
 public class PlayerMenu extends JPanel {
     private final Image bgImg = new ImageIcon("res/player-menu-bg-800-450.jpg").getImage();
 
@@ -15,8 +18,10 @@ public class PlayerMenu extends JPanel {
     private final ArrayList<PlayerPanel> playerPanels = new ArrayList<>();
     private final FooterPanel fp = new FooterPanel(this);
     private final HeaderPanel hp = new HeaderPanel();
+    private final JFrame frame;
 
-    public PlayerMenu() {
+    public PlayerMenu(JFrame frame) {
+        this.frame = frame;
         Dimension size = new Dimension(WIDTH, HEIGHT);
         setPreferredSize(size);
         setMinimumSize(size);
@@ -104,13 +109,29 @@ public class PlayerMenu extends JPanel {
         g.drawImage(bgImg, 0, 0, null);
     }
 
+    public void startGame() {
+        // gather player info
+        ArrayList<Player> players = new ArrayList<>();
+
+        for (PlayerPanel pp : playerPanels) {
+            players.add(pp.getPlayerInfo());
+        }
+
+        frame.remove(this);
+        Game game = new Game(players);
+        frame.add(game.getGameWindow());
+        frame.pack();
+
+        System.out.println(players);
+    }
+
     public static void main(String[] args) {
         JFrame frame = new JFrame("Risk - Game settings");
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setSize(WIDTH, HEIGHT);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.add(new PlayerMenu());
+        frame.add(new PlayerMenu(frame));
         frame.validate();
     }
 }

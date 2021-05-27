@@ -12,7 +12,7 @@ class FooterPanel extends JPanel {
 
     private JButton addPlayerButton;
     private JButton startButton;
-    private PlayerMenu parent;
+    private final PlayerMenu parent;
 
     FooterPanel(PlayerMenu parent) {
         setSize(WIDTH, HEIGHT);
@@ -48,6 +48,12 @@ class FooterPanel extends JPanel {
         if (startButton == null) {
             startButton = new JButton("Start game");
             startButton.setPreferredSize(new Dimension(WIDTH/4, HEIGHT-10));
+            startButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    parent.startGame();
+                }
+            });
         }
         return startButton;
     }

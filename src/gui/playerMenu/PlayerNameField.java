@@ -32,6 +32,10 @@ class PlayerNameField extends HintTextField {
         setText(hint);
     }
 
+    public String getPlayerName() {
+        return super.getText().isEmpty() ? getHint() : super.getText();
+    }
+
 
 
 //    @Override

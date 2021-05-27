@@ -1,3 +1,7 @@
+package gui;
+
+import logic.Player;
+
 import java.util.Objects;
 
 public class Territory {

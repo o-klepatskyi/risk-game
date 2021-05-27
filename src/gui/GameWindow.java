@@ -7,13 +7,16 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameWindow extends JPanel {
+
+    public final static int WIDTH = 1280, HEIGHT = 720;
+
     public GameWindow(Game game) {
-        final int WIDTH = 1280, HEIGHT = 720;
+
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setLayout(new GridBagLayout());
 
-        SidePanel reinforcementsPanel = new ReinforcementsPanel();
-        reinforcementsPanel.setPreferredSize(new Dimension((int) (WIDTH*0.25), (int) (HEIGHT*0.9)));
+        SidePanel reinforcementsPanel = new ReinforcementsPanel(); // size is set inside SidePanel
+
         Map map = new Map(game);
         map.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -30,8 +33,6 @@ public class GameWindow extends JPanel {
         this.add(gameTitle, gbc);
 
         JPanel gameFlow = new JPanel();
-//        gbc.weightx = 1;
-//        gbc.weighty = 1;
         gbc.gridx = 1;
         gbc.gridy = 0;
         gameFlow.setOpaque(true);
@@ -39,17 +40,14 @@ public class GameWindow extends JPanel {
         this.add(gameFlow, gbc);
 
         gbc.gridx = 0;
-//        gbc.weightx = 0.25;
-//        gbc.weighty = 0.95;
         gbc.gridy = 1;
         this.add(reinforcementsPanel, gbc);
 
-//        gbc.weightx = 0.75;
         gbc.gridx = 1;
         this.add(map, gbc);
 
 
-        System.out.println(reinforcementsPanel.getWidth() + " " + reinforcementsPanel.getHeight());
+        System.out.println(reinforcementsPanel.getPreferredSize());
     }
 
 }

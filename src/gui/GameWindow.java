@@ -1,7 +1,6 @@
 package gui;
 
-import gui.sidePanels.ReinforcementsPanel;
-import gui.sidePanels.SidePanel;
+import gui.sidePanels.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +14,8 @@ public class GameWindow extends JPanel {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setLayout(new GridBagLayout());
 
-        SidePanel reinforcementsPanel = new ReinforcementsPanel(); // size is set inside SidePanel
+        SidePanel sidePanel = new ReinforcementsPanel(); // size is set inside SidePanel
+        //SidePanel sidePanel = new AttackPanel();
 
         Map map = new Map(game);
         map.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
@@ -41,13 +41,10 @@ public class GameWindow extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        this.add(reinforcementsPanel, gbc);
+        this.add(sidePanel, gbc);
 
         gbc.gridx = 1;
         this.add(map, gbc);
-
-
-        System.out.println(reinforcementsPanel.getPreferredSize());
     }
 
 }

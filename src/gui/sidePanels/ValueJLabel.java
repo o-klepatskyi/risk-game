@@ -1,11 +1,11 @@
-package gui;
+package gui.sidePanels;
 
 import javax.swing.*;
 
 /**
  * Class for quicker change in JLabel.
  */
-public class ValueJLabel extends JLabel {
+class ValueJLabel extends MultiLineLabel {
     private String text, value;
 
     public ValueJLabel(String text, String value) {

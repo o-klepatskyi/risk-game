@@ -1,8 +1,5 @@
 package gui.sidePanels;
 
-import gui.GameWindow;
-import gui.ValueJLabel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,17 +12,15 @@ public class ReinforcementsPanel extends SidePanel {
     private JSpinner troopsLeftSpinner;
     private JButton deployTroopsButton;
 
-    private final int labelWidth = (int) (GameWindow.WIDTH * 0.25), labelHeight = 30;
-
     public ReinforcementsPanel() {
         setLayout(new FlowLayout());
 
         initLabels();
 
         troopsLeftSpinner = new JSpinner(new SpinnerNumberModel());
-        troopsLeftSpinner.setPreferredSize(new Dimension(labelWidth/5, labelHeight));
+        troopsLeftSpinner.setPreferredSize(new Dimension(LABEL_WIDTH /5, LABEL_HEIGHT));
         deployTroopsButton = new JButton("Deploy troops");
-        deployTroopsButton.setPreferredSize(new Dimension(labelWidth/2, labelHeight));
+        deployTroopsButton.setPreferredSize(new Dimension(LABEL_WIDTH /2, LABEL_HEIGHT));
         add(troopsLeftSpinner);
         add(deployTroopsButton);
     }
@@ -36,8 +31,7 @@ public class ReinforcementsPanel extends SidePanel {
         fromTerritories = new ValueJLabel("From territories: ");
         fromContinentsControlled = new ValueJLabel("From continents controlled: ", "");
         // todo: add continents
-        territoryChosen = new ValueJLabel("Territory chosen: ", "");
-        territory = new ValueJLabel("");
+        territoryChosen = new ValueJLabel("Territory chosen:\n");
 
         labels.add(reinforcementsGot);
         labels.add(fromTerritories);
@@ -45,18 +39,13 @@ public class ReinforcementsPanel extends SidePanel {
         while (labels.size() < 10)  labels.add(new ValueJLabel("", ""));
         labels.add(reinforcementsLeft);
         labels.add(territoryChosen);
-        labels.add(territory);
 
 
-        for (JLabel label : labels) {
-            label.setPreferredSize(new Dimension(labelWidth, labelHeight));
-            label.setHorizontalAlignment(SwingConstants.CENTER);
-            label.setFont(font);
+        for (ValueJLabel label : labels) {
+            label.setFont(LABEL_FONT);
             label.setForeground(Color.white);
-            label.setOpaque(false);
+            label.setHorizontalTextAlignment(SwingConstants.CENTER);
             add(label);
         }
     }
-
-    private final Font font = new Font("Blackadder ITC", Font.BOLD, labelHeight);
 }

@@ -36,10 +36,10 @@ public class AttackPanel extends SidePanel {
         System.out.println(asd.getText());
         labels.add(asd);
 
-        MultiLineLabel asdasd = new MultiLineLabel("E123451231213121312312313");
-        asdasd.setFont(LABEL_FONT);
-        asdasd.setForeground(Color.white);
-        add(asdasd);
+//        MultiLineLabel asdasd = new MultiLineLabel("E123451231213121312312313");
+//        asdasd.setFont(LABEL_FONT);
+//        asdasd.setForeground(Color.white);
+//        add(asdasd);
 
         JLabel asdasdasd = new JLabel("E none");
         asdasdasd.setForeground(Color.white);

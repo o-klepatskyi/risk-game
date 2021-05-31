@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-import gui.Game;
+import logic.Game;
 import logic.Player;
 // TODO: size of the background image
 public class PlayerMenu extends JPanel {
@@ -124,15 +124,5 @@ public class PlayerMenu extends JPanel {
         frame.pack();
 
         System.out.println(players);
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Risk - Game settings");
-        frame.setVisible(true);
-        frame.setResizable(false);
-        frame.setSize(WIDTH, HEIGHT);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.add(new PlayerMenu(frame));
-        frame.validate();
     }
 }

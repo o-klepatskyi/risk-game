@@ -1,6 +1,6 @@
 package gui.playerMenu;
 
-import gui.PlayerColor;
+import logic.PlayerColor;
 
 import javax.swing.*;
 import java.awt.*;

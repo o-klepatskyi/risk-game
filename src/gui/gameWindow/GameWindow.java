@@ -16,8 +16,9 @@ public class GameWindow extends JPanel {
         setLayout(new GridBagLayout());
 
         // size is set inside SidePanel
-//        SidePanel sidePanel = new ReinforcementsPanel();
-        SidePanel sidePanel = new AttackPanel();
+        SidePanel sidePanel = new ReinforcementsPanel();
+//        SidePanel sidePanel = new AttackPanel();
+//        SidePanel sidePanel = new FortifyPanel();
 
         Map map = new Map(game);
         map.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));

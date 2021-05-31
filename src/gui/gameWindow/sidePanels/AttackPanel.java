@@ -10,11 +10,7 @@ public class AttackPanel extends SidePanel {
     private JButton attackButton, endAttack;
 
     public AttackPanel() {
-        setOpaque(false);
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
         initLabels();
-
         initButtons();
     }
 

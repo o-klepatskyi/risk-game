@@ -1,5 +1,7 @@
 package gui.gameWindow.sidePanels;
 
+import util.Fonts;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -9,14 +11,11 @@ public class ReinforcementsPanel extends SidePanel {
 
     private ValueJLabel reinforcementsGot, reinforcementsLeft, fromTerritories;
     private JLabel fromContinentsControlled, territoryChosen, territory;
-    private ArrayList<JLabel> labels = new ArrayList<>();
 
     private JSpinner troopsLeftSpinner;
     private JButton deployTroopsButton;
 
     public ReinforcementsPanel() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
         initLabels();
         initButtons();
     }
@@ -29,6 +28,8 @@ public class ReinforcementsPanel extends SidePanel {
         // todo: add continents
         territoryChosen = new JLabel("Territory chosen:");
         territory = new JLabel("<none>");
+
+        ArrayList<JLabel> labels = new ArrayList<>();
 
         labels.add(reinforcementsGot);
         labels.add(fromTerritories);
@@ -58,6 +59,7 @@ public class ReinforcementsPanel extends SidePanel {
         troopsLeftSpinner.setMinimumSize(troopsSpinnerSize);
         deployTroopsButton = new JButton("Deploy troops");
         deployTroopsButton.setPreferredSize(new Dimension(LABEL_WIDTH/2, LABEL_HEIGHT));
+        deployTroopsButton.setFont(Fonts.BUTTON_FONT.deriveFont((float) LABEL_HEIGHT-10));
         bottomPanel.add(troopsLeftSpinner);
         bottomPanel.add(deployTroopsButton);
         add(bottomPanel);

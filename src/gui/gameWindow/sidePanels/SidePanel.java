@@ -21,7 +21,8 @@ public abstract class SidePanel extends JPanel {
     public SidePanel() {
         setOpaque(true);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        revalidate();
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        //revalidate();
     }
 
     @Override

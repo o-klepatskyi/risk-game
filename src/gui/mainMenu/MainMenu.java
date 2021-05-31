@@ -1,14 +1,11 @@
 package gui.mainMenu;
 
 import gui.playerMenu.PlayerMenu;
-import logic.Player;
+import util.Fonts;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class MainMenu extends JPanel {
@@ -16,6 +13,7 @@ public class MainMenu extends JPanel {
     private final JFrame frame;
     private JButton play, multiplayer, rules;
     private GridBagConstraints gbc;
+    private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
 
     private final int SIZE = 500;
     private int menuOptionChosen;
@@ -53,13 +51,13 @@ public class MainMenu extends JPanel {
 
     private void resetButtons() {
         play.setForeground(Color.WHITE);
-        play.setText("  Play  ");
+        play.setText("Singleplayer");
 
         multiplayer.setForeground(Color.WHITE);
-        multiplayer.setText("  Multiplayer  ");
+        multiplayer.setText("Multiplayer");
 
         rules.setForeground(Color.WHITE);
-        rules.setText("  Rules  ");
+        rules.setText("Rules");
     }
 
     private void highlightOption(int option) {
@@ -67,7 +65,7 @@ public class MainMenu extends JPanel {
         switch (option) {
             case 1:
                 play.setForeground(Color.YELLOW);
-                play.setText("< Play >");
+                play.setText("< Singleplayer >");
                 break;
             case 2:
                 multiplayer.setForeground(Color.YELLOW);
@@ -80,105 +78,58 @@ public class MainMenu extends JPanel {
     }
 
     private void initButtons() {
-        play = new JButton("  Play  ");
-        play.setFont(new Font("Arial", Font.PLAIN, 30));
-        play.setContentAreaFilled(false);
-        play.setMargin(new Insets(0, 50, 0, 50));
-        play.setBorderPainted(false);
-        play.setFocusPainted(false);
-        play.setForeground(Color.WHITE);
-        play.addMouseListener(new MouseListener() {
+        ArrayList<JButton> buttons = new ArrayList<>();
+        play = new JButton("Singleplayer");
+        play.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 openPlayerMenu();
-            }
-
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
             }
 
             public void mouseEntered(MouseEvent e) {
                 menuOptionChosen = 1;
                 highlightOption(menuOptionChosen);
             }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
         });
+        buttons.add(play);
 
         multiplayer = new JButton("Multiplayer");
-        multiplayer.setFont(new Font("Arial", Font.PLAIN, 30));
-        multiplayer.setContentAreaFilled(false);
-        multiplayer.setBorderPainted(false);
-        multiplayer.setFocusPainted(false);
-        multiplayer.setForeground(Color.WHITE);
-        multiplayer.addMouseListener(new MouseListener() {
+        multiplayer.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 // TODO
-            }
-
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
             }
 
             public void mouseEntered(MouseEvent e) {
                 menuOptionChosen = 2;
                 highlightOption(menuOptionChosen);
             }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
         });
+        buttons.add(multiplayer);
 
         rules = new JButton("Rules");
-        rules.setFont(new Font("Arial", Font.PLAIN, 30));
-        rules.setContentAreaFilled(false);
-        rules.setBorderPainted(false);
-        rules.setFocusPainted(false);
-        rules.setForeground(Color.WHITE);
-        rules.addMouseListener(new MouseListener() {
+        rules.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 // TODO
-            }
-
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
             }
 
             public void mouseEntered(MouseEvent e) {
                 menuOptionChosen = 3;
                 highlightOption(menuOptionChosen);
             }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
         });
+        buttons.add(rules);
 
-        add(play, gbc);
-        add(multiplayer, gbc);
-        add(rules, gbc);
+        for (JButton button: buttons) {
+            button.setFont(LABEL_FONT);
+            button.setContentAreaFilled(false);
+            button.setBorderPainted(false);
+            button.setFocusPainted(false);
+            button.setForeground(Color.WHITE);
+            add(button,gbc);
+        }
     }
 
     private void setKeyListener() {
-        addKeyListener(new KeyListener() {
-            public void keyTyped(KeyEvent e) {
-
-            }
-
+        addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 int key = e.getKeyCode();
                 if(key == KeyEvent.VK_UP) {
@@ -206,10 +157,6 @@ public class MainMenu extends JPanel {
                             // TODO
                     }
                 }
-
-            }
-
-            public void keyReleased(KeyEvent e) {
 
             }
         });

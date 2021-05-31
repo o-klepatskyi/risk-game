@@ -125,14 +125,4 @@ public class PlayerMenu extends JPanel {
 
         System.out.println(players);
     }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Risk - Game settings");
-        frame.setVisible(true);
-        frame.setResizable(false);
-        frame.setSize(WIDTH, HEIGHT);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.add(new PlayerMenu(frame));
-        frame.validate();
-    }
 }

@@ -1,6 +1,4 @@
-package gui;
-
-import logic.Player;
+package logic;
 
 import java.util.Objects;
 

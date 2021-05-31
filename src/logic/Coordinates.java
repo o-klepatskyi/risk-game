@@ -1,4 +1,4 @@
-package gui;
+package logic;
 
 public class Coordinates {
     private int x, y;

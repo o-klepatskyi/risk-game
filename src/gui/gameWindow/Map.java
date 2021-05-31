@@ -1,4 +1,9 @@
-package gui;
+package gui.gameWindow;
+
+import logic.Coordinates;
+import logic.Game;
+import logic.Graph;
+import logic.Territory;
 
 import javax.swing.*;
 import java.awt.*;

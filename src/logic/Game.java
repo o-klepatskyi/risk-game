@@ -1,6 +1,6 @@
-package gui;
+package logic;
 
-import logic.Player;
+import gui.gameWindow.GameWindow;
 
 import java.util.ArrayList;
 import java.util.Random;

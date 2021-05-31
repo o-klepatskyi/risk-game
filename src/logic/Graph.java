@@ -1,4 +1,6 @@
-package gui;
+package logic;
+
+import logic.Territory;
 
 import java.util.*;
 

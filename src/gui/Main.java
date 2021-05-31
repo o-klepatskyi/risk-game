@@ -1,5 +1,6 @@
 package gui;
 
+import logic.Game;
 import logic.Player;
 
 import javax.swing.*;

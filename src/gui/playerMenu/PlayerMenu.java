@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-import gui.Game;
+import logic.Game;
 import logic.Player;
 // TODO: size of the background image
 public class PlayerMenu extends JPanel {

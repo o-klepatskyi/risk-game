@@ -32,11 +32,11 @@ public class AttackPanel extends SidePanel {
 //        enemyTroops.setHorizontalAlignment(SwingConstants.CENTER);
 //        add(enemyTroops);
 
-        ValueJLabel asd = new ValueJLabel("E", "none");
+        ValueJLabel asd = new ValueJLabel("E");
         System.out.println(asd.getText());
         labels.add(asd);
 
-        MultiLineLabel asdasd = new MultiLineLabel("E none");
+        MultiLineLabel asdasd = new MultiLineLabel("E123451231213121312312313");
         asdasd.setFont(LABEL_FONT);
         asdasd.setForeground(Color.white);
         add(asdasd);

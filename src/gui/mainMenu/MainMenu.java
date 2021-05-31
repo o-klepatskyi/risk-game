@@ -1,4 +1,4 @@
-package gui;
+package gui.mainMenu;
 
 import gui.playerMenu.PlayerMenu;
 import logic.Player;

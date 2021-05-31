@@ -1,12 +1,12 @@
 package gui.playerMenu;
 
+import util.Fonts;
 import gui.HintTextField;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
-import java.awt.event.FocusEvent;
 
 class PlayerNameField extends HintTextField {
 
@@ -17,7 +17,7 @@ class PlayerNameField extends HintTextField {
         // uncomment all lines to make this field nontransparent
         //setForeground(HINT_TEXT_COLOR);
         //setOpaque(false);
-        setFont(FONT);
+        setFont(Fonts.FIELD_FONT);
         setDocument(new PlainDocument() {
             @Override
             public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
@@ -59,5 +59,4 @@ class PlayerNameField extends HintTextField {
     private static final Color REGULAR_TEXT_COLOR = new Color(0, 0, 0);
     private static final Color HINT_TEXT_COLOR = new Color(179, 179, 179);
     private static final Color BACKGROUND_COLOR = new Color(255, 255, 255, 64);
-    private static final Font FONT = new Font("Serif", Font.BOLD, 20);
 }

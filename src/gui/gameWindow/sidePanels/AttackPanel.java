@@ -5,55 +5,60 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class AttackPanel extends SidePanel {
-    private ValueJLabel territoryChosen, alliedTroops, victoryChance;
-    private JButton attackButton;
+    private JLabel territoryChosen, territory, victoryChance;
+    private ValueJLabel alliedTroops, enemyTroops;
+    private JButton attackButton, endAttack;
 
     public AttackPanel() {
         setOpaque(false);
-        setLayout(new FlowLayout());
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         initLabels();
 
-        attackButton = new JButton("Attack");
+        initButtons();
     }
 
     private void initLabels() {
-        ArrayList<ValueJLabel> labels = new ArrayList<>();
+        ArrayList<JLabel> labels = new ArrayList<>();
 
-        territoryChosen = new ValueJLabel("Territory chosen:\n");
+        territoryChosen = new JLabel("Territory chosen:");
         labels.add(territoryChosen);
+
+        territory = new JLabel("<none>");
+        labels.add(territory);
 
         alliedTroops = new ValueJLabel("Allied troops:");
         labels.add(alliedTroops);
 
-//        JLabel enemyTroops = new JLabel("Enemy troops: <none>");
-//        enemyTroops.setFont(LABEL_FONT);
-//        enemyTroops.setForeground(Color.WHITE);
-//        enemyTroops.setHorizontalAlignment(SwingConstants.CENTER);
-//        add(enemyTroops);
-
-        ValueJLabel asd = new ValueJLabel("E");
-        System.out.println(asd.getText());
-        labels.add(asd);
-
-//        MultiLineLabel asdasd = new MultiLineLabel("E123451231213121312312313");
-//        asdasd.setFont(LABEL_FONT);
-//        asdasd.setForeground(Color.white);
-//        add(asdasd);
-
-        JLabel asdasdasd = new JLabel("E none");
-        asdasdasd.setForeground(Color.white);
-        asdasdasd.setFont(LABEL_FONT);
-        add(asdasdasd);
+        enemyTroops = new ValueJLabel("Enemy troops:");
+        labels.add(enemyTroops);
 
         victoryChance = new ValueJLabel("Victory chance:");
         labels.add(victoryChance);
 
-        for (ValueJLabel label : labels) {
+        for (JLabel label : labels) {
             label.setFont(LABEL_FONT);
             label.setForeground(Color.WHITE);
-            //label.setHorizontalTextAlignment(SwingConstants.CENTER);
+            label.setAlignmentX(0.5f);
             add(label);
         }
+    }
+
+    private void initButtons() {
+        Dimension buttonSize = new Dimension(LABEL_WIDTH, LABEL_HEIGHT);
+
+        attackButton = new JButton("Attack");
+        attackButton.setPreferredSize(buttonSize);
+        attackButton.setAlignmentX(0.5f);
+        attackButton.setFont(BUTTON_FONT);
+        add(attackButton);
+
+        add(Box.createRigidArea(new Dimension(0,50)));
+
+        endAttack = new JButton("End attack");
+        endAttack.setPreferredSize(buttonSize);
+        endAttack.setAlignmentX(0.5f);
+        endAttack.setFont(BUTTON_FONT);
+        add(endAttack);
     }
 }

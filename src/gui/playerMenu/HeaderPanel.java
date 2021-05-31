@@ -1,5 +1,7 @@
 package gui.playerMenu;
 
+import util.Fonts;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
@@ -8,7 +10,6 @@ class HeaderPanel extends JPanel {
 
     private static final int WIDTH = PlayerMenu.WIDTH-50;
     private static final int HEIGHT = PlayerMenu.HEIGHT/10;
-    private final Font FONT = new Font("Blackadder ITC", Font.BOLD, 25);
 
     HeaderPanel() {
         setSize(WIDTH, HEIGHT);
@@ -28,7 +29,7 @@ class HeaderPanel extends JPanel {
 
     private JLabel getLabel(String text, Dimension size) {
         JLabel label = new JLabel(text);
-        label.setFont(FONT);
+        label.setFont(Fonts.LABEL_FONT);
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setBorder(new BevelBorder(BevelBorder.LOWERED));
         label.setPreferredSize(size);

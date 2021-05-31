@@ -1,5 +1,7 @@
 package gui.playerMenu;
 
+import util.Fonts;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -9,12 +11,11 @@ class FooterPanel extends JPanel {
 
     private static final int WIDTH = PlayerMenu.WIDTH-50;
     private static final int HEIGHT = PlayerMenu.HEIGHT/10;
+    private static final Font BUTTON_FONT = Fonts.BUTTON_FONT.deriveFont((float) HEIGHT-24);
 
     private JButton addPlayerButton;
     private JButton startButton;
     private final PlayerMenu parent;
-
-    private final Font BUTTON_FONT  = new Font("Footlight MT Light", Font.PLAIN, HEIGHT-24);
 
     FooterPanel(PlayerMenu parent) {
         setSize(WIDTH, HEIGHT);

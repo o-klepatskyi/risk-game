@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package gui.sidePanels;
+package gui.gameWindow.sidePanels;
 
 import java.awt.Dimension;
 import java.awt.FontMetrics;

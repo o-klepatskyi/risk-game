@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package gui.sidePanels;
+package gui.gameWindow.sidePanels;
 
 import java.awt.Rectangle;
 

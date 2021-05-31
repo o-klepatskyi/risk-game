@@ -1,6 +1,6 @@
 package gui.gameWindow;
 
-import gui.sidePanels.*;
+import gui.gameWindow.sidePanels.*;
 import logic.Game;
 
 import javax.swing.*;

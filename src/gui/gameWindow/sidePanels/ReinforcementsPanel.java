@@ -1,4 +1,4 @@
-package gui.sidePanels;
+package gui.gameWindow.sidePanels;
 
 import javax.swing.*;
 import java.awt.*;

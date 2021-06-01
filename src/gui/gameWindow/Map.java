@@ -1,9 +1,6 @@
 package gui.gameWindow;
 
-import logic.Coordinates;
-import logic.Game;
-import logic.Graph;
-import logic.Territory;
+import logic.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,21 +12,46 @@ public class Map extends JPanel {
     private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
     private final int BORDER_MARGIN = 5;
 
-    private final Game game;
+    private Graph gameGraph;
+    private Game game;
     private ArrayList<JButton> buttons;
     private final JPanel panel;
 
     private boolean buttonClicked = false;
-    private JButton attack, defend;
+    private JButton src, dst;
 
     public Map(Game game) {
         this.setLayout(null);
         this.game = game;
+        this.gameGraph = game.getGameGraph();
         panel = this;
 
         setBackground(new Color(0, 145, 182));
         buttons = new ArrayList<>();
         drawField();
+
+        panel.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent e) {
+                if(!game.getGameOption().equals(GameOption.REINFORCEMENT))
+                    resetButtons();
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
     }
 
     protected void paintComponent(Graphics g) {
@@ -39,7 +61,9 @@ public class Map extends JPanel {
     }
 
     public void drawField(){
-        Graph gameGraph = game.getGameGraph();
+        clearField();
+        buttons.clear();
+
         ArrayList<Territory> territories = gameGraph.getTerritories();
         int BUTTON_WIDTH = 50;
         int BUTTON_HEIGHT = 25;
@@ -60,35 +84,68 @@ public class Map extends JPanel {
 
         }
         addListeners();
+        if(game.getGameOption().equals(GameOption.REINFORCEMENT))
+            showOptions(GameOption.REINFORCEMENT);
+
+    }
+
+    /*
+    public void attack() {
+        if(src != null && dst != null) {
+            game.attack(gameGraph.getVertex(src.getName()), gameGraph.getVertex(dst.getName()));
+            drawField();
+            resetButtons();
+        }
+    }
+
+     */
+
+    private void clearField() {
+        panel.removeAll();
+        panel.revalidate();
+        panel.repaint();
     }
 
     private void addListeners() {
         for(JButton button : buttons){
             button.addMouseListener(new MouseListener() {
                 public void mouseClicked(MouseEvent e) {
-                    if(!buttonClicked) {
-                        highlighButton(button);
+                    if(!buttonClicked && button.getBackground() == game.getCurrentPlayer().getColor()) {
+                        resetButtons();
+                        highlightButton(button, "src");
+                        showOptions(game.getGameOption());
                     }
                     else {
                         if(button.getBackground() == DISABLED_COLOR) {
-                            resetButtons();
-                            highlighButton(button);
+                            if( button.getForeground() == game.getCurrentPlayer().getColor()) {
+                                if(!button.equals(src)) {
+                                    resetButtons();
+                                    highlightButton(button, "src");
+                                    showOptions(game.getGameOption());
+                                }
+                                else
+                                    resetButtons();
+                            }
                         }
                         else {
-                            if(!button.equals(attack)){
-                                if(defend != null)
-                                    defend.setBorder(null);
-
-                                if(defend != button) {
-                                    defend = button;
-                                    button.setBorder(BorderFactory.createLineBorder(Color.BLACK, BORDER_MARGIN));
-                                }
-                                else {
-                                    button.setBorder(null);
-                                }
+                            if(game.getGameOption().equals(GameOption.REINFORCEMENT)) {
+                                resetButtons();
+                                highlightButton(button, "src");
+                                showOptions(game.getGameOption());
                             }
                             else {
-                                resetButtons();
+                                if (!button.equals(src)) {
+                                    if (dst != null)
+                                        dst.setBorder(null);
+                                    if (dst != button)
+                                        highlightButton(button, "dst");
+                                    else {
+                                        button.setBorder(null);
+                                        dst = null;
+                                    }
+                                }
+                                else
+                                    resetButtons();
                             }
                         }
                     }
@@ -103,20 +160,30 @@ public class Map extends JPanel {
                 }
 
                 public void mouseEntered(MouseEvent e) {
-                    if(attack == null || button.getBackground().equals(DISABLED_COLOR)) {
-                        button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
+                    if(src == null || button.getBackground().equals(DISABLED_COLOR)) {
+                        if(button.getBackground() == game.getCurrentPlayer().getColor()) {
+                            resetButtons();
+                            button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
+                            showOptions(game.getGameOption());
+                        }
+                        else if(button.getForeground() == game.getCurrentPlayer().getColor())
+                            button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
                     }
                     else {
-                        if(attack != button)
-                            button.setBorder(BorderFactory.createLineBorder(Color.BLACK, BORDER_MARGIN));
+                        if(src != button) {
+                            if(game.getGameOption().equals(GameOption.REINFORCEMENT))
+                                button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
+                            else
+                                button.setBorder(BorderFactory.createLineBorder(Color.BLACK, BORDER_MARGIN));
+                        }
                     }
                 }
 
                 public void mouseExited(MouseEvent e) {
-                    if(!buttonClicked)
+                    if(!buttonClicked && !game.getGameOption().equals(GameOption.REINFORCEMENT))
                         resetButtons();
                     else {
-                        if(!button.equals(attack) && !button.equals(defend))
+                        if(!button.equals(src) && !button.equals(dst))
                             button.setBorder(null);
                     }
                 }
@@ -124,37 +191,59 @@ public class Map extends JPanel {
         }
     }
 
-    private void paintAdjacent(JButton button) {
-        Graph gameGraph = game.getGameGraph();
-        Territory src = gameGraph.getVertex(button.getName());
-        Territory dst;
-        for(JButton b : buttons) {
-            dst = gameGraph.getVertex(b.getName());
-            if(!src.equals(dst)) {
-                if(!gameGraph.hasEdge(src, dst) || button.getBackground().equals(b.getBackground())){
+
+    private void showOptions(GameOption option){
+        if(src != null || option.equals(GameOption.REINFORCEMENT)) {
+            ArrayList<Territory> filter = new ArrayList<>();
+            Territory territory = null;
+            if(src != null)
+                territory = gameGraph.getVertex(src.getName());
+            switch (option) {
+                case REINFORCEMENT:
+                    filter = gameGraph.getTerritories(game.getCurrentPlayer());
+                    break;
+                case ATTACK:
+                    filter = gameGraph.getAdjacentTerritories(territory);
+                    break;
+                case FORTIFY:
+                    filter = gameGraph.getConnectedTerritories(territory);
+                    break;
+
+            }
+
+            Territory dst;
+            for(JButton b : buttons) {
+                dst = gameGraph.getVertex(b.getName());
+                if(!filter.contains(dst)){
                     b.setForeground(b.getBackground());
                     b.setBackground(DISABLED_COLOR);
                 }
             }
+
         }
     }
 
     private void resetButtons() {
-        Graph gameGraph = game.getGameGraph();
         for(JButton b : buttons) {
             b.setBackground(gameGraph.getVertex(b.getName()).getOwner().getColor());
             b.setBorder(null);
             b.setForeground(Color.WHITE);
         }
         buttonClicked = false;
-        attack = null;
-        defend = null;
+        src = null;
+        dst = null;
     }
 
-    private void highlighButton(JButton button) {
-        button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
-        paintAdjacent(button);
-        buttonClicked = true;
-        attack = button;
+    private void highlightButton(JButton button, String purpose) {
+        switch (purpose) {
+            case "src":
+                button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
+                buttonClicked = true;
+                src = button;
+                break;
+            case "dst":
+                button.setBorder(BorderFactory.createLineBorder(Color.BLACK, BORDER_MARGIN));
+                dst = button;
+        }
     }
 }

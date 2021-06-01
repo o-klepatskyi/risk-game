@@ -21,6 +21,7 @@ public class Game {
             "Scandinavia", "Siam", "Siberia", "South Africa", "Southern Europe", "Ukraine",
             "Ural", "Venezuela", "Western Australia", "Western Europe", "Western United States", "Yakutsk"
     };
+
     private final Coordinates[] coordinates = {
             new Coordinates(640, 240), new Coordinates(60, 105), new Coordinates(150, 155), new Coordinates(245, 510), new Coordinates(300, 430), new Coordinates(165, 315),
             new Coordinates(750, 290), new Coordinates(515, 480), new Coordinates(550, 430), new Coordinates(880, 535), new Coordinates(220, 250), new Coordinates(515, 370),
@@ -34,7 +35,8 @@ public class Game {
     private GameWindow gameWindow;
     private Graph gameGraph;
 
-    private final Random rand = new Random();
+    private Player currentPlayer;
+    private GameOption gameOption;
 
     public Game(ArrayList<Player> players) {
         this.players = players;
@@ -45,8 +47,10 @@ public class Game {
         createGraphFromTerritories();
 
         distributeTerritories();
+        gameOption = GameOption.REINFORCEMENT; // change accordingly
+        currentPlayer = players.get(0); // change accordingly
+
         gameWindow = new GameWindow(this);
-        System.out.println(calculate_probability(150, 138));
     }
 
     public GameWindow getGameWindow() {
@@ -55,6 +59,58 @@ public class Game {
 
     public Graph getGameGraph() {
         return gameGraph;
+    }
+
+    public GameOption getGameOption() {
+        return gameOption;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public int calculateProbability(int attackTroops, int defendTroops) {
+        int attackerWinsCount = 0;
+        final double COUNT_OF_DICE_ROLLS = 10000;
+        for(int i = 0; i < COUNT_OF_DICE_ROLLS; i++) {
+            if(attackerWins(dice_rolls(attackTroops, defendTroops)))
+                attackerWinsCount++;
+        }
+        double probability = attackerWinsCount / COUNT_OF_DICE_ROLLS;
+        probability *= 100;
+        return (int) Math.round(probability);
+    }
+
+    public void attack(Territory attackTerritory, Territory defendTerritory) {
+        int attackTroops = attackTerritory.getTroops();
+        int defendTroops = defendTerritory.getTroops();
+
+        if(attackTroops >= 2) {
+            int[] troopsLeft = dice_rolls(attackTroops, defendTroops);
+
+            if(attackerWins(troopsLeft)) {
+                attackTerritory.setTroops(1);
+                defendTerritory.setTroops(troopsLeft[0]);
+                defendTerritory.setOwner(attackTerritory.getOwner());
+            }
+            else {
+                attackTerritory.setTroops(1);
+                defendTerritory.setTroops(troopsLeft[1]);
+            }
+        }
+    }
+
+    public void fortify(Territory src, Territory dst, int numberOfTroops) {
+        ArrayList<Territory> connectedTerritories = gameGraph.getConnectedTerritories(src);
+        if(connectedTerritories.contains(dst) && numberOfTroops <= dst.getTroops()-1) {
+            dst.setTroops(dst.getTroops() + numberOfTroops);
+            src.setTroops(src.getTroops() - numberOfTroops);
+        }
+    }
+
+    public void reinforce(Territory src, Territory dst, int numberOfTroops) {
+        if(gameGraph.hasEdge(src, dst))
+            fortify(src, dst, numberOfTroops);
     }
 
     private void initializeTerritories() {
@@ -162,7 +218,7 @@ public class Game {
     private void distributeTerritories() {
         int territoriesLeft = numberOfTerritories;
         for(int i = 0; i < numberOfPlayers; i++) {
-            int playerTeritorriesNumber = numberOfTerritories / numberOfPlayers;
+            int playerTerritoriesNumber = numberOfTerritories / numberOfPlayers;
             int playerTroopsNumber;
             ArrayList<Territory> playerTerritories = new ArrayList<>();
             switch (numberOfPlayers) {
@@ -186,10 +242,10 @@ public class Game {
             }
 
             if(i == numberOfPlayers-1) {
-                playerTeritorriesNumber = territoriesLeft;
+                playerTerritoriesNumber = territoriesLeft;
             }
-            int troopsLeft = playerTroopsNumber - playerTeritorriesNumber;
-            for(int j = 0; j < playerTeritorriesNumber; j++){
+            int troopsLeft = playerTroopsNumber - playerTerritoriesNumber;
+            for(int j = 0; j < playerTerritoriesNumber; j++){
                 Territory territory = getRandomTerritory(territories);
                 territory.setOwner(players.get(i));
                 territory.setTroops(1);
@@ -203,27 +259,28 @@ public class Game {
                 troopsLeft--;
             }
 
-            territoriesLeft -= playerTeritorriesNumber;
+            territoriesLeft -= playerTerritoriesNumber;
         }
     }
 
     private Territory getRandomTerritory(ArrayList<Territory> t) {
+        Random rand = new Random();
         return t.get(rand.nextInt(t.size()));
     }
 
-    private int[] dice_rolls(int troops_one, int troops_two) {
-        troops_one--;
-        while (troops_one > 0 && troops_two > 0) {
-            int[] attack_cast = attack_dice(troops_one);
-            int[] defend_cast = defend_dice(troops_two);
-            int[] total_troops_lost = compare_casts(attack_cast, defend_cast);
-            troops_one -= total_troops_lost[0];
-            troops_two -= total_troops_lost[1];
+    private int[] dice_rolls(int attackTroops, int defendTroops) {
+        attackTroops--;
+        while (attackTroops > 0 && defendTroops > 0) {
+            int[] attackCast = attackDice(attackTroops);
+            int[] defendCast = defendDice(defendTroops);
+            int[] totalTroopsLost = compareCasts(attackCast, defendCast);
+            attackTroops -= totalTroopsLost[0];
+            defendTroops -= totalTroopsLost[1];
         }
-        return new int[]{troops_one, troops_two};
+        return new int[]{attackTroops, defendTroops};
     }
 
-    private int[] attack_dice(int units) {
+    private int[] attackDice(int units) {
         int[] cast;
         if(units >= 3) {
             cast = new int[]{Dice.roll(), Dice.roll(), Dice.roll()};
@@ -239,7 +296,7 @@ public class Game {
         return cast;
     }
 
-    private int[] defend_dice(int units) {
+    private int[] defendDice(int units) {
         int[] cast;
         if(units >= 2) {
             cast = new int[]{Dice.roll(), Dice.roll()};
@@ -252,17 +309,17 @@ public class Game {
         return cast;
     }
 
-    private int[] compare_casts(int[] attack_cast, int[] defend_cast) {
-        int[] total_lost = {0, 0};
+    private int[] compareCasts(int[] attack_cast, int[] defend_cast) {
+        int[] totalLost = {0, 0};
         for(int i = 0; i < Math.min(attack_cast.length, defend_cast.length); i++) {
             if(attack_cast[i] > defend_cast[i]) {
-                total_lost[1]++;
+                totalLost[1]++;
             }
             else {
-                total_lost[0]++;
+                totalLost[0]++;
             }
         }
-        return total_lost;
+        return totalLost;
     }
 
     private int[] reversed(int[] array) {
@@ -271,17 +328,5 @@ public class Game {
 
     private boolean attackerWins(int[] troopsLeft) {
         return troopsLeft[0] > 0;
-    }
-
-    private int calculate_probability(int troops_one, int troops_two) {
-        int attackerWinsCount = 0;
-        final double COUNT_OF_DICE_ROLLS = 10000;
-        for(int i = 0; i < COUNT_OF_DICE_ROLLS; i++) {
-            if(attackerWins(dice_rolls(troops_one, troops_two)))
-                attackerWinsCount++;
-        }
-        double probability = attackerWinsCount / COUNT_OF_DICE_ROLLS;
-        probability *= 100;
-        return (int) Math.round(probability);
     }
 }

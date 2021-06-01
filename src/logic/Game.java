@@ -2,8 +2,8 @@ package logic;
 
 import gui.gameWindow.GameWindow;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class Game {
     private final int numberOfTerritories = 42;
@@ -46,6 +46,7 @@ public class Game {
 
         distributeTerritories();
         gameWindow = new GameWindow(this);
+        System.out.println(calculate_probability(150, 138));
     }
 
     public GameWindow getGameWindow() {
@@ -208,5 +209,79 @@ public class Game {
 
     private Territory getRandomTerritory(ArrayList<Territory> t) {
         return t.get(rand.nextInt(t.size()));
+    }
+
+    private int[] dice_rolls(int troops_one, int troops_two) {
+        troops_one--;
+        while (troops_one > 0 && troops_two > 0) {
+            int[] attack_cast = attack_dice(troops_one);
+            int[] defend_cast = defend_dice(troops_two);
+            int[] total_troops_lost = compare_casts(attack_cast, defend_cast);
+            troops_one -= total_troops_lost[0];
+            troops_two -= total_troops_lost[1];
+        }
+        return new int[]{troops_one, troops_two};
+    }
+
+    private int[] attack_dice(int units) {
+        int[] cast;
+        if(units >= 3) {
+            cast = new int[]{Dice.roll(), Dice.roll(), Dice.roll()};
+        }
+        else if(units == 2) {
+            cast = new int[]{Dice.roll(), Dice.roll()};
+        }
+        else {
+            cast = new int[]{Dice.roll()};
+        }
+        Arrays.sort(cast);
+        cast = reversed(cast);
+        return cast;
+    }
+
+    private int[] defend_dice(int units) {
+        int[] cast;
+        if(units >= 2) {
+            cast = new int[]{Dice.roll(), Dice.roll()};
+        }
+        else {
+            cast = new int[]{Dice.roll()};
+        }
+        Arrays.sort(cast);
+        cast = reversed(cast);
+        return cast;
+    }
+
+    private int[] compare_casts(int[] attack_cast, int[] defend_cast) {
+        int[] total_lost = {0, 0};
+        for(int i = 0; i < Math.min(attack_cast.length, defend_cast.length); i++) {
+            if(attack_cast[i] > defend_cast[i]) {
+                total_lost[1]++;
+            }
+            else {
+                total_lost[0]++;
+            }
+        }
+        return total_lost;
+    }
+
+    private int[] reversed(int[] array) {
+        return IntStream.range(0, array.length).map(i -> array[array.length-i-1]).toArray();
+    }
+
+    private boolean attackerWins(int[] troopsLeft) {
+        return troopsLeft[0] > 0;
+    }
+
+    private int calculate_probability(int troops_one, int troops_two) {
+        int attackerWinsCount = 0;
+        final double COUNT_OF_DICE_ROLLS = 10000;
+        for(int i = 0; i < COUNT_OF_DICE_ROLLS; i++) {
+            if(attackerWins(dice_rolls(troops_one, troops_two)))
+                attackerWinsCount++;
+        }
+        double probability = attackerWinsCount / COUNT_OF_DICE_ROLLS;
+        probability *= 100;
+        return (int) Math.round(probability);
     }
 }

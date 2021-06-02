@@ -1,7 +1,6 @@
 package gui.gameWindow.sidePanels;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Class for quicker change in JLabel.

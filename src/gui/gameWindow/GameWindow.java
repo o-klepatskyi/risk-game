@@ -72,7 +72,7 @@ public class GameWindow extends JPanel {
                 sidePanel = new AttackPanel(this);
                 break;
             case FORTIFY:
-                sidePanel = new FortifyPanel();
+                sidePanel = new FortifyPanel(this);
                 break;
             default:
                 sidePanel = SidePanel.getEmptyPanel();
@@ -122,5 +122,15 @@ public class GameWindow extends JPanel {
             System.err.println(e.getMessage());
         }
         return 0;
+    }
+
+    public void fortify(int troopsToTransfer) {
+        try {
+            game.fortify(troopsToTransfer);
+            nextPhase();
+        } catch (Exception e) {
+            System.out.print("FORTIFY in Game Window: ");
+            System.err.println(e.getMessage());
+        }
     }
 }

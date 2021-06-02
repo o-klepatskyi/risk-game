@@ -193,7 +193,6 @@ public class Game {
             throw new WrongTerritoriesPairException("These territories are not connected!");
         }
         gameMap.drawField();
-        nextPlayerTurn(); // Only one fortification can be made
     }
 
     /**

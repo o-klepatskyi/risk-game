@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-
+// todo: fortifying with 1 troop
 public class GameMap extends JPanel {
     private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
     private final int BORDER_MARGIN = 5;
@@ -33,8 +33,10 @@ public class GameMap extends JPanel {
 
         panel.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {
-                if(!game.getGameOption().equals(GameOption.REINFORCEMENT))
+                if(!game.getGameOption().equals(GameOption.REINFORCEMENT)) {
                     resetButtons();
+                    updateTerritories();
+                }
             }
 
             public void mousePressed(MouseEvent e) {
@@ -53,6 +55,10 @@ public class GameMap extends JPanel {
 
             }
         });
+    }
+
+    private void updateTerritories() {
+        game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
     }
 
     /**
@@ -86,7 +92,9 @@ public class GameMap extends JPanel {
         addListeners();
         if(game.getGameOption().equals(GameOption.REINFORCEMENT))
             showOptions(GameOption.REINFORCEMENT);
-
+        if (game.getGameWindow() != null) {
+            game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
+        }
     }
 
     /**
@@ -167,6 +175,7 @@ public class GameMap extends JPanel {
                             }
                         }
                     }
+                    updateTerritories();
                 }
 
                 public void mousePressed(MouseEvent e) {

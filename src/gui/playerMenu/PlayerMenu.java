@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import logic.Game;
 import logic.Player;
-// TODO: size of the background image
+
 public class PlayerMenu extends JPanel {
     private final Image bgImg = new ImageIcon("res/player-menu-bg.jpg").getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
 

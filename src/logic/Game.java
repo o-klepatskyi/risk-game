@@ -193,16 +193,6 @@ public class Game {
             throw new WrongTerritoriesPairException("These territories are not connected!");
         }
         gameMap.drawField();
-        nextPlayerTurn(); // Only one fortification can be made
-    }
-
-    /**
-     * for GUI
-     * @return maximum amount of troops that are transferable
-     */
-    public int getMaximumFortificationTroops() {
-        Territory srcTerritory = gameMap.getSrcTerritory();
-        return srcTerritory.getTroops()-1;
     }
 
     /**
@@ -224,24 +214,40 @@ public class Game {
         gameMap.drawField();
     }
 
+    public void nextPhase() {
+        switch (gameOption) {
+            case REINFORCEMENT:
+                attackPhase();
+                break;
+            case ATTACK:
+                fortifyPhase();
+                break;
+            case FORTIFY:
+                nextPlayerTurn();
+                break;
+        }
+    }
+
     /**
      * must be applied after nextPlayerTurn() call
+     *
+     * so why not just include it in that method????
      */
-    public void reinforcePhase() {
+    private void reinforcePhase() {
         gameOption = GameOption.REINFORCEMENT;
     }
 
     /**
      * must be applied after reinforcePhase() call
      */
-    public void attackPhase() {
+    private void attackPhase() {
         gameOption = GameOption.ATTACK;
     }
 
     /**
      * must be applied after attackPhase() call
      */
-    public void fortifyPhase() {
+    private void fortifyPhase() {
         gameOption = GameOption.FORTIFY;
     }
 
@@ -257,7 +263,12 @@ public class Game {
             index = 0;
 
         currentPlayer = players.get(index);
-        currentPlayer.setBonus(gameGraph.getTerritories(currentPlayer).size() / 3);
+
+        int bonus = gameGraph.getTerritories(currentPlayer).size() / 3;
+        bonus = Math.max(bonus, 3);
+        currentPlayer.setBonus(bonus);
+
+        reinforcePhase();
     }
 
 
@@ -493,7 +504,7 @@ public class Game {
 
     private void pickFirstPlayer() {
         gameOption = GameOption.REINFORCEMENT;
-        currentPlayer = players.get(0);
+        currentPlayer = players.get(players.size()-1);
+        nextPlayerTurn();
     }
-
 }

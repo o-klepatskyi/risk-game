@@ -1,10 +1,14 @@
 package gui.gameWindow.sidePanels;
 
+import gui.gameWindow.GameWindow;
+import logic.Territory;
 import util.Fonts;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class ReinforcementsPanel extends SidePanel {
@@ -15,14 +19,20 @@ public class ReinforcementsPanel extends SidePanel {
     private JSpinner troopsLeftSpinner;
     private JButton deployTroopsButton;
 
-    public ReinforcementsPanel() {
+    private int playerBonus, troopsLeft;
+    private GameWindow gameWindow;
+
+    public ReinforcementsPanel(GameWindow gameWindow, int bonus) {
+        this.gameWindow = gameWindow;
+        playerBonus = bonus;
+        troopsLeft = bonus;
         initLabels();
         initButtons();
     }
 
     private void initLabels() {
-        reinforcementsGot = new ValueJLabel("Reinforcements got: ");
-        reinforcementsLeft = new ValueJLabel("Reinforcements Left: ");
+        reinforcementsGot = new ValueJLabel("Reinforcements got: ", playerBonus);
+        reinforcementsLeft = new ValueJLabel("Reinforcements Left: ", troopsLeft);
         fromTerritories = new ValueJLabel("From territories: ");
         fromContinentsControlled = new JLabel("From continents controlled: ");
         // todo: add continents
@@ -44,7 +54,7 @@ public class ReinforcementsPanel extends SidePanel {
             label.setFont(LABEL_FONT);
             label.setForeground(Color.white);
             label.setAlignmentX(0.5f);
-            label.setBorder(new LineBorder(Color.red));
+            //label.setBorder(new LineBorder(Color.red));
             add(label);
         }
     }
@@ -52,7 +62,8 @@ public class ReinforcementsPanel extends SidePanel {
     private void initButtons() {
         JPanel bottomPanel = new JPanel();
         bottomPanel.setOpaque(false);
-        troopsLeftSpinner = new JSpinner(new SpinnerNumberModel());
+        troopsLeftSpinner = new JSpinner(new SpinnerNumberModel(troopsLeft, 1, troopsLeft, 1));
+        ((JSpinner.DefaultEditor) troopsLeftSpinner.getEditor()).getTextField().setEditable(false);
         Dimension troopsSpinnerSize = new Dimension(LABEL_WIDTH/5, LABEL_HEIGHT);
         troopsLeftSpinner.setPreferredSize(troopsSpinnerSize);
         troopsLeftSpinner.setMaximumSize(troopsSpinnerSize);
@@ -60,8 +71,43 @@ public class ReinforcementsPanel extends SidePanel {
         deployTroopsButton = new JButton("Deploy troops");
         deployTroopsButton.setPreferredSize(new Dimension(LABEL_WIDTH/2, LABEL_HEIGHT));
         deployTroopsButton.setFont(Fonts.BUTTON_FONT.deriveFont((float) LABEL_HEIGHT-10));
+        deployTroopsButton.setEnabled(false);
+        deployTroopsButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (deployTroopsButton.isEnabled()) {
+                    reinforce();
+                }
+            }
+        });
         bottomPanel.add(troopsLeftSpinner);
         bottomPanel.add(deployTroopsButton);
         add(bottomPanel);
+    }
+
+    @Override
+    public void updateTerritories(Territory src, Territory dst) {
+        super.updateTerritories(src, dst);
+        deployTroopsButton.setEnabled(true);
+        if (src == null) {
+            territory.setText("<none>");
+            deployTroopsButton.setEnabled(false);
+        } else {
+            territory.setText(src.getName());
+            deployTroopsButton.setEnabled(true);
+        }
+    }
+
+    public void reinforce() {
+        int reinforcedTroops = (int) troopsLeftSpinner.getValue();
+        gameWindow.reinforce(reinforcedTroops);
+        troopsLeft -= reinforcedTroops;
+        if (troopsLeft == 0) {
+            gameWindow.nextPhase();
+        } else {
+            troopsLeftSpinner.setModel(new SpinnerNumberModel(troopsLeft, 1, troopsLeft, 1));
+            reinforcementsLeft.setValue(troopsLeft);
+            deployTroopsButton.setEnabled(false);
+        }
     }
 }

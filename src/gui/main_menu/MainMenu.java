@@ -1,5 +1,6 @@
 package gui.main_menu;
 
+import gui.multiplayer_menu.MultiplayerMenu;
 import gui.player_menu.PlayerMenu;
 import util.Fonts;
 
@@ -95,7 +96,7 @@ public class MainMenu extends JPanel {
         multiplayer = new JButton("Multiplayer");
         multiplayer.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                // TODO
+               openMultiplayerMenu();
             }
 
             public void mouseEntered(MouseEvent e) {
@@ -152,7 +153,8 @@ public class MainMenu extends JPanel {
                             openPlayerMenu();
                             break;
                         case 2:
-                            // TODO
+                            openMultiplayerMenu();
+                            break;
                         case 3:
                             // TODO
                     }
@@ -165,6 +167,12 @@ public class MainMenu extends JPanel {
     private void openPlayerMenu() {
         frame.remove(panel);
         frame.add(new PlayerMenu(frame));
+        frame.pack();
+    }
+
+    private void openMultiplayerMenu() {
+        frame.remove(panel);
+        frame.add(new MultiplayerMenu(frame));
         frame.pack();
     }
 }

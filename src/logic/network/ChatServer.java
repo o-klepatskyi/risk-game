@@ -11,9 +11,6 @@ public class ChatServer {
     private Set<String> userNames = new HashSet<>();
     private Set<UserThread> userThreads = new HashSet<>();
 
-    public static final int NAME_ERROR =  1;
-    public static final int OK = 0;
-
     public ChatServer(int port) {
         this.port = port;
     }

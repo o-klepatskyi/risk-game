@@ -1,6 +1,7 @@
 package gui.multiplayer_menu;
 
 import gui.HintTextField;
+import gui.player_menu.PlayerMenu;
 import logic.network.MultiplayerManager;
 import logic.network.NetworkMode;
 
@@ -9,6 +10,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+// todo: design
+// todo: similar methods to parent class
 public class ClientMenu extends JPanel {
 
     private HintTextField portField;
@@ -30,6 +33,12 @@ public class ClientMenu extends JPanel {
         add(getBackButton());
         add(new FillerButton(100,0));
         setVisible(true);
+    }
+
+    private void openPlayerMenu() {
+        frame.remove(this);
+        frame.add(new PlayerMenu(frame, multiplayerManager));
+        frame.pack();
     }
 
     private HintTextField getNameField() {
@@ -81,6 +90,8 @@ public class ClientMenu extends JPanel {
         }
 
         multiplayerManager.startClient(ipAddress, portNumber, username);
+
+        // todo
 
         return true;
     }

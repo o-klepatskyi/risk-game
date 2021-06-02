@@ -8,11 +8,9 @@ import java.net.Socket;
 
 public class ReadThread extends Thread {
     private BufferedReader reader;
-    //private final Socket socket;
     private final ChatClient client;
 
     public ReadThread(Socket socket, ChatClient client) {
-        //this.socket = socket;
         this.client = client;
 
         try {
@@ -25,16 +23,16 @@ public class ReadThread extends Thread {
     }
 
     public void run() {
-        int first_response = -1;
+        String first_response = null;
         try {
-            first_response = Integer.parseInt(reader.readLine());
+            first_response = reader.readLine();
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        if (first_response == ChatServer.NAME_ERROR) {
+        if (first_response == null || first_response.equals(NetworkMessage.NAME_ERROR.toString())) {
             System.out.println("Name " + client.getUserName() + " is already occupied");
             client.close();
-        } else if (first_response != ChatServer.OK) {
+        } else if (!first_response.equals(NetworkMessage.OK.toString())) {
             System.out.println("Error occurred while connecting to the room.");
             client.close();
         } else {
@@ -44,9 +42,8 @@ public class ReadThread extends Thread {
                     String response = reader.readLine();
                     System.out.println("\n" + response);
 
-                    // prints the username after displaying the server's message
                     if (client.getUserName() != null) {
-                        System.out.print(response);
+                        //System.out.print(response);
                         System.out.println(response);
                     }
                 } catch (IOException ex) {

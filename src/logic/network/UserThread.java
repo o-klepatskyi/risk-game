@@ -23,9 +23,9 @@ public class UserThread extends Thread {
 
             String userName = reader.readLine();
             if (server.hasUser(userName)) {
-                sendMessage(ChatServer.NAME_ERROR + "");
+                sendMessage(NetworkMessage.NAME_ERROR.toString());
             } else {
-                sendMessage(ChatServer.OK + "");
+                sendMessage(NetworkMessage.OK.toString());
                 printUsers();
                 server.addUserName(userName);
                 String serverMessage = "New user connected: " + userName;
@@ -39,7 +39,7 @@ public class UserThread extends Thread {
                     serverMessage = "[" + userName + "]: " + clientMessage;
                     server.broadcast(serverMessage, null);
 
-                } while (!clientMessage.equals("<YOUR CLOSE MESSAGE>"));
+                } while (!clientMessage.equals(NetworkMessage.CLOSE_CONNECTION.toString()));
 
                 server.removeUser(userName, this);
                 socket.close();

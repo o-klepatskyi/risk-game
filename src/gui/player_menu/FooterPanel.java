@@ -47,7 +47,9 @@ class FooterPanel extends JPanel {
             addPlayerButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    parent.addPlayer();
+                    if (addPlayerButton.isEnabled()) {
+                        parent.addPlayer();
+                    }
                 }
             });
         }
@@ -59,10 +61,13 @@ class FooterPanel extends JPanel {
             startButton = new JButton("Start game");
             startButton.setPreferredSize(new Dimension(WIDTH/4, HEIGHT-10));
             startButton.setFont(BUTTON_FONT);
+            startButton.setEnabled(false);
             startButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    parent.startGame();
+                    if (startButton.isEnabled()) {
+                        parent.startGame();
+                    }
                 }
             });
         }

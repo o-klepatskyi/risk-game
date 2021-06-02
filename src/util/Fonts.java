@@ -14,7 +14,7 @@ public abstract class Fonts {
     static {
         try {
             // create fonts
-            LABEL_FONT = Font.createFont(Font.BOLD, new File("res/fonts/ITCBLKAD.TTF")).deriveFont(DEFAULT_SIZE);
+            LABEL_FONT = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/ITCBLKAD.TTF")).deriveFont(DEFAULT_SIZE).deriveFont(Font.BOLD);
             BUTTON_FONT = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/FTLTLT.TTF")).deriveFont(DEFAULT_SIZE);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font

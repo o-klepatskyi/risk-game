@@ -71,7 +71,7 @@ public class FortifyPanel extends SidePanel {
 
         for (JLabel label : labels) {
             label.setFont(LABEL_FONT);
-            label.setForeground(Color.white);
+            label.setForeground(FONT_COLOR);
             label.setAlignmentX(0.5f);
             //label.setBorder(new LineBorder(Color.red));
             add(label);

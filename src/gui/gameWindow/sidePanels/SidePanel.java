@@ -20,6 +20,8 @@ public class SidePanel extends JPanel {
 
     protected Territory src, dst;
 
+    protected final Color FONT_COLOR = Color.black;
+
 
     SidePanel() {
         setOpaque(true);

@@ -167,6 +167,7 @@ public class GameMap extends JPanel {
                             }
                         }
                     }
+                    game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
                 }
 
                 public void mousePressed(MouseEvent e) {

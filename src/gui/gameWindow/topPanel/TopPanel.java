@@ -1,6 +1,8 @@
 package gui.gameWindow.topPanel;
 
 import gui.gameWindow.GameWindow;
+import logic.GameOption;
+import logic.Player;
 import util.Fonts;
 
 import javax.swing.*;
@@ -23,13 +25,19 @@ public class TopPanel extends JPanel {
 
     private void initLabels() {
         if (currentPlayer == null && currentState == null) {
-            currentPlayer = new JLabel("Player 1 - ");
-            currentPlayer.setFont(Fonts.BUTTON_FONT.deriveFont((float) HEIGHT - 15));
+            currentPlayer = new JLabel();
+            currentPlayer.setFont(Fonts.BUTTON_FONT.deriveFont((float) HEIGHT - 30));
             add(currentPlayer);
 
-            currentState = new JLabel("Fortify");
-            currentState.setFont(Fonts.BUTTON_FONT.deriveFont((float) HEIGHT - 15));
+            currentState = new JLabel();
+            currentState.setFont(Fonts.BUTTON_FONT.deriveFont((float) HEIGHT - 30));
             add(currentState);
         }
+    }
+
+    public void updatePhase(Player player, GameOption gameOption) {
+        currentPlayer.setText(player.getName());
+        currentPlayer.setForeground(player.getColor());
+        currentState.setText(gameOption.toString());
     }
 }

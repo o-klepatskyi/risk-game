@@ -226,6 +226,8 @@ public class Game {
 
     /**
      * must be applied after nextPlayerTurn() call
+     *
+     * so why not just include it in that method????
      */
     public void reinforcePhase() {
         gameOption = GameOption.REINFORCEMENT;
@@ -258,6 +260,8 @@ public class Game {
 
         currentPlayer = players.get(index);
         currentPlayer.setBonus(gameGraph.getTerritories(currentPlayer).size() / 3);
+
+        reinforcePhase();
     }
 
 
@@ -493,7 +497,21 @@ public class Game {
 
     private void pickFirstPlayer() {
         gameOption = GameOption.REINFORCEMENT;
-        currentPlayer = players.get(0);
+        currentPlayer = players.get(players.size()-1);
+        nextPlayerTurn();
     }
 
+    public void nextPhase() {
+        switch (gameOption) {
+            case REINFORCEMENT:
+                attackPhase();
+                break;
+            case ATTACK:
+                fortifyPhase();
+                break;
+            case FORTIFY:
+                nextPlayerTurn();
+                break;
+        }
+    }
 }

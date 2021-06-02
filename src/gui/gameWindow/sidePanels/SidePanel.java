@@ -1,5 +1,6 @@
 package gui.gameWindow.sidePanels;
 
+import logic.Territory;
 import util.Fonts;
 import gui.gameWindow.GameWindow;
 
@@ -17,6 +18,8 @@ public class SidePanel extends JPanel {
     protected final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont((float) LABEL_HEIGHT);
     protected final Font BUTTON_FONT = Fonts.BUTTON_FONT.deriveFont((float) LABEL_HEIGHT-5);
 
+    protected Territory src, dst;
+
 
     SidePanel() {
         setOpaque(true);
@@ -32,5 +35,11 @@ public class SidePanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(bgImg, 0, 0, this);
+    }
+
+    public void updateTerritories(Territory src, Territory dst) {
+        this.src = src;
+        this.dst = dst;
+        System.out.println("updated territories in side panel");
     }
 }

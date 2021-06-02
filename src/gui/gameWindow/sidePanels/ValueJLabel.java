@@ -18,6 +18,10 @@ class ValueJLabel extends JLabel {
         this(text, "<none>");
     }
 
+    public ValueJLabel(String text, int playerBonus) {
+        this(text, String.valueOf(playerBonus));
+    }
+
     public String getTextWithoutValue() {
         return text;
     }
@@ -34,5 +38,9 @@ class ValueJLabel extends JLabel {
     public void setValue(String value) {
         this.value = value;
         setText(text + " " + value);
+    }
+
+    public void setValue(int value) {
+        setValue(String.valueOf(value));
     }
 }

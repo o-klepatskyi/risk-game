@@ -193,6 +193,7 @@ public class Game {
             throw new WrongTerritoriesPairException("These territories are not connected!");
         }
         gameMap.drawField();
+        nextPlayerTurn(); // Only one fortification can be made
     }
 
     /**
@@ -220,6 +221,7 @@ public class Game {
 
         srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
         currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
+        gameMap.drawField();
     }
 
     /**
@@ -239,7 +241,7 @@ public class Game {
     /**
      * must be applied after attackPhase() call
      */
-    public void FortifyPhase() {
+    public void fortifyPhase() {
         gameOption = GameOption.FORTIFY;
     }
 
@@ -490,7 +492,7 @@ public class Game {
     }
 
     private void pickFirstPlayer() {
-        gameOption = GameOption.ATTACK;
+        gameOption = GameOption.REINFORCEMENT;
         currentPlayer = players.get(0);
     }
 

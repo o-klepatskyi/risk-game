@@ -1,6 +1,7 @@
 package gui.gameWindow;
 
 import logic.*;
+import util.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,6 +77,7 @@ public class GameMap extends JPanel {
             button.setBackground(territory.getOwner().getColor());
             button.setName(territory.getName());
             button.setFocusPainted(false);
+            button.setBorder(null);
 
             panel.add(button);
             buttons.add(button);

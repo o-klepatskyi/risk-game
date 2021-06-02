@@ -1,6 +1,7 @@
 package gui.gameWindow;
 
 import gui.gameWindow.sidePanels.*;
+import gui.gameWindow.topPanel.Logo;
 import gui.gameWindow.topPanel.TopPanel;
 import logic.Game;
 
@@ -30,9 +31,7 @@ public class GameWindow extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
 
-        JPanel gameTitle = new JPanel();
-        gameTitle.setOpaque(true);
-        gameTitle.setBackground(Color.RED);
+        JPanel gameTitle = new Logo();
         this.add(gameTitle, gbc);
 
         gbc.gridx = 1;

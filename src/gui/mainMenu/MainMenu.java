@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class MainMenu extends JPanel {
     private final JPanel panel;
     private final JFrame frame;
-    private JButton play, multiplayer, rules;
+    private JButton play, load, multiplayer, rules;
     private GridBagConstraints gbc;
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
 
@@ -43,15 +43,18 @@ public class MainMenu extends JPanel {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        ImageIcon backgroundImage = new ImageIcon("res/logo/logo.png");
+        ImageIcon backgroundImage = new ImageIcon("res/logo/logo.jpg");
         g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
-        ImageIcon menuPanel = new ImageIcon("res/woodSign.jpg");
-        g.drawImage(menuPanel.getImage(), SIZE/4, SIZE/2 - SIZE/20, SIZE/2, SIZE/2 - SIZE/10, null);
+        ImageIcon menuPanel = new ImageIcon("res/logo/map.jpg");
+        g.drawImage(menuPanel.getImage(), SIZE/6, SIZE/3 + SIZE/20, 3*SIZE/4 - SIZE / 12, SIZE/2+SIZE/20 , null);
     }
 
     private void resetButtons() {
         play.setForeground(Color.WHITE);
-        play.setText("Singleplayer");
+        play.setText("Play");
+
+        load.setForeground(Color.WHITE);
+        load.setText("Load Game");
 
         multiplayer.setForeground(Color.WHITE);
         multiplayer.setText("Multiplayer");
@@ -65,13 +68,17 @@ public class MainMenu extends JPanel {
         switch (option) {
             case 1:
                 play.setForeground(Color.YELLOW);
-                play.setText("< Singleplayer >");
+                play.setText("< Play >");
                 break;
             case 2:
+                load.setForeground(Color.YELLOW);
+                load.setText("< Load Game >");
+                break;
+            case 3:
                 multiplayer.setForeground(Color.YELLOW);
                 multiplayer.setText("< Multiplayer >");
                 break;
-            case 3:
+            case 4:
                 rules.setForeground(Color.YELLOW);
                 rules.setText("< Rules >");
         }
@@ -79,7 +86,7 @@ public class MainMenu extends JPanel {
 
     private void initButtons() {
         ArrayList<JButton> buttons = new ArrayList<>();
-        play = new JButton("Singleplayer");
+        play = new JButton("Play");
         play.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 openPlayerMenu();
@@ -92,6 +99,19 @@ public class MainMenu extends JPanel {
         });
         buttons.add(play);
 
+        load = new JButton("Load");
+        load.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                // TODO
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                menuOptionChosen = 2;
+                highlightOption(menuOptionChosen);
+            }
+        });
+        buttons.add(load);
+
         multiplayer = new JButton("Multiplayer");
         multiplayer.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -99,7 +119,7 @@ public class MainMenu extends JPanel {
             }
 
             public void mouseEntered(MouseEvent e) {
-                menuOptionChosen = 2;
+                menuOptionChosen = 3;
                 highlightOption(menuOptionChosen);
             }
         });
@@ -112,7 +132,7 @@ public class MainMenu extends JPanel {
             }
 
             public void mouseEntered(MouseEvent e) {
-                menuOptionChosen = 3;
+                menuOptionChosen = 4;
                 highlightOption(menuOptionChosen);
             }
         });
@@ -134,13 +154,13 @@ public class MainMenu extends JPanel {
                 int key = e.getKeyCode();
                 if(key == KeyEvent.VK_UP) {
                     if(menuOptionChosen == 1)
-                        menuOptionChosen = 3;
+                        menuOptionChosen = 4;
                     else
                         menuOptionChosen--;
                     highlightOption(menuOptionChosen);
                 }
                 else if(key == KeyEvent.VK_DOWN) {
-                    if(menuOptionChosen == 3)
+                    if(menuOptionChosen == 4)
                         menuOptionChosen = 1;
                     else
                         menuOptionChosen++;
@@ -154,6 +174,8 @@ public class MainMenu extends JPanel {
                         case 2:
                             // TODO
                         case 3:
+                            // TODO
+                        case 4:
                             // TODO
                     }
                 }

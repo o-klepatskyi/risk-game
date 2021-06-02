@@ -120,7 +120,7 @@ public class GameMap extends JPanel {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Image backgroundImage = new ImageIcon("res/map-bg.jpg").getImage();//.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
+        Image backgroundImage = new ImageIcon("res/logo/water.jpg").getImage();//.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
         g.drawImage(backgroundImage, 0, 0,getWidth(),getHeight(), this);
         ImageIcon map = new ImageIcon("res/map.png");
         g.drawImage(map.getImage(), 0, 0, this.getWidth(), this.getHeight(), this);

@@ -9,8 +9,7 @@ import java.awt.event.MouseEvent;
 
 public class MultiplayerMenu extends JPanel {
 
-    private JFrame frame;
-    private JPanel menu = this;
+    private final JFrame frame;
 
     public MultiplayerMenu(JFrame frame) {
         this.frame = frame;
@@ -60,7 +59,7 @@ public class MultiplayerMenu extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                frame.remove(menu);
+                frame.remove(currentMenu);
                 frame.add(new MainMenu(frame));
                 frame.pack();
             }

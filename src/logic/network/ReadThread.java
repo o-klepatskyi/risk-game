@@ -8,11 +8,11 @@ import java.net.Socket;
 
 public class ReadThread extends Thread {
     private BufferedReader reader;
-    private Socket socket;
-    private ChatClient client;
+    //private final Socket socket;
+    private final ChatClient client;
 
     public ReadThread(Socket socket, ChatClient client) {
-        this.socket = socket;
+        //this.socket = socket;
         this.client = client;
 
         try {

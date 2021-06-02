@@ -1,6 +1,8 @@
 package gui.multiplayer_menu;
 
 import gui.HintTextField;
+import logic.network.MultiplayerManager;
+import logic.network.NetworkMode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,8 +13,9 @@ public class ServerMenu extends JPanel {
 
     private HintTextField portField;
     private HintTextField nameField;
-    private JFrame frame;
-    private JPanel menu = this;
+    private final JFrame frame;
+
+    private final MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.SERVER);
 
     ServerMenu(JFrame frame) {
         this.frame = frame;
@@ -57,7 +60,7 @@ public class ServerMenu extends JPanel {
             return false;
         }
 
-        //MainFrame.startServer(portNumber, username);
+        multiplayerManager.startServer(portNumber, username);
 
         return true;
     }
@@ -78,7 +81,7 @@ public class ServerMenu extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                frame.remove(menu);
+                frame.remove(currentMenu);
                 frame.add(new MultiplayerMenu(frame));
                 frame.pack();
             }

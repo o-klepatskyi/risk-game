@@ -4,8 +4,8 @@ import java.io.*;
 import java.net.Socket;
 
 public class UserThread extends Thread {
-    private Socket socket;
-    private ChatServer server;
+    private final Socket socket;
+    private final ChatServer server;
     private PrintWriter writer;
 
     public UserThread(Socket socket, ChatServer server) {

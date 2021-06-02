@@ -1,8 +1,8 @@
-package gui.gameWindow;
+package gui.game_window;
 
-import gui.gameWindow.sidePanels.*;
-import gui.gameWindow.topPanel.Logo;
-import gui.gameWindow.topPanel.TopPanel;
+import gui.game_window.sidePanels.*;
+import gui.game_window.topPanel.Logo;
+import gui.game_window.topPanel.TopPanel;
 import logic.Game;
 import logic.GameOption;
 import logic.Territory;

@@ -1,15 +1,15 @@
 package logic;
 
-import gui.gameWindow.GameMap;
-import gui.gameWindow.GameWindow;
+import gui.game_window.GameMap;
+import gui.game_window.GameWindow;
 import util.*;
 
 import java.awt.*;
 import java.util.*;
 import java.util.stream.IntStream;
 
-import static gui.gameWindow.GameWindow.HEIGHT;
-import static gui.gameWindow.GameWindow.WIDTH;
+import static gui.game_window.GameWindow.HEIGHT;
+import static gui.game_window.GameWindow.WIDTH;
 
 public class Game {
     private final int numberOfTerritories = 42;

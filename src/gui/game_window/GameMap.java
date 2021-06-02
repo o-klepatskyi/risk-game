@@ -1,7 +1,6 @@
-package gui.gameWindow;
+package gui.game_window;
 
 import logic.*;
-import util.*;
 
 import javax.swing.*;
 import java.awt.*;

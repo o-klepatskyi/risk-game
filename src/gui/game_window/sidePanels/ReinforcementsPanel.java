@@ -1,11 +1,10 @@
-package gui.gameWindow.sidePanels;
+package gui.game_window.sidePanels;
 
-import gui.gameWindow.GameWindow;
+import gui.game_window.GameWindow;
 import logic.Territory;
 import util.Fonts;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

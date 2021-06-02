@@ -1,6 +1,6 @@
-package gui.mainMenu;
+package gui.main_menu;
 
-import gui.playerMenu.PlayerMenu;
+import gui.player_menu.PlayerMenu;
 import util.Fonts;
 
 import javax.swing.*;

@@ -1,7 +1,5 @@
-package gui;
-
-import gui.mainMenu.MainMenu;
-import gui.playerMenu.PlayerMenu;
+import gui.main_menu.MainMenu;
+import gui.player_menu.PlayerMenu;
 import logic.Game;
 import logic.Player;
 

@@ -1,4 +1,4 @@
-package gui.playerMenu;
+package gui.player_menu;
 
 import util.Fonts;
 

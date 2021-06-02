@@ -1,4 +1,4 @@
-package gui.playerMenu;
+package gui.player_menu;
 
 /*
  * Copyright (c) 1995, 2008, Oracle and/or its affiliates. All rights reserved.

@@ -196,15 +196,6 @@ public class Game {
     }
 
     /**
-     * for GUI
-     * @return maximum amount of troops that are transferable
-     */
-    public int getMaximumFortificationTroops() {
-        Territory srcTerritory = gameMap.getSrcTerritory();
-        return srcTerritory.getTroops()-1;
-    }
-
-    /**
      *
      * @param numberOfTroops
      * @throws SrcNotStatedException
@@ -272,7 +263,10 @@ public class Game {
             index = 0;
 
         currentPlayer = players.get(index);
-        currentPlayer.setBonus(gameGraph.getTerritories(currentPlayer).size() / 3);
+
+        int bonus = gameGraph.getTerritories(currentPlayer).size() / 3;
+        bonus = Math.max(bonus, 3);
+        currentPlayer.setBonus(bonus);
 
         reinforcePhase();
     }

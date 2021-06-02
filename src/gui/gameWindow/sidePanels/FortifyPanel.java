@@ -39,8 +39,14 @@ public class FortifyPanel extends SidePanel {
         }
 
         if (src != null & dst != null) {
-            fortifyButton.setEnabled(true);
-            troopsToTransferSpinner.setModel(new SpinnerNumberModel(src.getTroops()-1,1, src.getTroops()-1, 1));
+            int availableTroops = src.getTroops()-1;
+            if (availableTroops > 1) {
+                fortifyButton.setEnabled(true);
+                troopsToTransferSpinner.setModel(new SpinnerNumberModel(availableTroops,1, availableTroops, 1));
+            } else {
+                fortifyButton.setEnabled(false);
+                troopsToTransferSpinner.setModel(new SpinnerNumberModel(0,0,0,0));
+            }
         } else {
             fortifyButton.setEnabled(false);
             troopsToTransferSpinner.setModel(new SpinnerNumberModel(0,0,0,0));

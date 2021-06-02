@@ -28,10 +28,10 @@ public class Main {
         ArrayList<Player> players = new ArrayList<>();
         Player p1 = new Player("Ivan", Color.RED, false);
         Player p2 = new Player("Oleh", Color.BLUE, false);
-        Player p3 = new Player("Bot", Color.YELLOW, true);
+        //Player p3 = new Player("Bot", Color.YELLOW, true);
         players.add(p1);
         players.add(p2);
-        players.add(p3);
+        //players.add(p3);
         Game game = new Game(players);
         frame.add(game.getGameWindow());
         frame.pack();

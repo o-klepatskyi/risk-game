@@ -10,8 +10,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class AttackPanel extends SidePanel {
-    private JLabel alliedTroopsLabel, enemyTroopsLabel;
-    private ValueJLabel alliedTroops, enemyTroops, victoryChance;
+    private JLabel alliedTroopsLabel, enemyTroopsLabel,  alliedTroops, enemyTroops;
+    private ValueJLabel victoryChance;
     private JButton attackButton, endAttack;
     private GameWindow gameWindow;
 
@@ -27,13 +27,13 @@ public class AttackPanel extends SidePanel {
         alliedTroopsLabel = new JLabel("Allied troops:");
         labels.add(alliedTroopsLabel);
 
-        alliedTroops = new ValueJLabel();
+        alliedTroops = new JLabel("<none>");
         labels.add(alliedTroops);
 
         enemyTroopsLabel = new JLabel("Enemy troops:");
         labels.add(enemyTroopsLabel);
 
-        enemyTroops = new ValueJLabel();
+        enemyTroops = new ValueJLabel("<none>");
         labels.add(enemyTroops);
 
         victoryChance = new ValueJLabel("Victory chance:", "0%");
@@ -58,7 +58,9 @@ public class AttackPanel extends SidePanel {
         attackButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                attack();
+                if (attackButton.isEnabled()) {
+                    gameWindow.attack();
+                }
             }
         });
         add(attackButton);
@@ -78,31 +80,23 @@ public class AttackPanel extends SidePanel {
         add(endAttack);
     }
 
-    private void attack() {
-        if (attackButton.isEnabled()) {
-            gameWindow.attack();
-        }
-    }
-
     @Override
     public void updateTerritories(Territory src, Territory dst) {
         super.updateTerritories(src, dst);
         if (src != null) {
-            alliedTroops.setTextWithoutValue(src.getName() + " -");
-            alliedTroops.setValue(src.getTroops());
+            alliedTroops.setText(src.getName() + " - " + src.getTroops());
             alliedTroops.setForeground(src.getOwner().getColor());
         } else {
-            alliedTroops.clear();
-            alliedTroops.setForeground(Color.black);
+            alliedTroops.setText("<none>");
+            alliedTroops.setForeground(Color.white);
         }
 
         if (dst != null) {
-            enemyTroops.setTextWithoutValue(dst.getName() + " -");
-            enemyTroops.setValue(dst.getTroops());
+            enemyTroops.setText(dst.getName() + " - " + dst.getTroops());
             enemyTroops.setForeground(dst.getOwner().getColor());
         } else {
-            enemyTroops.clear();
-            enemyTroops.setForeground(Color.black);
+            enemyTroops.setText("<none>");
+            enemyTroops.setForeground(Color.white);
         }
 
         if (src != null && dst != null) {

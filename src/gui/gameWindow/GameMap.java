@@ -26,8 +26,7 @@ public class GameMap extends JPanel {
         this.game = game;
         this.gameGraph = game.getGameGraph();
         panel = this;
-
-        setBackground(new Color(0, 145, 182));
+        //setBackground(new Color(0, 145, 182));
         buttons = new ArrayList<>();
         drawField();
 
@@ -121,8 +120,10 @@ public class GameMap extends JPanel {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        ImageIcon backgroundImage = new ImageIcon("res/map.png");
-        g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+        Image backgroundImage = new ImageIcon("res/map-bg.jpg").getImage();//.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
+        g.drawImage(backgroundImage, 0, 0,getWidth(),getHeight(), this);
+        ImageIcon map = new ImageIcon("res/map.png");
+        g.drawImage(map.getImage(), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
     private void clearField() {

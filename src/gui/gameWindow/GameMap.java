@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class Map extends JPanel {
+public class GameMap extends JPanel {
     private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
     private final int BORDER_MARGIN = 5;
 
@@ -20,7 +20,7 @@ public class Map extends JPanel {
     private boolean buttonClicked = false;
     private JButton src, dst;
 
-    public Map(Game game) {
+    public GameMap(Game game) {
         this.setLayout(null);
         this.game = game;
         this.gameGraph = game.getGameGraph();
@@ -54,12 +54,10 @@ public class Map extends JPanel {
         });
     }
 
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        ImageIcon backgroundImage = new ImageIcon("res/map.png");
-        g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
-    }
-
+    /**
+     * Call this method after any changes applied to map(attack, fortify, reinforcement)
+     * Updates map
+     */
     public void drawField(){
         clearField();
         buttons.clear();
@@ -89,18 +87,36 @@ public class Map extends JPanel {
 
     }
 
-    /*
-    public void attack() {
-        if(src != null && dst != null) {
-            game.attack(gameGraph.getVertex(src.getName()), gameGraph.getVertex(dst.getName()));
-            drawField();
-            resetButtons();
-        }
+    /**
+     *
+     * @return territory from src button(by name)
+     */
+    public Territory getSrcTerritory() {
+        if(src == null)
+            return null;
+
+        return gameGraph.getVertex(src.getName());
     }
 
+    /**
+     *
+     * @return territory from dst button(by name)
      */
+    public Territory getDstTerritory() {
+        if(dst == null)
+            return null;
+
+        return gameGraph.getVertex(dst.getName());
+    }
+
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        ImageIcon backgroundImage = new ImageIcon("res/map.png");
+        g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+    }
 
     private void clearField() {
+        resetButtons();
         panel.removeAll();
         panel.revalidate();
         panel.repaint();
@@ -134,7 +150,7 @@ public class Map extends JPanel {
                                 showOptions(game.getGameOption());
                             }
                             else {
-                                if (!button.equals(src)) {
+                                if (!button.equals(src) && src != null) {
                                     if (dst != null)
                                         dst.setBorder(null);
                                     if (dst != button)
@@ -215,8 +231,7 @@ public class Map extends JPanel {
             for(JButton b : buttons) {
                 dst = gameGraph.getVertex(b.getName());
                 if(!filter.contains(dst)){
-                    b.setForeground(b.getBackground());
-                    b.setBackground(DISABLED_COLOR);
+                    makeButtonInactive(b);
                 }
             }
 
@@ -245,5 +260,10 @@ public class Map extends JPanel {
                 button.setBorder(BorderFactory.createLineBorder(Color.BLACK, BORDER_MARGIN));
                 dst = button;
         }
+    }
+
+    private void makeButtonInactive(JButton button) {
+        button.setForeground(button.getBackground());
+        button.setBackground(DISABLED_COLOR);
     }
 }

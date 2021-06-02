@@ -20,8 +20,6 @@ public class GameWindow extends JPanel {
 //        SidePanel sidePanel = new AttackPanel();
 //        SidePanel sidePanel = new FortifyPanel();
 
-        Map map = new Map(game);
-        map.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         gbc.fill = GridBagConstraints.BOTH;
@@ -47,7 +45,7 @@ public class GameWindow extends JPanel {
         this.add(sidePanel, gbc);
 
         gbc.gridx = 1;
-        this.add(map, gbc);
+        this.add(game.getGameMap(), gbc);
     }
 
 }

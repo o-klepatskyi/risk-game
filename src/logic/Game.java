@@ -1,9 +1,15 @@
 package logic;
 
+import gui.gameWindow.GameMap;
 import gui.gameWindow.GameWindow;
+import util.*;
 
+import java.awt.*;
 import java.util.*;
 import java.util.stream.IntStream;
+
+import static gui.gameWindow.GameWindow.HEIGHT;
+import static gui.gameWindow.GameWindow.WIDTH;
 
 public class Game {
     private final int numberOfTerritories = 42;
@@ -37,6 +43,7 @@ public class Game {
 
     private Player currentPlayer;
     private GameOption gameOption;
+    private GameMap gameMap;
 
     public Game(ArrayList<Player> players) {
         this.players = players;
@@ -45,16 +52,22 @@ public class Game {
         initializeTerritories();
         gameGraph = new Graph();
         createGraphFromTerritories();
-
         distributeTerritories();
-        gameOption = GameOption.REINFORCEMENT; // change accordingly
-        currentPlayer = players.get(0); // change accordingly
+
+        pickFirstPlayer();
+
+        gameMap = new GameMap(this);
+        gameMap.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
 
         gameWindow = new GameWindow(this);
     }
 
     public GameWindow getGameWindow() {
         return gameWindow;
+    }
+
+    public GameMap getGameMap() {
+        return gameMap;
     }
 
     public Graph getGameGraph() {
@@ -69,7 +82,29 @@ public class Game {
         return currentPlayer;
     }
 
-    public int calculateProbability(int attackTroops, int defendTroops) {
+    /**
+     *
+     * @return probability of a battle between GameMap src and dst territories
+     * @throws SrcNotStatedException
+     * @throws DstNotStatedException
+     * @throws WrongTerritoriesPairException
+     */
+    public int calculateProbability() throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException {
+        Territory srcTerritory = gameMap.getSrcTerritory();
+        Territory dstTerritory = gameMap.getDstTerritory();
+
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory was not stated!");
+
+        if(dstTerritory == null)
+            throw new DstNotStatedException("Destination territory was not stated!");
+
+        if(!gameGraph.hasEdge(srcTerritory, dstTerritory))
+            throw new WrongTerritoriesPairException("These territories are not adjacent");
+
+        int attackTroops = srcTerritory.getTroops();
+        int defendTroops = dstTerritory.getTroops();
+
         int attackerWinsCount = 0;
         final double COUNT_OF_DICE_ROLLS = 10000;
         for(int i = 0; i < COUNT_OF_DICE_ROLLS; i++) {
@@ -81,37 +116,149 @@ public class Game {
         return (int) Math.round(probability);
     }
 
-    public void attack(Territory attackTerritory, Territory defendTerritory) {
-        int attackTroops = attackTerritory.getTroops();
-        int defendTroops = defendTerritory.getTroops();
+    /**
+     *
+     * @return true if attacker wins, else - false
+     * @throws SrcNotStatedException
+     * @throws DstNotStatedException
+     * @throws WrongTerritoriesPairException
+     * @throws IllegalNumberOfAttackTroopsException
+     */
+    public boolean attack() throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfAttackTroopsException {
+        Territory srcTerritory = gameMap.getSrcTerritory();
+        Territory dstTerritory = gameMap.getDstTerritory();
 
-        if(attackTroops >= 2) {
-            int[] troopsLeft = dice_rolls(attackTroops, defendTroops);
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory was not stated!");
 
-            if(attackerWins(troopsLeft)) {
-                attackTerritory.setTroops(1);
-                defendTerritory.setTroops(troopsLeft[0]);
-                defendTerritory.setOwner(attackTerritory.getOwner());
+        if(dstTerritory == null)
+            throw new DstNotStatedException("Destination territory was not stated!");
+
+        if(!gameGraph.hasEdge(srcTerritory, dstTerritory))
+            throw new WrongTerritoriesPairException("These territories are not adjacent!");
+
+        int attackTroops = srcTerritory.getTroops();
+        int defendTroops = dstTerritory.getTroops();
+
+        if(attackTroops == 1)
+            throw new IllegalNumberOfAttackTroopsException("Not enough troops to attack (1)!");
+
+        int[] troopsLeft = dice_rolls(attackTroops, defendTroops);
+
+        if(attackerWins(troopsLeft)) {
+            srcTerritory.setTroops(1);
+            dstTerritory.setTroops(troopsLeft[0]);
+            dstTerritory.setOwner(srcTerritory.getOwner());
+            gameMap.drawField();
+            return true;
+        }
+        else {
+            srcTerritory.setTroops(1);
+            dstTerritory.setTroops(troopsLeft[1]);
+            gameMap.drawField();
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param numberOfTroops
+     * @throws SrcNotStatedException
+     * @throws DstNotStatedException
+     * @throws WrongTerritoriesPairException
+     * @throws IllegalNumberOfFortifyTroopsException
+     */
+    public void fortify(int numberOfTroops) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException {
+        Territory srcTerritory = gameMap.getSrcTerritory();
+        Territory dstTerritory = gameMap.getDstTerritory();
+
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory was not stated!");
+
+        if(dstTerritory == null)
+            throw new DstNotStatedException("Destination territory was not stated!");
+
+
+        ArrayList<Territory> connectedTerritories = gameGraph.getConnectedTerritories(srcTerritory);
+        if(connectedTerritories.contains(dstTerritory)) {
+            if(numberOfTroops <= srcTerritory.getTroops()-1) {
+                dstTerritory.setTroops(dstTerritory.getTroops() + numberOfTroops);
+                srcTerritory.setTroops(srcTerritory.getTroops() - numberOfTroops);
             }
             else {
-                attackTerritory.setTroops(1);
-                defendTerritory.setTroops(troopsLeft[1]);
+                throw new IllegalNumberOfFortifyTroopsException("Number of troops to transfer exceeds number of available troops. Cannot be 0 troops on territory, must be at least 1");
             }
         }
-    }
-
-    public void fortify(Territory src, Territory dst, int numberOfTroops) {
-        ArrayList<Territory> connectedTerritories = gameGraph.getConnectedTerritories(src);
-        if(connectedTerritories.contains(dst) && numberOfTroops <= dst.getTroops()-1) {
-            dst.setTroops(dst.getTroops() + numberOfTroops);
-            src.setTroops(src.getTroops() - numberOfTroops);
+        else {
+            throw new WrongTerritoriesPairException("These territories are not connected!");
         }
+        gameMap.drawField();
     }
 
-    public void reinforce(Territory src, Territory dst, int numberOfTroops) {
-        if(gameGraph.hasEdge(src, dst))
-            fortify(src, dst, numberOfTroops);
+    /**
+     * for GUI
+     * @return maximum amount of troops that are transferable
+     */
+    public int getMaximumFortificationTroops() {
+        Territory srcTerritory = gameMap.getSrcTerritory();
+        return srcTerritory.getTroops()-1;
     }
+
+    /**
+     *
+     * @param numberOfTroops
+     * @throws SrcNotStatedException
+     * @throws IllegalNumberOfReinforceTroopsException
+     */
+    public void reinforce(int numberOfTroops) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
+        Territory srcTerritory = gameMap.getSrcTerritory();
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory was not stated!");
+
+        if(numberOfTroops > currentPlayer.getBonus())
+            throw new IllegalNumberOfReinforceTroopsException("Number of troops for reinforcement exceeds bonus!");
+
+        srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
+        currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
+    }
+
+    /**
+     * must be applied after nextPlayerTurn() call
+     */
+    public void reinforcePhase() {
+        gameOption = GameOption.REINFORCEMENT;
+    }
+
+    /**
+     * must be applied after reinforcePhase() call
+     */
+    public void attackPhase() {
+        gameOption = GameOption.ATTACK;
+    }
+
+    /**
+     * must be applied after attackPhase() call
+     */
+    public void FortifyPhase() {
+        gameOption = GameOption.FORTIFY;
+    }
+
+    /**
+     * removes dead player and gives turn to next player
+     */
+    public void nextPlayerTurn() {
+        removeDeadPlayers();
+
+        int index = players.indexOf(currentPlayer);
+        index++;
+        if(index == players.size())
+            index = 0;
+
+        currentPlayer = players.get(index);
+        currentPlayer.setBonus(gameGraph.getTerritories(currentPlayer).size() / 3);
+    }
+
+
 
     private void initializeTerritories() {
         territories = new ArrayList<>();
@@ -268,6 +415,18 @@ public class Game {
         return t.get(rand.nextInt(t.size()));
     }
 
+    private void removeDeadPlayers() {
+        players.removeIf(this::playerIsDead);
+    }
+
+    private boolean playerIsDead(Player player) {
+        for(Territory territory : gameGraph.getTerritories()) {
+            if(territory.getOwner().equals(player))
+                return false;
+        }
+        return true;
+    }
+
     private int[] dice_rolls(int attackTroops, int defendTroops) {
         attackTroops--;
         while (attackTroops > 0 && defendTroops > 0) {
@@ -329,4 +488,10 @@ public class Game {
     private boolean attackerWins(int[] troopsLeft) {
         return troopsLeft[0] > 0;
     }
+
+    private void pickFirstPlayer() {
+        gameOption = GameOption.ATTACK;
+        currentPlayer = players.get(0);
+    }
+
 }

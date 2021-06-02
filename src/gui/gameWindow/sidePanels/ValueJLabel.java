@@ -1,12 +1,17 @@
 package gui.gameWindow.sidePanels;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Class for quicker change in JLabel.
  */
 class ValueJLabel extends JLabel {
     private String text, value;
+
+    public ValueJLabel() {
+        this("<none>");
+    }
 
     public ValueJLabel(String text, String value) {
         this.text = text;
@@ -26,7 +31,7 @@ class ValueJLabel extends JLabel {
         return text;
     }
 
-    public void setTextWithoutValue() {
+    public void setTextWithoutValue(String text) {
         this.text = text;
         setText(text + " " + value);
     }
@@ -42,5 +47,11 @@ class ValueJLabel extends JLabel {
 
     public void setValue(int value) {
         setValue(String.valueOf(value));
+    }
+
+    public void clear() {
+        text = "<none>";
+        value = "<none>";
+        setText(text + " " + value);
     }
 }

@@ -69,7 +69,7 @@ public class GameWindow extends JPanel {
                 sidePanel = createReinforcementsPanel();
                 break;
             case ATTACK:
-                sidePanel = new AttackPanel();
+                sidePanel = new AttackPanel(this);
                 break;
             case FORTIFY:
                 sidePanel = new FortifyPanel();
@@ -97,12 +97,30 @@ public class GameWindow extends JPanel {
         } catch (Exception e) {
             System.out.print("REINFORCE in Game Window: ");
             System.err.println(e.getMessage());
-            e.printStackTrace();
         }
     }
 
     public void nextPhase() {
         game.nextPhase();
         updatePhase();
+    }
+
+    public void attack() {
+        try {
+            game.attack();
+        } catch (Exception e) {
+            System.out.print("ATTACK in Game Window: ");
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public int calculateProbability() {
+        try {
+            return game.calculateProbability();
+        } catch (Exception e) {
+            System.out.print("CALCULATE in Game Window: ");
+            System.err.println(e.getMessage());
+        }
+        return 0;
     }
 }

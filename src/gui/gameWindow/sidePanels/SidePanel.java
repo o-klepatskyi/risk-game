@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
-public abstract class SidePanel extends JPanel {
+public class SidePanel extends JPanel {
     private final int WIDTH = (int) (GameWindow.WIDTH*0.25);
     private final int HEIGHT = (int) (GameWindow.HEIGHT*0.9);
     protected final int LABEL_WIDTH = WIDTH, LABEL_HEIGHT = 30;
@@ -18,11 +18,14 @@ public abstract class SidePanel extends JPanel {
     protected final Font BUTTON_FONT = Fonts.BUTTON_FONT.deriveFont((float) LABEL_HEIGHT-5);
 
 
-    public SidePanel() {
+    SidePanel() {
         setOpaque(true);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        //revalidate();
+    }
+
+    public static SidePanel getEmptyPanel() {
+        return new SidePanel();
     }
 
     @Override

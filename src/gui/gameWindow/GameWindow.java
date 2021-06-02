@@ -1,6 +1,7 @@
 package gui.gameWindow;
 
 import gui.gameWindow.sidePanels.*;
+import gui.gameWindow.topPanel.TopPanel;
 import logic.Game;
 
 import javax.swing.*;
@@ -10,15 +11,16 @@ public class GameWindow extends JPanel {
 
     public final static int WIDTH = 1280, HEIGHT = 720;
 
+    private SidePanel sidePanel;
+    private TopPanel gameFlow;
+
     public GameWindow(Game game) {
 
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setLayout(new GridBagLayout());
 
-        // size is set inside SidePanel
-        SidePanel sidePanel = new ReinforcementsPanel();
-//        SidePanel sidePanel = new AttackPanel();
-//        SidePanel sidePanel = new FortifyPanel();
+        sidePanel = SidePanel.getEmptyPanel();
+        gameFlow = new TopPanel();
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -33,11 +35,9 @@ public class GameWindow extends JPanel {
         gameTitle.setBackground(Color.RED);
         this.add(gameTitle, gbc);
 
-        JPanel gameFlow = new JPanel();
         gbc.gridx = 1;
         gbc.gridy = 0;
-        gameFlow.setOpaque(true);
-        gameFlow.setBackground(Color.GREEN);
+
         this.add(gameFlow, gbc);
 
         gbc.gridx = 0;

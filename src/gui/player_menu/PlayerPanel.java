@@ -21,8 +21,10 @@ class PlayerPanel extends JPanel {
     private final Font TEXTFIELD_FONT = new Font("Footlight MT Light", Font.PLAIN, HEIGHT-20);
     private final Font BUTTON_FONT  = new Font("Footlight MT Light", Font.PLAIN, HEIGHT-32);
 
+    private final ColorModel colorModel;
 
-    PlayerPanel(PlayerMenu parent) {
+
+    PlayerPanel(PlayerMenu parent, final ColorModel colorModel) {
         this.parent = parent;
         setSize(WIDTH, HEIGHT);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -32,17 +34,17 @@ class PlayerPanel extends JPanel {
         setOpaque(false);
         setBackground(new Color(255, 255, 255, 123));
 
-
+        this.colorModel = colorModel;
         playerNameField = new PlayerNameField("Player " + playerNumber++);
         playerNameField.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT-10));
         playerNameField.setFont(TEXTFIELD_FONT);
         add(playerNameField);
 
-        colorComboBox = new ColorComboBox();
+        colorComboBox = new ColorComboBox(colorModel);
         colorComboBox.setPreferredSize(new Dimension((int) (WIDTH * (3.0 / 16.0)), HEIGHT - 10));
         colorComboBox.setRenderer(new ColorComboBoxRenderer());
         add(colorComboBox);
-        ColorModel.addComboBox(colorComboBox);
+        colorModel.addComboBox(colorComboBox);
 
 
         botCheckBox = new JCheckBoxCustomIcon(WIDTH / 8 - 20,HEIGHT - 10);

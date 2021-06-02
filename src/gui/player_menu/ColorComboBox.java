@@ -10,15 +10,17 @@ import java.util.ArrayList;
 class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
     private final int SIZE = PlayerMenu.HEIGHT/10;
     private PlayerColor oldSelectedColor;
+    private final ColorModel colorModel;
 
-    ColorComboBox() {
+    ColorComboBox(final ColorModel colorModel) {
         setSize(SIZE, SIZE);
         setPreferredSize(new Dimension(SIZE+20,SIZE));
         setEditable(false);
 
-        PlayerColor firstAvailableColor = ((ArrayList<PlayerColor>)ColorModel.getAvailableColors()).get(0);
+        this.colorModel = colorModel;
+        PlayerColor firstAvailableColor = ((ArrayList<PlayerColor>)colorModel.getAvailableColors()).get(0);
         oldSelectedColor = firstAvailableColor;
-        ColorModel.chooseColor(firstAvailableColor);
+        colorModel.chooseColor(firstAvailableColor);
 
         addActionListener(this);
     }
@@ -31,7 +33,7 @@ class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
         if (selectedColor != null) {
             oldSelectedColor = selectedColor;
         }
-        ColorModel.chooseColor(selectedColor, previousSelectedColor);
+        colorModel.chooseColor(selectedColor, previousSelectedColor);
     }
 
     @Override

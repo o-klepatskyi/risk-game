@@ -1,5 +1,7 @@
 package gui.player_menu;
 
+import gui.main_menu.MainMenu;
+import gui.multiplayer_menu.MultiplayerMenu;
 import util.Fonts;
 
 import javax.swing.*;
@@ -16,8 +18,10 @@ class FooterPanel extends JPanel {
     private JButton addPlayerButton;
     private JButton startButton;
     private final PlayerMenu parent;
+    private JFrame frame;
+    private JPanel menu = this;
 
-    FooterPanel(PlayerMenu parent) {
+    FooterPanel(PlayerMenu parent, JFrame frame) {
         setSize(WIDTH, HEIGHT);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setMaximumSize(new Dimension(WIDTH, HEIGHT));
@@ -26,9 +30,11 @@ class FooterPanel extends JPanel {
         setBackground(new Color(255, 255, 255, 123));
 
         this.parent = parent;
+        this.frame = frame;
 
         add(getAddPlayerButton());
         add(getStartButton());
+        add(getBackButton());
 
         setVisible(true);
     }
@@ -61,5 +67,20 @@ class FooterPanel extends JPanel {
             });
         }
         return startButton;
+    }
+
+    private JButton getBackButton() {
+        JButton backButton = new JButton("Back");
+        backButton.setPreferredSize(new Dimension(WIDTH/4, HEIGHT-10));
+        backButton.setFont(BUTTON_FONT);
+        backButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                frame.remove(parent);
+                frame.add(new MainMenu(frame));
+                frame.pack();
+            }
+        });
+        return backButton;
     }
 }

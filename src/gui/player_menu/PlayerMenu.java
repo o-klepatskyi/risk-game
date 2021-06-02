@@ -16,12 +16,15 @@ public class PlayerMenu extends JPanel {
     private final int MIN_PLAYER_NUMBER = 2;
     private int currentPlayerNumber = 0;
     private final ArrayList<PlayerPanel> playerPanels = new ArrayList<>();
-    private final FooterPanel fp = new FooterPanel(this);
+    private final FooterPanel fp;
     private final HeaderPanel hp = new HeaderPanel();
     private final JFrame frame;
+    private final ColorModel colorModel = new ColorModel();
+
 
     public PlayerMenu(JFrame frame) {
         this.frame = frame;
+        fp = new FooterPanel(this, frame);
         Dimension size = new Dimension(WIDTH, HEIGHT);
         setPreferredSize(size);
         setMinimumSize(size);
@@ -44,7 +47,7 @@ public class PlayerMenu extends JPanel {
                 addPlayerPanel();
             }
 
-            ColorModel.updateAll();
+            colorModel.updateAll();
             updatePanels();
             return;
         }
@@ -79,12 +82,12 @@ public class PlayerMenu extends JPanel {
         if (currentPlayerNumber < MAX_PLAYER_NUMBER) {
             addPlayerPanel();
             updatePanels();
-            System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
+            //System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
         }
     }
 
     private void addPlayerPanel() {
-        PlayerPanel p = new PlayerPanel(this);
+        PlayerPanel p = new PlayerPanel(this, colorModel);
         playerPanels.add(p);
         currentPlayerNumber++;
     }
@@ -93,7 +96,7 @@ public class PlayerMenu extends JPanel {
         if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
             removePlayerPanel(playerPanel);
             updatePanels();
-            System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
+            //System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
         }
     }
 
@@ -101,7 +104,7 @@ public class PlayerMenu extends JPanel {
         currentPlayerNumber--;
         playerPanels.remove(playerPanel);
         playerPanel.setVisible(false);
-        ColorModel.removeComboBox(playerPanel.getColorComboBox());
+        colorModel.removeComboBox(playerPanel.getColorComboBox());
     }
 
     @Override

@@ -95,7 +95,9 @@ public class GameWindow extends JPanel {
         try {
             game.reinforce(reinforcedTroops);
         } catch (Exception e) {
+            System.out.print("REINFORCE in Game Window: ");
             System.err.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

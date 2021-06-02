@@ -86,7 +86,9 @@ public class GameMap extends JPanel {
         addListeners();
         if(game.getGameOption().equals(GameOption.REINFORCEMENT))
             showOptions(GameOption.REINFORCEMENT);
-
+        if (game.getGameWindow() != null) {
+            game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
+        }
     }
 
     /**

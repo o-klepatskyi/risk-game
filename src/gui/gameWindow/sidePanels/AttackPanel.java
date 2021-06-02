@@ -1,5 +1,7 @@
 package gui.gameWindow.sidePanels;
 
+import logic.Territory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -56,5 +58,11 @@ public class AttackPanel extends SidePanel {
         endAttack.setAlignmentX(0.5f);
         endAttack.setFont(BUTTON_FONT);
         add(endAttack);
+    }
+
+    @Override
+    public void updateTerritories(Territory src, Territory dst) {
+        super.updateTerritories(src, dst);
+
     }
 }

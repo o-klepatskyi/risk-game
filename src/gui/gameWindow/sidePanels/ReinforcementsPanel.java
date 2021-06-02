@@ -71,6 +71,7 @@ public class ReinforcementsPanel extends SidePanel {
         deployTroopsButton = new JButton("Deploy troops");
         deployTroopsButton.setPreferredSize(new Dimension(LABEL_WIDTH/2, LABEL_HEIGHT));
         deployTroopsButton.setFont(Fonts.BUTTON_FONT.deriveFont((float) LABEL_HEIGHT-10));
+        deployTroopsButton.setEnabled(false);
         deployTroopsButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -85,18 +86,26 @@ public class ReinforcementsPanel extends SidePanel {
     @Override
     public void updateTerritories(Territory src, Territory dst) {
         super.updateTerritories(src, dst);
-        territory.setText(src.getName());
+        deployTroopsButton.setEnabled(true);
+        if (src == null) {
+            territory.setText("<none>");
+        } else {
+            territory.setText(src.getName());
+        }
     }
 
     public void reinforce() {
-        int reinforcedTroops = (int) troopsLeftSpinner.getValue();
-        gameWindow.reinforce(reinforcedTroops);
-        troopsLeft -= reinforcedTroops;
-        if (troopsLeft == 0) {
-            gameWindow.nextPhase();
-        } else {
-            troopsLeftSpinner.setModel(new SpinnerNumberModel(troopsLeft, 1, troopsLeft, 1));
-            reinforcementsLeft.setValue(troopsLeft);
+        if (deployTroopsButton.isEnabled()) {
+            int reinforcedTroops = (int) troopsLeftSpinner.getValue();
+            gameWindow.reinforce(reinforcedTroops);
+            troopsLeft -= reinforcedTroops;
+            if (troopsLeft == 0) {
+                gameWindow.nextPhase();
+            } else {
+                troopsLeftSpinner.setModel(new SpinnerNumberModel(troopsLeft, 1, troopsLeft, 1));
+                reinforcementsLeft.setValue(troopsLeft);
+                deployTroopsButton.setEnabled(false);
+            }
         }
     }
 }

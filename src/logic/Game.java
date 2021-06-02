@@ -224,26 +224,40 @@ public class Game {
         gameMap.drawField();
     }
 
+    public void nextPhase() {
+        switch (gameOption) {
+            case REINFORCEMENT:
+                attackPhase();
+                break;
+            case ATTACK:
+                fortifyPhase();
+                break;
+            case FORTIFY:
+                nextPlayerTurn();
+                break;
+        }
+    }
+
     /**
      * must be applied after nextPlayerTurn() call
      *
      * so why not just include it in that method????
      */
-    public void reinforcePhase() {
+    private void reinforcePhase() {
         gameOption = GameOption.REINFORCEMENT;
     }
 
     /**
      * must be applied after reinforcePhase() call
      */
-    public void attackPhase() {
+    private void attackPhase() {
         gameOption = GameOption.ATTACK;
     }
 
     /**
      * must be applied after attackPhase() call
      */
-    public void fortifyPhase() {
+    private void fortifyPhase() {
         gameOption = GameOption.FORTIFY;
     }
 
@@ -499,19 +513,5 @@ public class Game {
         gameOption = GameOption.REINFORCEMENT;
         currentPlayer = players.get(players.size()-1);
         nextPlayerTurn();
-    }
-
-    public void nextPhase() {
-        switch (gameOption) {
-            case REINFORCEMENT:
-                attackPhase();
-                break;
-            case ATTACK:
-                fortifyPhase();
-                break;
-            case FORTIFY:
-                nextPlayerTurn();
-                break;
-        }
     }
 }

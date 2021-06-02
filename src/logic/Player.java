@@ -8,10 +8,14 @@ public class Player {
     private Color color;
     private boolean isBot;
 
+    private int bonus;
+
     public Player(String name, Color color, boolean isBot) {
         this.name = name;
         this.color = color;
         this.isBot = isBot;
+
+        bonus = 0;
     }
 
     public void setName(String name) {
@@ -45,6 +49,14 @@ public class Player {
         return isBot == player.isBot &&
                 Objects.equals(name, player.name) &&
                 Objects.equals(color, player.color);
+    }
+
+    public void setBonus(int bonus) {
+        this.bonus = bonus;
+    }
+
+    public int getBonus() {
+        return bonus;
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Graph {
 
-    private HashMap<Territory, ArrayList<Territory>> map = new HashMap<>();
+    private HashMap<Territory, List<Territory>> map = new HashMap<>();
 
     public void addVertex(Territory s) {
         map.put(s, new ArrayList<>());
@@ -54,6 +54,50 @@ public class Graph {
 
     public ArrayList<Territory> getTerritories() {
         return new ArrayList<>(map.keySet());
+    }
+
+    public ArrayList<Territory> getTerritories(Player player) {
+        ArrayList<Territory> territories = new ArrayList<>();
+        for(Territory t : map.keySet()){
+            if(t.getOwner().equals(player))
+                territories.add(t);
+        }
+        return territories;
+    }
+
+    public ArrayList<Territory> getAdjacentTerritories(Territory territory) {
+        ArrayList<Territory> territories = new ArrayList<>();
+        for(Territory t : map.keySet()) {
+            if(hasEdge(t, territory) && !t.getOwner().equals(territory.getOwner()))
+                territories.add(t);
+        }
+        return territories;
+    }
+
+    public ArrayList<Territory> getConnectedTerritories(Territory territory) {
+
+        Map<Territory, Boolean> connectedTerritoriesMap = new HashMap<>();
+        for(Territory t : map.keySet()) {
+            connectedTerritoriesMap.put(t, false);
+        }
+        dfs(territory, connectedTerritoriesMap);
+        ArrayList<Territory> connectedTerritories = new ArrayList<>();
+        for(Territory t : connectedTerritoriesMap.keySet()) {
+            if(connectedTerritoriesMap.get(t)) {
+                connectedTerritories.add(t);
+            }
+        }
+        connectedTerritories.remove(territory);
+        return connectedTerritories;
+    }
+
+    private void dfs(Territory territory, Map<Territory, Boolean> visited) {
+        visited.put(territory, true);
+
+        for (Territory t : map.get(territory)) {
+            if (!visited.get(t) && t.getOwner().equals(territory.getOwner()))
+                dfs(t, visited);
+        }
     }
 
 }

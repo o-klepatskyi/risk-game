@@ -1,9 +1,15 @@
 package logic;
 
+import gui.gameWindow.GameMap;
 import gui.gameWindow.GameWindow;
+import util.*;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.awt.*;
+import java.util.*;
+import java.util.stream.IntStream;
+
+import static gui.gameWindow.GameWindow.HEIGHT;
+import static gui.gameWindow.GameWindow.WIDTH;
 
 public class Game {
     private final int numberOfTerritories = 42;
@@ -21,6 +27,7 @@ public class Game {
             "Scandinavia", "Siam", "Siberia", "South Africa", "Southern Europe", "Ukraine",
             "Ural", "Venezuela", "Western Australia", "Western Europe", "Western United States", "Yakutsk"
     };
+
     private final Coordinates[] coordinates = {
             new Coordinates(640, 240), new Coordinates(60, 105), new Coordinates(150, 155), new Coordinates(245, 510), new Coordinates(300, 430), new Coordinates(165, 315),
             new Coordinates(750, 290), new Coordinates(515, 480), new Coordinates(550, 430), new Coordinates(880, 535), new Coordinates(220, 250), new Coordinates(515, 370),
@@ -34,7 +41,9 @@ public class Game {
     private GameWindow gameWindow;
     private Graph gameGraph;
 
-    private final Random rand = new Random();
+    private Player currentPlayer;
+    private GameOption gameOption;
+    private GameMap gameMap;
 
     public Game(ArrayList<Player> players) {
         this.players = players;
@@ -43,8 +52,13 @@ public class Game {
         initializeTerritories();
         gameGraph = new Graph();
         createGraphFromTerritories();
-
         distributeTerritories();
+
+        pickFirstPlayer();
+
+        gameMap = new GameMap(this);
+        gameMap.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
+
         gameWindow = new GameWindow(this);
     }
 
@@ -52,9 +66,201 @@ public class Game {
         return gameWindow;
     }
 
+    public GameMap getGameMap() {
+        return gameMap;
+    }
+
     public Graph getGameGraph() {
         return gameGraph;
     }
+
+    public GameOption getGameOption() {
+        return gameOption;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    /**
+     *
+     * @return probability of a battle between GameMap src and dst territories
+     * @throws SrcNotStatedException
+     * @throws DstNotStatedException
+     * @throws WrongTerritoriesPairException
+     */
+    public int calculateProbability() throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException {
+        Territory srcTerritory = gameMap.getSrcTerritory();
+        Territory dstTerritory = gameMap.getDstTerritory();
+
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory was not stated!");
+
+        if(dstTerritory == null)
+            throw new DstNotStatedException("Destination territory was not stated!");
+
+        if(!gameGraph.hasEdge(srcTerritory, dstTerritory))
+            throw new WrongTerritoriesPairException("These territories are not adjacent");
+
+        int attackTroops = srcTerritory.getTroops();
+        int defendTroops = dstTerritory.getTroops();
+
+        int attackerWinsCount = 0;
+        final double COUNT_OF_DICE_ROLLS = 10000;
+        for(int i = 0; i < COUNT_OF_DICE_ROLLS; i++) {
+            if(attackerWins(dice_rolls(attackTroops, defendTroops)))
+                attackerWinsCount++;
+        }
+        double probability = attackerWinsCount / COUNT_OF_DICE_ROLLS;
+        probability *= 100;
+        return (int) Math.round(probability);
+    }
+
+    /**
+     *
+     * @return true if attacker wins, else - false
+     * @throws SrcNotStatedException
+     * @throws DstNotStatedException
+     * @throws WrongTerritoriesPairException
+     * @throws IllegalNumberOfAttackTroopsException
+     */
+    public boolean attack() throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfAttackTroopsException {
+        Territory srcTerritory = gameMap.getSrcTerritory();
+        Territory dstTerritory = gameMap.getDstTerritory();
+
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory was not stated!");
+
+        if(dstTerritory == null)
+            throw new DstNotStatedException("Destination territory was not stated!");
+
+        if(!gameGraph.hasEdge(srcTerritory, dstTerritory))
+            throw new WrongTerritoriesPairException("These territories are not adjacent!");
+
+        int attackTroops = srcTerritory.getTroops();
+        int defendTroops = dstTerritory.getTroops();
+
+        if(attackTroops == 1)
+            throw new IllegalNumberOfAttackTroopsException("Not enough troops to attack (1)!");
+
+        int[] troopsLeft = dice_rolls(attackTroops, defendTroops);
+
+        if(attackerWins(troopsLeft)) {
+            srcTerritory.setTroops(1);
+            dstTerritory.setTroops(troopsLeft[0]);
+            dstTerritory.setOwner(srcTerritory.getOwner());
+            gameMap.drawField();
+            return true;
+        }
+        else {
+            srcTerritory.setTroops(1);
+            dstTerritory.setTroops(troopsLeft[1]);
+            gameMap.drawField();
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param numberOfTroops
+     * @throws SrcNotStatedException
+     * @throws DstNotStatedException
+     * @throws WrongTerritoriesPairException
+     * @throws IllegalNumberOfFortifyTroopsException
+     */
+    public void fortify(int numberOfTroops) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException {
+        Territory srcTerritory = gameMap.getSrcTerritory();
+        Territory dstTerritory = gameMap.getDstTerritory();
+
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory was not stated!");
+
+        if(dstTerritory == null)
+            throw new DstNotStatedException("Destination territory was not stated!");
+
+
+        ArrayList<Territory> connectedTerritories = gameGraph.getConnectedTerritories(srcTerritory);
+        if(connectedTerritories.contains(dstTerritory)) {
+            if(numberOfTroops <= srcTerritory.getTroops()-1) {
+                dstTerritory.setTroops(dstTerritory.getTroops() + numberOfTroops);
+                srcTerritory.setTroops(srcTerritory.getTroops() - numberOfTroops);
+            }
+            else {
+                throw new IllegalNumberOfFortifyTroopsException("Number of troops to transfer exceeds number of available troops. Cannot be 0 troops on territory, must be at least 1");
+            }
+        }
+        else {
+            throw new WrongTerritoriesPairException("These territories are not connected!");
+        }
+        gameMap.drawField();
+        nextPlayerTurn(); // Only one fortification can be made
+    }
+
+    /**
+     * for GUI
+     * @return maximum amount of troops that are transferable
+     */
+    public int getMaximumFortificationTroops() {
+        Territory srcTerritory = gameMap.getSrcTerritory();
+        return srcTerritory.getTroops()-1;
+    }
+
+    /**
+     *
+     * @param numberOfTroops
+     * @throws SrcNotStatedException
+     * @throws IllegalNumberOfReinforceTroopsException
+     */
+    public void reinforce(int numberOfTroops) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
+        Territory srcTerritory = gameMap.getSrcTerritory();
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory was not stated!");
+
+        if(numberOfTroops > currentPlayer.getBonus())
+            throw new IllegalNumberOfReinforceTroopsException("Number of troops for reinforcement exceeds bonus!");
+
+        srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
+        currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
+        gameMap.drawField();
+    }
+
+    /**
+     * must be applied after nextPlayerTurn() call
+     */
+    public void reinforcePhase() {
+        gameOption = GameOption.REINFORCEMENT;
+    }
+
+    /**
+     * must be applied after reinforcePhase() call
+     */
+    public void attackPhase() {
+        gameOption = GameOption.ATTACK;
+    }
+
+    /**
+     * must be applied after attackPhase() call
+     */
+    public void fortifyPhase() {
+        gameOption = GameOption.FORTIFY;
+    }
+
+    /**
+     * removes dead player and gives turn to next player
+     */
+    public void nextPlayerTurn() {
+        removeDeadPlayers();
+
+        int index = players.indexOf(currentPlayer);
+        index++;
+        if(index == players.size())
+            index = 0;
+
+        currentPlayer = players.get(index);
+        currentPlayer.setBonus(gameGraph.getTerritories(currentPlayer).size() / 3);
+    }
+
+
 
     private void initializeTerritories() {
         territories = new ArrayList<>();
@@ -161,7 +367,7 @@ public class Game {
     private void distributeTerritories() {
         int territoriesLeft = numberOfTerritories;
         for(int i = 0; i < numberOfPlayers; i++) {
-            int playerTeritorriesNumber = numberOfTerritories / numberOfPlayers;
+            int playerTerritoriesNumber = numberOfTerritories / numberOfPlayers;
             int playerTroopsNumber;
             ArrayList<Territory> playerTerritories = new ArrayList<>();
             switch (numberOfPlayers) {
@@ -185,10 +391,10 @@ public class Game {
             }
 
             if(i == numberOfPlayers-1) {
-                playerTeritorriesNumber = territoriesLeft;
+                playerTerritoriesNumber = territoriesLeft;
             }
-            int troopsLeft = playerTroopsNumber - playerTeritorriesNumber;
-            for(int j = 0; j < playerTeritorriesNumber; j++){
+            int troopsLeft = playerTroopsNumber - playerTerritoriesNumber;
+            for(int j = 0; j < playerTerritoriesNumber; j++){
                 Territory territory = getRandomTerritory(territories);
                 territory.setOwner(players.get(i));
                 territory.setTroops(1);
@@ -202,11 +408,92 @@ public class Game {
                 troopsLeft--;
             }
 
-            territoriesLeft -= playerTeritorriesNumber;
+            territoriesLeft -= playerTerritoriesNumber;
         }
     }
 
     private Territory getRandomTerritory(ArrayList<Territory> t) {
+        Random rand = new Random();
         return t.get(rand.nextInt(t.size()));
     }
+
+    private void removeDeadPlayers() {
+        players.removeIf(this::playerIsDead);
+    }
+
+    private boolean playerIsDead(Player player) {
+        for(Territory territory : gameGraph.getTerritories()) {
+            if(territory.getOwner().equals(player))
+                return false;
+        }
+        return true;
+    }
+
+    private int[] dice_rolls(int attackTroops, int defendTroops) {
+        attackTroops--;
+        while (attackTroops > 0 && defendTroops > 0) {
+            int[] attackCast = attackDice(attackTroops);
+            int[] defendCast = defendDice(defendTroops);
+            int[] totalTroopsLost = compareCasts(attackCast, defendCast);
+            attackTroops -= totalTroopsLost[0];
+            defendTroops -= totalTroopsLost[1];
+        }
+        return new int[]{attackTroops, defendTroops};
+    }
+
+    private int[] attackDice(int units) {
+        int[] cast;
+        if(units >= 3) {
+            cast = new int[]{Dice.roll(), Dice.roll(), Dice.roll()};
+        }
+        else if(units == 2) {
+            cast = new int[]{Dice.roll(), Dice.roll()};
+        }
+        else {
+            cast = new int[]{Dice.roll()};
+        }
+        Arrays.sort(cast);
+        cast = reversed(cast);
+        return cast;
+    }
+
+    private int[] defendDice(int units) {
+        int[] cast;
+        if(units >= 2) {
+            cast = new int[]{Dice.roll(), Dice.roll()};
+        }
+        else {
+            cast = new int[]{Dice.roll()};
+        }
+        Arrays.sort(cast);
+        cast = reversed(cast);
+        return cast;
+    }
+
+    private int[] compareCasts(int[] attack_cast, int[] defend_cast) {
+        int[] totalLost = {0, 0};
+        for(int i = 0; i < Math.min(attack_cast.length, defend_cast.length); i++) {
+            if(attack_cast[i] > defend_cast[i]) {
+                totalLost[1]++;
+            }
+            else {
+                totalLost[0]++;
+            }
+        }
+        return totalLost;
+    }
+
+    private int[] reversed(int[] array) {
+        return IntStream.range(0, array.length).map(i -> array[array.length-i-1]).toArray();
+    }
+
+    private boolean attackerWins(int[] troopsLeft) {
+        return troopsLeft[0] > 0;
+    }
+
+    private void pickFirstPlayer() {
+        gameOption = GameOption.REINFORCEMENT;
+        currentPlayer = players.get(0);
+    }
+
 }

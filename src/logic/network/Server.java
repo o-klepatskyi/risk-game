@@ -1,5 +1,6 @@
 package logic.network;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,7 +19,7 @@ public class Server {
     }
 
     public void execute() {
-        try (ServerSocket serverSocket = new ServerSocket(port);){
+        try (ServerSocket serverSocket = new ServerSocket(port)){
 
             System.out.println("Chat Server is listening on port " + port);
 
@@ -29,12 +30,13 @@ public class Server {
                 UserThread newUser = new UserThread(socket, this);
                 userThreads.add(newUser);
                 newUser.start();
-
-                // todo: close connection to the server with back button
             }
-        } catch (IOException ex) {
-            System.out.println("Error in the server: " + ex.getMessage());
-            System.out.println("Error in the server: " + ex.getMessage());
+        } catch (IOException | IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Error occurred while setting up the server. Please restart the game.",
+                    "Server error",
+                    JOptionPane.ERROR_MESSAGE);
+            System.err.println("Error in the server: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -54,6 +56,7 @@ public class Server {
      * Stores username of the newly connected client.
      */
     void addUserName(String userName) {
+        System.out.println("Adding username '" + userName + "'");
         userNames.add(userName);
         manager.addPlayer(userName);
     }

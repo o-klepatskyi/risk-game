@@ -20,6 +20,9 @@ public class ServerMenu extends JPanel {
 
     private final MultiplayerManager multiplayerManager = new MultiplayerManager(new Game());
 
+    private String username;
+    private int portNumber;
+
     ServerMenu(JFrame frame) {
         this.frame = frame;
         setPreferredSize(new Dimension(500,500));
@@ -53,14 +56,16 @@ public class ServerMenu extends JPanel {
     }
 
     private void openPlayerMenu() {
+        PlayerMenu pm = new PlayerMenu(frame, multiplayerManager);
+
+        multiplayerManager.setPlayerMenu(pm);
+        multiplayerManager.startServer(portNumber, username, frame);
+
         frame.remove(this);
-        frame.add(new PlayerMenu(frame, multiplayerManager));
-        frame.pack();
     }
 
     private boolean getServerInfo() {
-        String username = nameField.getText();
-        int portNumber;
+        username = nameField.getText();
         try {
             portNumber = Integer.parseInt(portField.getText());
         } catch (Exception e) {
@@ -70,8 +75,6 @@ public class ServerMenu extends JPanel {
         if (username.length() == 0) {
             return false;
         }
-
-        multiplayerManager.startServer(portNumber, username);
 
         return true;
     }

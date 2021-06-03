@@ -19,6 +19,10 @@ public class ClientMenu extends JPanel {
     private HintTextField nameField;
     private final JFrame frame;
 
+    private String username;
+    private String ipAddress;
+    private int portNumber;
+
     private final MultiplayerManager multiplayerManager = new MultiplayerManager();
 
     ClientMenu(JFrame frame) {
@@ -36,9 +40,12 @@ public class ClientMenu extends JPanel {
     }
 
     private void openPlayerMenu() {
+        PlayerMenu pm = new PlayerMenu(frame, multiplayerManager);
+
+        multiplayerManager.setPlayerMenu(pm);
+        multiplayerManager.startClient(ipAddress, portNumber, username, frame);
+
         frame.remove(this);
-        frame.add(new PlayerMenu(frame, multiplayerManager));
-        frame.pack();
     }
 
     private HintTextField getNameField() {
@@ -69,6 +76,8 @@ public class ClientMenu extends JPanel {
                             "Enter all the information carefully.",
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
+                } else {
+                    openPlayerMenu();
                 }
             }
         });
@@ -76,9 +85,8 @@ public class ClientMenu extends JPanel {
     }
 
     private boolean getClientInfo() {
-        String username = nameField.getText();
-        String ipAddress = ipField.getText();
-        int portNumber;
+        username = nameField.getText();
+        ipAddress = ipField.getText();
         try {
             portNumber = Integer.parseInt(portField.getText());
         } catch (Exception e) {
@@ -88,10 +96,6 @@ public class ClientMenu extends JPanel {
         if (username.length() == 0 || ipAddress.length() == 0) {
             return false;
         }
-
-        multiplayerManager.startClient(ipAddress, portNumber, username);
-
-        // todo
 
         return true;
     }

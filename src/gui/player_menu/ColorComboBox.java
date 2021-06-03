@@ -12,6 +12,23 @@ class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
     private PlayerColor oldSelectedColor;
     private final ColorModel colorModel;
 
+    ColorComboBox(final ColorModel colorModel, Color color) throws Exception {
+        this.colorModel = colorModel;
+        setSize(SIZE, SIZE);
+        setPreferredSize(new Dimension(SIZE+20,SIZE));
+        setEditable(false);
+
+        PlayerColor playerColor = PlayerColor.getPlayerColor(color);
+
+        if (playerColor != null && colorModel.getAvailableColors().contains(color)) {
+            System.out.println("COLOR IS AVAILABLE!!!");
+            oldSelectedColor = playerColor;
+            colorModel.chooseColor(playerColor);
+        } else throw new Exception("Color is invalid");
+
+        addActionListener(this);
+    }
+
     ColorComboBox(final ColorModel colorModel) {
         setSize(SIZE, SIZE);
         setPreferredSize(new Dimension(SIZE+20,SIZE));

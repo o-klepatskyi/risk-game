@@ -3,16 +3,15 @@ package logic.network;
 import java.io.*;
 import java.net.Socket;
 
-public class ReadThread extends Thread {
+public class ClientReadThread extends Thread {
     private ObjectInputStream objectInputStream;
     private final Client client;
 
-    public ReadThread(Socket socket, Client client) {
+    public ClientReadThread(Socket socket, Client client) {
         this.client = client;
 
         try {
             InputStream input = socket.getInputStream();
-            //reader = new BufferedReader(new InputStreamReader(input));
             objectInputStream = new ObjectInputStream(input);
         } catch (IOException ex) {
             System.err.println("Error getting input stream: " + ex.getMessage());
@@ -39,6 +38,9 @@ public class ReadThread extends Thread {
                     System.out.println("Client waiting for message...");
                     Message response = (Message) objectInputStream.readObject();
                     System.out.println(response);
+                    if (response.type == MessageType.PLAYERS) {
+                        client.manager.updatePlayerMenu(response.players);
+                    }
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error reading from server: " + ex.getMessage());
                     ex.printStackTrace();

@@ -2,19 +2,17 @@ package gui.player_menu;
 
 import logic.PlayerColor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class ColorModel {
+import static logic.PlayerColor.*;
+
+public class ColorModel implements Serializable {
 
     public static final ArrayList<PlayerColor> colors = new ArrayList<>(Arrays.asList(
-            new PlayerColor(255,0,0, "red"),
-            new PlayerColor(0, 0, 255, "blue"),
-            new PlayerColor(34, 177,76, "green"),
-            new PlayerColor(255, 201, 14, "yellow"),
-            new PlayerColor(255,127,39, "orange"),
-            new PlayerColor(255, 64, 127, "pink")
+            RED,BLUE,GREEN,YELLOW,ORANGE,PINK
     ));
 
     private final ArrayList<PlayerColor> availableColors = new ArrayList<>(colors);

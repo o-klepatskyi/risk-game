@@ -12,7 +12,7 @@ class PlayerPanel extends JPanel {
     private static final int HEIGHT = PlayerMenu.HEIGHT/10;
 
     private PlayerNameField playerNameField;
-    private final ColorComboBox colorComboBox;
+    private ColorComboBox colorComboBox;
     private JCheckBox botCheckBox;
     private JButton removePlayerButton;
     private static int playerNumber = 1;
@@ -23,18 +23,41 @@ class PlayerPanel extends JPanel {
 
     private final ColorModel colorModel;
 
+    PlayerPanel(PlayerMenu parent, final ColorModel colorModel, Player player) {
+        this.parent = parent;
+        this.colorModel = colorModel;
+        init();
+        getPlayerNameField();
+
+        playerNameField.setText(player.getName());
+        playerNameField.setEditable(false);
+        add(getPlayerNameField());
+
+        try {
+            colorComboBox = new ColorComboBox(colorModel, player.getColor());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        colorComboBox.setPreferredSize(new Dimension((int) (WIDTH * (3.0 / 16.0)), HEIGHT - 10));
+        colorComboBox.setRenderer(new ColorComboBoxRenderer());
+
+        add(colorComboBox);
+        colorModel.addComboBox(colorComboBox);
+
+        add(getBotCheckBox());
+        add(getRemovePlayerButton());
+
+        repaint();
+        validate();
+        setVisible(true);
+    }
+
 
     PlayerPanel(PlayerMenu parent, final ColorModel colorModel) {
         this.parent = parent;
-        setSize(WIDTH, HEIGHT);
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        setMaximumSize(new Dimension(WIDTH, HEIGHT));
-        setMinimumSize(new Dimension(WIDTH, HEIGHT));
-        setLayout(new FlowLayout());
-        setOpaque(false);
-        setBackground(new Color(255, 255, 255, 123));
-
         this.colorModel = colorModel;
+        init();
 
         add(getPlayerNameField());
 
@@ -43,15 +66,22 @@ class PlayerPanel extends JPanel {
         colorComboBox.setRenderer(new ColorComboBoxRenderer());
         add(colorComboBox);
         colorModel.addComboBox(colorComboBox);
-
-
-
         add(getBotCheckBox());
-
-
         add(getRemovePlayerButton());
+
+        repaint();
         validate();
         setVisible(true);
+    }
+
+    private void init() {
+        setSize(WIDTH, HEIGHT);
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setMaximumSize(new Dimension(WIDTH, HEIGHT));
+        setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        setLayout(new FlowLayout());
+        setOpaque(false);
+        setBackground(new Color(255, 255, 255, 123));
     }
 
     public JCheckBox getBotCheckBox() {

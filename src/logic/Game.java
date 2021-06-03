@@ -6,13 +6,14 @@ import gui.player_menu.ColorModel;
 import util.*;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.IntStream;
 
 import static gui.game_window.GameWindow.HEIGHT;
 import static gui.game_window.GameWindow.WIDTH;
 
-public class Game {
+public class Game implements Serializable {
     private final int numberOfTerritories = 42;
 
     private ArrayList<Player> players;

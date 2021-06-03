@@ -1,10 +1,11 @@
 package logic.network;
 
+import gui.player_menu.ColorModel;
 import gui.player_menu.PlayerMenu;
 import logic.Game;
 import logic.Player;
 
-import java.util.ArrayList;
+import javax.swing.*;
 import java.util.Collection;
 
 public final class MultiplayerManager {
@@ -26,7 +27,7 @@ public final class MultiplayerManager {
         this.networkMode = NetworkMode.CLIENT;
     }
 
-    public void startServer(int portNumber, String userName) {
+    public void startServer(int portNumber, String userName, JFrame frame) {
         if (networkMode != NetworkMode.SERVER) {
             System.err.println("Wrong network mode."); // todo exceptions
             return;
@@ -37,17 +38,19 @@ public final class MultiplayerManager {
         }
         server = new Server(portNumber, this);
         new Thread(() -> server.execute()).start();
-        startClient("127.0.0.1", portNumber, userName);
+        startClient("127.0.0.1", portNumber, userName, frame);
         //game.addPlayer(new Player(userName, game.colorModel.chooseFirstAvailableColor(), false)); // todo
     }
 
-    public void startClient(String ipAddress, int portNumber, String username) {
+    public void startClient(String ipAddress, int portNumber, String username, JFrame frame) {
         if (client != null) {
             System.err.println("Client is already activated.");
             return;
         }
-        client = new Client(ipAddress, portNumber, username);
+        client = new Client(ipAddress, portNumber, username, this);
         new Thread(() -> client.execute()).start();
+        frame.add(playerMenu);
+        frame.pack();
     }
 
     public void sendMessage(Message msg) {
@@ -56,6 +59,7 @@ public final class MultiplayerManager {
 
     void addPlayer(String username) {
         //game.addPlayer();
+        System.out.println("Adding the same player in manager...");
         playerMenu.addPlayer(username);
     }
 
@@ -67,7 +71,11 @@ public final class MultiplayerManager {
         return playerMenu.getPlayers();
     }
 
-    public void setPlayerMenu(final PlayerMenu playerMenu) {
+    public void setPlayerMenu(PlayerMenu playerMenu) {
         this.playerMenu = playerMenu;
+    }
+
+    public void updatePlayerMenu(Collection<Player> players) {
+        playerMenu.updatePlayers(players);
     }
 }

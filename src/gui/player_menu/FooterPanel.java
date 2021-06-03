@@ -1,8 +1,6 @@
 package gui.player_menu;
 
 import gui.main_menu.MainMenu;
-import gui.multiplayer_menu.MultiplayerMenu;
-import logic.network.NetworkMode;
 import util.Fonts;
 
 import javax.swing.*;
@@ -87,8 +85,6 @@ class FooterPanel extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-//                if (parent.multiplayerManager != null)
-//                    parent.multiplayerManager.close(); // todo
                 frame.remove(parent);
                 frame.add(new MainMenu(frame));
                 frame.pack();

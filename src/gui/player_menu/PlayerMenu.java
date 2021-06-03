@@ -2,6 +2,8 @@ package gui.player_menu;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -18,7 +20,7 @@ public class PlayerMenu extends JPanel {
     private final int MAX_PLAYER_NUMBER = ColorModel.colors.size();
     private final int MIN_PLAYER_NUMBER = 1;
     private int currentPlayerNumber = 0;
-    private final ArrayList<PlayerPanel> playerPanels = new ArrayList<>();
+    private ArrayList<PlayerPanel> playerPanels = new ArrayList<>();
     private final FooterPanel fp;
     private final HeaderPanel hp = new HeaderPanel();
     private final JFrame frame;
@@ -26,7 +28,7 @@ public class PlayerMenu extends JPanel {
     public final boolean isMultiplayer;
     public final boolean isServer;
     public final MultiplayerManager multiplayerManager;
-    private final ColorModel colorModel;
+    private ColorModel colorModel;
 
     public PlayerMenu(final JFrame frame) {
         this(frame, null);
@@ -38,13 +40,11 @@ public class PlayerMenu extends JPanel {
         if (multiplayerManager != null) {
             isMultiplayer = true;
             isServer = multiplayerManager.networkMode == NetworkMode.SERVER;
-            colorModel = multiplayerManager.game.colorModel;
-            multiplayerManager.setPlayerMenu(this);
         } else {
             isMultiplayer = false;
             isServer = false;
-            colorModel = new ColorModel();
         }
+        colorModel = new ColorModel();
 
         this.frame = frame;
         fp = new FooterPanel(this, frame);
@@ -60,14 +60,9 @@ public class PlayerMenu extends JPanel {
     }
 
     private void updatePanels() {
-        if (playerPanels.size() == 0) {
-            if (!isMultiplayer) {
-                for (int i = 0; i < MIN_PLAYER_NUMBER; i++) {
-                    addPlayerPanel();
-                }
-            } else {
-                // todo
-                addPlayerPanel(new ArrayList<>(multiplayerManager.game.getPlayers()).get(0).getName());
+        if (!isMultiplayer && playerPanels.size() == 0) {
+            for (int i = 0; i < MIN_PLAYER_NUMBER; i++) {
+                addPlayerPanel();
             }
             colorModel.updateAll();
             updatePanels();
@@ -103,29 +98,48 @@ public class PlayerMenu extends JPanel {
         add(fp);
 
         repaint();
+        frame.pack();
     }
 
 
     public void addPlayer() {
-        addPlayer(null);
+        addPlayer("");
     }
 
     public void addPlayer(String name) {
         if (currentPlayerNumber < MAX_PLAYER_NUMBER) {
             addPlayerPanel(name);
             updatePanels();
-            //System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
         }
     }
 
+    /**
+     * FOR MULTIPLAYER ONLY
+     */
+    public void updatePlayers(Collection<Player> players) {
+        this.colorModel = new ColorModel();
+        currentPlayerNumber = 0;
+        playerPanels = new ArrayList<>(); // todo ?????
+        this.colorModel = new ColorModel();
+        if (currentPlayerNumber + players.size() <= MAX_PLAYER_NUMBER) {
+            for (Player p : players) {
+                addPlayerPanel(p);
+            }
+
+            updatePanels();
+        }
+
+        updatePanels();
+    }
+
     private void addPlayerPanel() {
-        addPlayerPanel(null);
+        addPlayerPanel("");
     }
 
     private void addPlayerPanel(String playerName) {
         PlayerPanel p = new PlayerPanel(this, colorModel);
 
-        if (playerName != null && isMultiplayer) {
+        if (playerName.length() > 0 && isMultiplayer) {
             p.getPlayerNameField().setEditable(false);
             p.getPlayerNameField().setText(playerName);
             p.getBotCheckBox().setEnabled(false);
@@ -135,11 +149,20 @@ public class PlayerMenu extends JPanel {
         currentPlayerNumber++;
     }
 
+    private void addPlayerPanel(Player player) {
+        if (player != null && isMultiplayer) {
+            PlayerPanel p = new PlayerPanel(this, colorModel, player);
+            p.getPlayerNameField().setEditable(false);
+            p.getBotCheckBox().setEnabled(false);
+            playerPanels.add(p);
+            currentPlayerNumber++;
+        }
+    }
+
     public void removePlayer(PlayerPanel playerPanel) {
         if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
             removePlayerPanel(playerPanel);
             updatePanels();
-            //System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
         }
     }
 

@@ -12,11 +12,13 @@ public class Client {
     private String userName;
     private ObjectOutputStream objectOutputStream;
     private Socket socket;
+    final MultiplayerManager manager;
 
-    public Client(String hostname, int port, String userName) {
+    public Client(String hostname, int port, String userName, final MultiplayerManager manager) {
         this.hostname = hostname;
         this.port = port;
         this.userName = userName;
+        this.manager = manager;
     }
 
     public void execute() {
@@ -33,8 +35,11 @@ public class Client {
 
             objectOutputStream.writeObject(new Message(MessageType.USERNAME, userName));
 
-            new ReadThread(socket, this).start();
-            System.out.println("Connected to the server");
+            new ClientReadThread(socket, this).start();
+            System.out.println("User '" + userName + "' connected to the server");
+
+
+            sendMessage(new Message(MessageType.OK));
         } catch (UnknownHostException ex) {
             System.err.println("Server not found: " + ex.getMessage());
         } catch (IOException ex) {

@@ -2,7 +2,6 @@ package logic;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 public class PlayerColor extends Color {
     private String colorName;
@@ -15,12 +14,8 @@ public class PlayerColor extends Color {
     }
 
     private static ImageIcon createImageIcon(String name) {
-        String path = "res" + File.separator + "color-icons" + File.separator + name + ".png";
-        ImageIcon imageIcon = new ImageIcon(path); // load the image to a imageIcon
-        Image image = imageIcon.getImage(); // transform it
-        Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-        imageIcon = new ImageIcon(newimg);  // transform it back
-        return imageIcon;
+        String path = "color-icons/" + name + ".png";
+        return new ImageIcon(new ImageIcon(PlayerColor.class.getResource(path)).getImage().getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH));
     }
 
     public ImageIcon getIcon() {

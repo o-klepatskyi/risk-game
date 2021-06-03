@@ -16,6 +16,9 @@ public class MainMenu extends JPanel {
     private GridBagConstraints gbc;
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
 
+    ImageIcon backgroundImage = new ImageIcon(getClass().getResource("logo.png"));
+    ImageIcon menuPanel = new ImageIcon(getClass().getResource("woodSign.jpg"));
+
     private final int SIZE = 500;
     private int menuOptionChosen;
 
@@ -44,9 +47,7 @@ public class MainMenu extends JPanel {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        ImageIcon backgroundImage = new ImageIcon("res/logo/logo.png");
         g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
-        ImageIcon menuPanel = new ImageIcon("res/woodSign.jpg");
         g.drawImage(menuPanel.getImage(), SIZE/4, SIZE/2 - SIZE/20, SIZE/2, SIZE/2 - SIZE/10, null);
     }
 

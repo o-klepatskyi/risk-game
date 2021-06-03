@@ -81,7 +81,8 @@ class FooterPanel extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                parent.multiplayerManager.close();
+//                if (parent.multiplayerManager != null)
+//                    parent.multiplayerManager.close(); // todo
                 frame.remove(parent);
                 frame.add(new MainMenu(frame));
                 frame.pack();

@@ -20,6 +20,9 @@ public class GameMap extends JPanel {
     private boolean buttonClicked = false;
     private JButton src, dst;
 
+    Image backgroundImage = new ImageIcon(getClass().getResource("map-bg.jpg")).getImage();//.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
+    ImageIcon map = new ImageIcon(getClass().getResource("map.png"));
+
     public GameMap(Game game) {
         this.setLayout(null);
         this.game = game;
@@ -119,9 +122,7 @@ public class GameMap extends JPanel {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Image backgroundImage = new ImageIcon("res/map-bg.jpg").getImage();//.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
         g.drawImage(backgroundImage, 0, 0,getWidth(),getHeight(), this);
-        ImageIcon map = new ImageIcon("res/map.png");
         g.drawImage(map.getImage(), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 

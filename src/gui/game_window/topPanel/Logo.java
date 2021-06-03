@@ -12,7 +12,7 @@ public class Logo extends JPanel {
 
     //todo: change to red text on the background
 
-    private final Image bgImg = new ImageIcon("res" + File.separator + "logo" + File.separator + "logo-small.png").getImage();//.getScaledInstance(WIDTH, HEIGHT,  Image.SCALE_SMOOTH);
+    private final Image bgImg = new ImageIcon(getClass().getResource("logo-small.png")).getImage();//.getScaledInstance(WIDTH, HEIGHT,  Image.SCALE_SMOOTH);
 
     public Logo() {
         setOpaque(true);

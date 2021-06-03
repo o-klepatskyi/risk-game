@@ -8,7 +8,7 @@ import logic.Game;
 import logic.network.MultiplayerManager;
 
 public class PlayerMenu extends JPanel {
-    private final Image bgImg = new ImageIcon("res/player-menu-bg.jpg").getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
+    private final Image bgImg = new ImageIcon(getClass().getResource("player-menu-bg.jpg")).getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
 
     public static final int WIDTH = 688;
     public static final int HEIGHT = 450;

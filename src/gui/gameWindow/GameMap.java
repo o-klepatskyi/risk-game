@@ -141,6 +141,7 @@ public class GameMap extends JPanel {
                         resetButtons();
                         highlightButton(button, "src");
                         showOptions(game.getGameOption());
+                        SoundPlayer.territoryClickedSound();
                     }
                     else {
                         if(button.getBackground() == DISABLED_COLOR) {
@@ -149,6 +150,7 @@ public class GameMap extends JPanel {
                                     resetButtons();
                                     highlightButton(button, "src");
                                     showOptions(game.getGameOption());
+                                    SoundPlayer.territoryClickedSound();
                                 }
                                 else
                                     resetButtons();
@@ -159,13 +161,16 @@ public class GameMap extends JPanel {
                                 resetButtons();
                                 highlightButton(button, "src");
                                 showOptions(game.getGameOption());
+                                SoundPlayer.territoryClickedSound();
                             }
                             else {
                                 if (!button.equals(src) && src != null) {
                                     if (dst != null)
                                         dst.setBorder(null);
-                                    if (dst != button)
+                                    if (dst != button) {
                                         highlightButton(button, "dst");
+                                        SoundPlayer.territoryClickedSound();
+                                    }
                                     else {
                                         button.setBorder(null);
                                         dst = null;
@@ -193,12 +198,16 @@ public class GameMap extends JPanel {
                             resetButtons();
                             button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
                             showOptions(game.getGameOption());
+                            SoundPlayer.territoryChosenSound();
                         }
-                        else if(button.getForeground() == game.getCurrentPlayer().getColor())
+                        else if(button.getForeground() == game.getCurrentPlayer().getColor()) {
                             button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
+                            SoundPlayer.territoryChosenSound();
+                        }
                     }
                     else {
                         if(src != button) {
+                            SoundPlayer.territoryChosenSound();
                             if(game.getGameOption().equals(GameOption.REINFORCEMENT))
                                 button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
                             else

@@ -1,10 +1,9 @@
 package logic.network;
 
-import gui.main_menu.MainMenu;
-
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
+import static logic.network.MessageType.*;
 
 public class ClientReadThread extends Thread {
     private ObjectInputStream objectInputStream;
@@ -52,8 +51,13 @@ public class ClientReadThread extends Thread {
                     System.out.println(client.username + " is waiting for message...");
                     Message response = (Message) objectInputStream.readObject();
                     System.out.println(client.username + " received: " + response);
-                    if (response.type == MessageType.PLAYERS) {
+                    if (response.type == PLAYERS) {
                         client.manager.updatePlayerMenu(response.players);
+                    }
+                    if (response.type == CONNECTION_CLOSED_BY_ADMIN) {
+                        client.sendMessage(new Message(CLOSE_CONNECTION));
+                        client.close();
+                        break;
                     }
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error reading from server: " + ex.getMessage());

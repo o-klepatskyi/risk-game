@@ -2,10 +2,12 @@ package logic.network;
 
 import java.io.*;
 import java.net.Socket;
+import static logic.network.MessageType.*;
 
 public class UserThread extends Thread {
     private final Socket socket;
     private final Server server;
+    public String username;
     private ObjectOutputStream objOutputStream;
 
     public UserThread(Socket socket, Server server) {
@@ -17,40 +19,40 @@ public class UserThread extends Thread {
         try {
             InputStream inputStream = socket.getInputStream();
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-
-            //BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
             OutputStream output = socket.getOutputStream();
             objOutputStream = new ObjectOutputStream(output);
 
-            //writer = new PrintWriter(output, true);
 
             Message userName = (Message) objectInputStream.readObject();
             System.out.println("Server thread received message: " + userName);
-            if (userName.type != MessageType.USERNAME || server.hasUser(userName.msg)) {
-                sendMessage(new Message(MessageType.NAME_ERROR));
+            if (userName.type != USERNAME || server.hasUser(userName.msg)) {
+                sendMessage(new Message(NAME_ERROR));
             } else if (server.getUserNames().size() == 6) {
-                sendMessage(new Message(MessageType.MAX_PLAYERS_ERROR));
+                sendMessage(new Message(MAX_PLAYERS_ERROR));
             } else {
-                sendMessage(new Message(MessageType.OK));
+                sendMessage(new Message(OK));
                 server.addUserName(userName.msg);
+                this.username = userName.msg;
                 printUsers();
-                Message serverMessage = null, clientMessage = null;
+                Message clientMessage;
 
                 do {
                     System.out.println(userName.msg + " thread listening...");
                     clientMessage = (Message) objectInputStream.readObject();
                     System.out.println("Server received: " + clientMessage);
 
-                    if (clientMessage.type == MessageType.COLOR_CHANGED || clientMessage.type == MessageType.BOT_ADDED) {
-                        server.broadcast(new Message(MessageType.PLAYERS, clientMessage.players), null);
+                    if (clientMessage.type == COLOR_CHANGED || clientMessage.type == BOT_ADDED || clientMessage.type == PLAYER_DELETED) {
+                        server.broadcast(new Message(PLAYERS, clientMessage.players), null);
                     }
+                    if (clientMessage.type == CONNECTION_CLOSED_BY_ADMIN) {
+                        server.sendMessage(new Message(CONNECTION_CLOSED_BY_ADMIN), clientMessage.msg);
+                    }
+                } while (clientMessage.type != CLOSE_CONNECTION);
 
 
-                } while (clientMessage.type != MessageType.CLOSE_CONNECTION);
-
-                server.removeUser(userName.msg, this);
+                server.removeUser(username, this);
                 socket.close();
+                System.out.println("User '" + username + "' left server.");
             }
         } catch (Exception ex) {
             System.out.println("Error in UserThread: " + ex.getMessage());

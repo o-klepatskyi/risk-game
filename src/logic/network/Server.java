@@ -45,9 +45,9 @@ public class Server {
      * Delivers a message from one user to others (broadcasting)
      */
     void broadcast(Message message, UserThread excludeUser) throws IOException {
-        for (UserThread aUser : userThreads) {
-            if (aUser != excludeUser) {
-                aUser.sendMessage(message);
+        for (UserThread userThread : userThreads) {
+            if (userThread != excludeUser) {
+                userThread.sendMessage(message);
             }
         }
     }
@@ -77,5 +77,13 @@ public class Server {
 
     public boolean hasUser(String userName) {
         return userNames.contains(userName);
+    }
+
+    public void sendMessage(Message message, String username) throws IOException {
+        for (UserThread userThread : userThreads) {
+            if (userThread.username.equals(username)) {
+                userThread.sendMessage(message);
+            }
+        }
     }
 }

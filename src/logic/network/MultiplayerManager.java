@@ -6,6 +6,7 @@ import logic.Player;
 
 import javax.swing.*;
 import java.util.Collection;
+import static logic.network.NetworkMode.*;
 
 public final class MultiplayerManager {
     private static Server server;
@@ -18,15 +19,15 @@ public final class MultiplayerManager {
 
     public MultiplayerManager(Game game) {
         this.game = game;
-        this.networkMode = NetworkMode.SERVER;
+        this.networkMode = SERVER;
     }
 
     public MultiplayerManager() {
-        this.networkMode = NetworkMode.CLIENT;
+        this.networkMode = CLIENT;
     }
 
     public void startServer(int portNumber, String userName, JFrame frame) {
-        if (networkMode != NetworkMode.SERVER) {
+        if (networkMode != SERVER) {
             System.err.println("Wrong network mode."); // todo exceptions
             return;
         }
@@ -54,8 +55,6 @@ public final class MultiplayerManager {
     }
 
     void addPlayer(String username) {
-        //game.addPlayer();
-        System.out.println("Adding the same player in manager...");
         playerMenu.addPlayer(username);
     }
 

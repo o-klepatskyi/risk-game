@@ -125,10 +125,11 @@ class PlayerPanel extends JPanel {
             if (!parent.isMultiplayer || parent.isServer) {
                 PlayerPanel currentPanel = this;
                 removePlayerButton.addMouseListener(new MouseAdapter() {
-
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        parent.removePlayer(currentPanel);
+                        if(removePlayerButton.isEnabled()) {
+                            parent.removePlayer(currentPanel);
+                        }
                     }
                 });
             } else {

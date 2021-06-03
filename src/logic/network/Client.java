@@ -3,6 +3,7 @@ package logic.network;
 import gui.main_menu.MainMenu;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -81,6 +82,10 @@ public class Client {
     public void close() {
         try {
             socket.close();
+            openMainMenu();
+            JOptionPane.showMessageDialog(null,
+                    "Connection closed",
+                    "Lost connection",JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {
             System.err.println("Error writing to server: " + ex.getMessage());
         }
@@ -92,6 +97,9 @@ public class Client {
     }
 
     public void openMainMenu() {
+        if (manager.frame.isAncestorOf(manager.playerMenu)) {
+            manager.frame.remove(manager.playerMenu);
+        }
         manager.frame.add(new MainMenu(manager.frame));
         manager.frame.pack();
     }

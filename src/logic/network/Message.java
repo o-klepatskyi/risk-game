@@ -5,6 +5,7 @@ import logic.Player;
 
 import java.io.Serializable;
 import java.util.Collection;
+import static logic.network.MessageType.*;
 
 public class Message implements Serializable {
     public final MessageType type;
@@ -13,8 +14,8 @@ public class Message implements Serializable {
     public Collection<Player> players;
     public Game game;
 
-    Message(MessageType type, String username) throws Exception {
-        if (type != MessageType.USERNAME) {
+    public Message(MessageType type, String username) throws Exception {
+        if (!(type == USERNAME || type == CONNECTION_CLOSED_BY_ADMIN)) {
             throw new Exception("Message type exception"); // todo unique exception
         }
         this.type = type;
@@ -26,7 +27,10 @@ public class Message implements Serializable {
     }
 
     public Message(MessageType type, Collection<Player> players) throws Exception {
-        if (!(type == MessageType.PLAYERS || type == MessageType.COLOR_CHANGED || type == MessageType.BOT_ADDED)) {
+        if (!(     type == PLAYERS
+                || type == COLOR_CHANGED
+                || type == BOT_ADDED
+                || type == PLAYER_DELETED)) {
             throw new Exception("Message type exception"); // todo unique exception
         }
         this.type = type;

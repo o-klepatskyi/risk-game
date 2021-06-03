@@ -195,9 +195,33 @@ public class PlayerMenu extends JPanel {
     }
 
     public void removePlayer(PlayerPanel playerPanel) {
-        if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
-            removePlayerPanel(playerPanel);
-            updatePanels();
+        if (isMultiplayer) {
+            if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
+                removePlayerPanel(playerPanel);
+                if (!playerPanel.getBotCheckBox().isSelected()) {
+                    String username = playerPanel.getPlayer().getName();
+                    try {
+                        multiplayerManager.sendMessage(new Message(MessageType.CONNECTION_CLOSED_BY_ADMIN, username));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    multiplayerManager.sendMessage(new Message(MessageType.PLAYER_DELETED, getPlayers()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+
+
+
+        } else {
+            if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
+                removePlayerPanel(playerPanel);
+                updatePanels();
+            }
         }
     }
 

@@ -5,7 +5,6 @@ import gui.player_menu.PlayerMenu;
 import gui.player_menu.PlayerNameField;
 import logic.Game;
 import logic.network.MultiplayerManager;
-import logic.network.NetworkMode;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;

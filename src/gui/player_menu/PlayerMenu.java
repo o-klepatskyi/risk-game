@@ -81,6 +81,10 @@ public class PlayerMenu extends JPanel {
                 if (currentPlayerNumber <= MIN_PLAYER_NUMBER) {
                     panel.getRemovePlayerButton().setEnabled(false);
                 }
+
+                if (panel.getPlayerNameField().getText().equals(multiplayerManager.client.username) && isServer) {
+                    panel.getRemovePlayerButton().setEnabled(false);
+                }
             }
 
             if (isMultiplayer) {
@@ -212,11 +216,6 @@ public class PlayerMenu extends JPanel {
                     e.printStackTrace();
                 }
             }
-
-
-
-
-
         } else {
             if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
                 removePlayerPanel(playerPanel);

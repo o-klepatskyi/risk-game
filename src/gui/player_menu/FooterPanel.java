@@ -1,6 +1,8 @@
 package gui.player_menu;
 
 import gui.main_menu.MainMenu;
+import logic.network.Message;
+import logic.network.MessageType;
 import util.Fonts;
 
 import javax.swing.*;
@@ -101,9 +103,16 @@ class FooterPanel extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                frame.remove(parent);
-                frame.add(new MainMenu(frame));
-                frame.pack();
+                if (parent.isMultiplayer) {
+                    parent.multiplayerManager.sendMessage(new Message(MessageType.CLOSE_CONNECTION));
+                    if (parent.isServer) {
+                        parent.multiplayerManager.closeServer();
+                    }
+                } else {
+                    frame.remove(parent);
+                    frame.add(new MainMenu(frame));
+                    frame.pack();
+                }
             }
         });
         return backButton;

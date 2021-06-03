@@ -5,11 +5,13 @@ import logic.Game;
 import logic.Player;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.Collection;
 import static logic.network.NetworkMode.*;
 
 public final class MultiplayerManager {
-    private static Server server;
+    public Server server;
     public Client client;
 
     public final NetworkMode networkMode;
@@ -29,10 +31,6 @@ public final class MultiplayerManager {
     public void startServer(int portNumber, String userName, JFrame frame) {
         if (networkMode != SERVER) {
             System.err.println("Wrong network mode."); // todo exceptions
-            return;
-        }
-        if (server != null) {
-            System.err.println("Server is already activated.");
             return;
         }
         server = new Server(portNumber, this);
@@ -58,10 +56,6 @@ public final class MultiplayerManager {
         playerMenu.addPlayer(username);
     }
 
-    public static boolean canStart() {
-        return server == null;
-    }
-
     public Collection<Player> getPlayers() {
         return playerMenu.getPlayers();
     }
@@ -72,5 +66,15 @@ public final class MultiplayerManager {
 
     public void updatePlayerMenu(Collection<Player> players) {
         playerMenu.updatePlayers(players);
+    }
+
+    public void closeServer() {
+        try {
+            server.broadcast(new Message(MessageType.CONNECTION_CLOSED_BY_ADMIN), null);
+            server.isClosed = true;
+            new Socket("127.0.0.1", server.port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

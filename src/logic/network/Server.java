@@ -8,7 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Server {
-    private int port;
+    public boolean isClosed = false;
+    public final int port;
     MultiplayerManager manager;
     private Set<String> userNames = new HashSet<>();
     private Set<UserThread> userThreads = new HashSet<>();
@@ -23,7 +24,7 @@ public class Server {
 
             System.out.println("Chat Server is listening on port " + port);
 
-            while (true) {
+            while (!isClosed) {
                 Socket socket = serverSocket.accept();
                 System.out.println("New user connected");
 
@@ -39,6 +40,8 @@ public class Server {
             System.err.println("Error in the server: " + ex.getMessage());
             ex.printStackTrace();
         }
+
+        System.out.println("Server closed.");
     }
 
     /**

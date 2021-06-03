@@ -33,12 +33,7 @@ public class MultiplayerMenu extends JPanel {
         clientButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (MultiplayerManager.canStart()) {
-                    openClientMenu();
-                } else {
-                    JOptionPane.showMessageDialog(null, "To connect to another server, please restart the game.",
-                            "Server is running", JOptionPane.ERROR_MESSAGE);
-                }
+                openClientMenu();
             }
         });
         return clientButton;
@@ -52,12 +47,7 @@ public class MultiplayerMenu extends JPanel {
         serverButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (MultiplayerManager.canStart()) {
-                    openServerMenu();
-                } else {
-                    JOptionPane.showMessageDialog(null, "To start server again, please restart the game",
-                            "Server is running", JOptionPane.ERROR_MESSAGE);
-                }
+                openServerMenu();
             }
         });
         return serverButton;

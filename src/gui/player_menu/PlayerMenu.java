@@ -7,6 +7,8 @@ import java.util.Collection;
 
 import logic.Game;
 import logic.Player;
+import logic.network.Message;
+import logic.network.MessageType;
 import logic.network.MultiplayerManager;
 import logic.network.NetworkMode;
 
@@ -82,12 +84,14 @@ public class PlayerMenu extends JPanel {
             }
 
             if (isMultiplayer) {
-                if (!multiplayerManager.client.username.equals(panel.getPlayerNameField().getText())) {
+                if (isServer && panel.getBotCheckBox().isSelected()) {
+                    // skip
+                } else if (!multiplayerManager.client.username.equals(panel.getPlayerNameField().getText())) {
                     panel.getColorComboBox().setEnabled(false);
                 }
             }
 
-
+            System.out.println(panel.getPlayerNameField().getText() + "'s checkbox: " + panel.getBotCheckBox().isSelected());
 
             add(panel);
         }
@@ -161,11 +165,30 @@ public class PlayerMenu extends JPanel {
         currentPlayerNumber++;
     }
 
+    public void addBot() {
+        PlayerPanel p = new PlayerPanel(this, colorModel);
+
+        p.getPlayerNameField().setEditable(false);
+        p.getPlayerNameField().setText("Bot");
+        p.getBotCheckBox().setEnabled(false);
+        p.getBotCheckBox().setSelected(true);
+
+        playerPanels.add(p);
+        currentPlayerNumber++;
+
+        try {
+            multiplayerManager.sendMessage(new Message(MessageType.BOT_ADDED, getPlayers()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void addPlayerPanel(Player player) {
         if (player != null && isMultiplayer) {
             PlayerPanel p = new PlayerPanel(this, colorModel, player);
             p.getPlayerNameField().setEditable(false);
             p.getBotCheckBox().setEnabled(false);
+            p.getBotCheckBox().setSelected(player.isBot());
             playerPanels.add(p);
             currentPlayerNumber++;
         }
@@ -210,8 +233,5 @@ public class PlayerMenu extends JPanel {
             players.add(pp.getPlayer());
         }
         return players;
-    }
-
-    public void addBot() {
     }
 }

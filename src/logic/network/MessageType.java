@@ -7,5 +7,6 @@ public enum MessageType {
     USERNAME,
     MAX_PLAYERS_ERROR,
     PLAYERS,
-    COLOR_CHANGED
+    COLOR_CHANGED,
+    BOT_ADDED
 }

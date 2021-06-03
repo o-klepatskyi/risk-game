@@ -26,7 +26,7 @@ public class Message implements Serializable {
     }
 
     public Message(MessageType type, Collection<Player> players) throws Exception {
-        if (!(type == MessageType.PLAYERS || type == MessageType.COLOR_CHANGED)) {
+        if (!(type == MessageType.PLAYERS || type == MessageType.COLOR_CHANGED || type == MessageType.BOT_ADDED)) {
             throw new Exception("Message type exception"); // todo unique exception
         }
         this.type = type;

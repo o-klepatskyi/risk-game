@@ -19,7 +19,7 @@ class JCheckBoxCustomIcon extends JCheckBox {
         setIcon(new ImageIcon(new ImageIcon(getClass().getResource("checkbox-icons/disabledIcon.png")).getImage().getScaledInstance(height, height,  Image.SCALE_SMOOTH)));
 
         setSelectedIcon(new ImageIcon(new ImageIcon(getClass().getResource("checkbox-icons/selectedIcon.png")).getImage().getScaledInstance(height, height,  Image.SCALE_SMOOTH)));
-
+        setDisabledSelectedIcon(new ImageIcon(new ImageIcon(getClass().getResource("checkbox-icons/selectedIcon.png")).getImage().getScaledInstance(height, height,  Image.SCALE_SMOOTH)));
         setDisabledIcon(new ImageIcon(new ImageIcon(getClass().getResource("checkbox-icons/disabledIcon.png")).getImage().getScaledInstance(height, height,  Image.SCALE_SMOOTH)));
     }
 }

@@ -49,9 +49,9 @@ public class ClientReadThread extends Thread {
             client.openPlayerMenu();
             while (true) {
                 try {
-                    System.out.println("Client waiting for message...");
+                    System.out.println(client.username + " is waiting for message...");
                     Message response = (Message) objectInputStream.readObject();
-                    System.out.println(response);
+                    System.out.println(client.username + " received: " + response);
                     if (response.type == MessageType.PLAYERS) {
                         client.manager.updatePlayerMenu(response.players);
                     }

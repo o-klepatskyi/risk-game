@@ -42,8 +42,8 @@ public class UserThread extends Thread {
                     clientMessage = (Message) objectInputStream.readObject();
                     System.out.println("Server received: " + clientMessage);
 
-                    if (clientMessage.type == MessageType.COLOR_CHANGED) {
-                        server.broadcast(new Message(MessageType.PLAYERS, clientMessage.players), this);
+                    if (clientMessage.type == MessageType.COLOR_CHANGED || clientMessage.type == MessageType.BOT_ADDED) {
+                        server.broadcast(new Message(MessageType.PLAYERS, clientMessage.players), null);
                     }
 
 
@@ -51,9 +51,6 @@ public class UserThread extends Thread {
 
                 server.removeUser(userName.msg, this);
                 socket.close();
-
-//                serverMessage = userName + " has quit.";
-//                server.broadcast(serverMessage, this);
             }
         } catch (Exception ex) {
             System.out.println("Error in UserThread: " + ex.getMessage());

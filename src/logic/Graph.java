@@ -1,6 +1,6 @@
 package logic;
 
-import logic.Territory;
+import util.Coordinates;
 
 import java.util.*;
 
@@ -47,6 +47,14 @@ public class Graph {
     public Territory getVertex(Territory territory) {
         for(Territory t : map.keySet()) {
             if(t.equals(territory))
+                return t;
+        }
+        return null;
+    }
+
+    public Territory getVertex(Coordinates coordinates) {
+        for(Territory t : map.keySet()) {
+            if(t.getCoordinates().getX() == coordinates.getX() && t.getCoordinates().getY() == coordinates.getY())
                 return t;
         }
         return null;

@@ -23,6 +23,7 @@ public class SoundPlayer {
             e.printStackTrace();
         }
         try {
+            assert clip != null;
             clip.open(audioInputStream);
         } catch (LineUnavailableException | IOException e) {
             e.printStackTrace();
@@ -49,6 +50,10 @@ public class SoundPlayer {
 
     public static void territoryClickedSound() {
         SoundPlayer.play("res/sounds/territory_clicked.wav", clip);
+    }
+
+    public static void explosionSound() {
+        SoundPlayer.play("res/sounds/explosion.wav", clip);
     }
 
     public static void menuBackgroundMusic() {

@@ -8,6 +8,9 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.TimerTask;
+import java.util.Timer;
+
 // todo: fortifying with 1 troop
 public class GameMap extends JPanel {
     private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
@@ -116,6 +119,38 @@ public class GameMap extends JPanel {
             return null;
 
         return gameGraph.getVertex(dst.getName());
+    }
+
+    public void explosionEffect(Coordinates coordinates) {
+        SoundPlayer.explosionSound();
+        String territoryName = gameGraph.getVertex(coordinates).getName();
+        JButton territoryButton = null;
+        for(JButton button : buttons) {
+            if(button.getName().equals(territoryName)) {
+                territoryButton = button;
+                break;
+            }
+        }
+        if(territoryButton != null) {
+            int SIZE = 50;
+            ImageIcon explosionIcon = new ImageIcon("res/explosion.png");
+            JLabel explosion = new JLabel(explosionIcon);
+            explosion.setBounds(coordinates.getX()-SIZE/2, coordinates.getY()-SIZE/2, SIZE, SIZE);
+            territoryButton.setVisible(false);
+            panel.add(explosion);
+
+            JButton finalTerritoryButton = territoryButton;
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            explosion.setVisible(false);
+                            finalTerritoryButton.setVisible(true);
+                        }
+                    },
+                    500
+            );
+        }
     }
 
     protected void paintComponent(Graphics g) {

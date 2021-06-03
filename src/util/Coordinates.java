@@ -1,4 +1,4 @@
-package logic;
+package util;
 
 public class Coordinates {
     private int x, y;

@@ -3,6 +3,7 @@ package gui.gameWindow.sidePanels;
 import gui.gameWindow.GameWindow;
 import logic.Territory;
 import util.Fonts;
+import util.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -95,6 +96,7 @@ public class FortifyPanel extends SidePanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (fortifyButton.isEnabled()) {
+                    SoundPlayer.buttonClickedSound();
                     gameWindow.fortify((int) troopsToTransferSpinner.getValue());
                 }
             }
@@ -113,6 +115,7 @@ public class FortifyPanel extends SidePanel {
         skipButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                SoundPlayer.buttonClickedSound();
                 gameWindow.nextPhase();
             }
         });

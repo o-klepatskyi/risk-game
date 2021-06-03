@@ -4,6 +4,7 @@ import gui.mainMenu.MainMenu;
 import gui.playerMenu.PlayerMenu;
 import logic.Game;
 import logic.Player;
+import util.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         openMainMenu();
+        SoundPlayer.menuBackgroundMusic();
     }
 
     private static void openMainMenu() {
@@ -49,4 +51,5 @@ public class Main {
         frame.add(new PlayerMenu(frame));
         frame.validate();
     }
+
 }

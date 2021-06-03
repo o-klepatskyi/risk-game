@@ -1,6 +1,7 @@
 package gui.playerMenu;
 
 import logic.Player;
+import util.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,6 +79,8 @@ class PlayerPanel extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     parent.removePlayer(currentPanel);
+                    if(removePlayerButton.isEnabled())
+                        SoundPlayer.buttonClickedSound();
                 }
             });
         }

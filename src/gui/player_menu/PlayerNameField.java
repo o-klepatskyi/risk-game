@@ -8,9 +8,9 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
 
-class PlayerNameField extends HintTextField {
+public class PlayerNameField extends HintTextField {
 
-    private static final int MAX_CHARACTERS = 20;
+    public static final int MAX_CHARACTERS = 20;
 
     public PlayerNameField(final String hint) {
         super(hint);
@@ -32,7 +32,7 @@ class PlayerNameField extends HintTextField {
         setText(hint);
     }
 
-    public String getPlayerName() {
+    String getPlayerName() {
         return super.getText().isEmpty() ? getHint() : super.getText();
     }
 

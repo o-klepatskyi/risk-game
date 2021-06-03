@@ -2,11 +2,15 @@ package gui.multiplayer_menu;
 
 import gui.HintTextField;
 import gui.player_menu.PlayerMenu;
+import gui.player_menu.PlayerNameField;
 import logic.Game;
 import logic.network.MultiplayerManager;
 import logic.network.NetworkMode;
 
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -107,6 +111,17 @@ public class ServerMenu extends JPanel {
         if (nameField == null) {
             nameField = new HintTextField("Enter username");
             nameField.setSize(new Dimension(150,35));
+            nameField.setDocument(new PlainDocument() {
+                @Override
+                public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
+                    if (str == null)
+                        return;
+
+                    if ((getLength() + str.length()) <= PlayerNameField.MAX_CHARACTERS) {
+                        super.insertString(offset, str, attr);
+                    }
+                }
+            });
         }
         return nameField;
     }

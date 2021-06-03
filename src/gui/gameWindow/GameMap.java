@@ -8,6 +8,9 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.TimerTask;
+import java.util.Timer;
+
 // todo: fortifying with 1 troop
 public class GameMap extends JPanel {
     private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
@@ -118,6 +121,38 @@ public class GameMap extends JPanel {
         return gameGraph.getVertex(dst.getName());
     }
 
+    public void explosionEffect(Coordinates coordinates) {
+        SoundPlayer.explosionSound();
+        String territoryName = gameGraph.getVertex(coordinates).getName();
+        JButton territoryButton = null;
+        for(JButton button : buttons) {
+            if(button.getName().equals(territoryName)) {
+                territoryButton = button;
+                break;
+            }
+        }
+        if(territoryButton != null) {
+            int SIZE = 50;
+            ImageIcon explosionIcon = new ImageIcon("res/explosion.png");
+            JLabel explosion = new JLabel(explosionIcon);
+            explosion.setBounds(coordinates.getX()-SIZE/2, coordinates.getY()-SIZE/2, SIZE, SIZE);
+            territoryButton.setVisible(false);
+            panel.add(explosion);
+
+            JButton finalTerritoryButton = territoryButton;
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            explosion.setVisible(false);
+                            finalTerritoryButton.setVisible(true);
+                        }
+                    },
+                    500
+            );
+        }
+    }
+
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Image backgroundImage = new ImageIcon("res/logo/water.jpg").getImage();//.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
@@ -141,6 +176,7 @@ public class GameMap extends JPanel {
                         resetButtons();
                         highlightButton(button, "src");
                         showOptions(game.getGameOption());
+                        SoundPlayer.territoryClickedSound();
                     }
                     else {
                         if(button.getBackground() == DISABLED_COLOR) {
@@ -149,6 +185,7 @@ public class GameMap extends JPanel {
                                     resetButtons();
                                     highlightButton(button, "src");
                                     showOptions(game.getGameOption());
+                                    SoundPlayer.territoryClickedSound();
                                 }
                                 else
                                     resetButtons();
@@ -159,13 +196,16 @@ public class GameMap extends JPanel {
                                 resetButtons();
                                 highlightButton(button, "src");
                                 showOptions(game.getGameOption());
+                                SoundPlayer.territoryClickedSound();
                             }
                             else {
                                 if (!button.equals(src) && src != null) {
                                     if (dst != null)
                                         dst.setBorder(null);
-                                    if (dst != button)
+                                    if (dst != button) {
                                         highlightButton(button, "dst");
+                                        SoundPlayer.territoryClickedSound();
+                                    }
                                     else {
                                         button.setBorder(null);
                                         dst = null;
@@ -193,12 +233,16 @@ public class GameMap extends JPanel {
                             resetButtons();
                             button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
                             showOptions(game.getGameOption());
+                            SoundPlayer.territoryChosenSound();
                         }
-                        else if(button.getForeground() == game.getCurrentPlayer().getColor())
+                        else if(button.getForeground() == game.getCurrentPlayer().getColor()) {
                             button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
+                            SoundPlayer.territoryChosenSound();
+                        }
                     }
                     else {
                         if(src != button) {
+                            SoundPlayer.territoryChosenSound();
                             if(game.getGameOption().equals(GameOption.REINFORCEMENT))
                                 button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
                             else

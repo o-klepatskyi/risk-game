@@ -1,5 +1,7 @@
 package logic;
 
+import util.Coordinates;
+
 import java.util.Objects;
 
 public class Territory {

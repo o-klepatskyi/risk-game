@@ -151,12 +151,14 @@ public class Game {
             dstTerritory.setTroops(troopsLeft[0]);
             dstTerritory.setOwner(srcTerritory.getOwner());
             gameMap.drawField();
+            gameMap.explosionEffect(dstTerritory.getCoordinates());
             return true;
         }
         else {
             srcTerritory.setTroops(1);
             dstTerritory.setTroops(troopsLeft[1]);
             gameMap.drawField();
+            gameMap.explosionEffect(dstTerritory.getCoordinates());
             return false;
         }
     }

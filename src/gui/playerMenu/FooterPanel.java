@@ -1,6 +1,7 @@
 package gui.playerMenu;
 
 import util.Fonts;
+import util.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,6 +42,8 @@ class FooterPanel extends JPanel {
             addPlayerButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
+                    if(addPlayerButton.isEnabled())
+                        SoundPlayer.buttonClickedSound();
                     parent.addPlayer();
                 }
             });
@@ -56,6 +59,8 @@ class FooterPanel extends JPanel {
             startButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
+                    if(startButton.isEnabled())
+                        SoundPlayer.buttonClickedSound();
                     parent.startGame();
                 }
             });

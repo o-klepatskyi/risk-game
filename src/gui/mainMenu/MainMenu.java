@@ -2,6 +2,7 @@ package gui.mainMenu;
 
 import gui.playerMenu.PlayerMenu;
 import util.Fonts;
+import util.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,18 +70,22 @@ public class MainMenu extends JPanel {
             case 1:
                 play.setForeground(Color.YELLOW);
                 play.setText("< Play >");
+                SoundPlayer.optionChosenSound();
                 break;
             case 2:
                 load.setForeground(Color.YELLOW);
                 load.setText("< Load Game >");
+                SoundPlayer.optionChosenSound();
                 break;
             case 3:
                 multiplayer.setForeground(Color.YELLOW);
                 multiplayer.setText("< Multiplayer >");
+                SoundPlayer.optionChosenSound();
                 break;
             case 4:
                 rules.setForeground(Color.YELLOW);
                 rules.setText("< Rules >");
+                SoundPlayer.optionChosenSound();
         }
     }
 
@@ -90,9 +95,11 @@ public class MainMenu extends JPanel {
         play.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 openPlayerMenu();
+                SoundPlayer.buttonClickedSound();
             }
 
             public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
                 menuOptionChosen = 1;
                 highlightOption(menuOptionChosen);
             }
@@ -102,10 +109,12 @@ public class MainMenu extends JPanel {
         load = new JButton("Load");
         load.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                SoundPlayer.buttonClickedSound();
                 // TODO
             }
 
             public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
                 menuOptionChosen = 2;
                 highlightOption(menuOptionChosen);
             }
@@ -115,10 +124,12 @@ public class MainMenu extends JPanel {
         multiplayer = new JButton("Multiplayer");
         multiplayer.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                SoundPlayer.buttonClickedSound();
                 // TODO
             }
 
             public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
                 menuOptionChosen = 3;
                 highlightOption(menuOptionChosen);
             }
@@ -128,10 +139,12 @@ public class MainMenu extends JPanel {
         rules = new JButton("Rules");
         rules.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                SoundPlayer.buttonClickedSound();
                 // TODO
             }
 
             public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
                 menuOptionChosen = 4;
                 highlightOption(menuOptionChosen);
             }
@@ -169,13 +182,20 @@ public class MainMenu extends JPanel {
                 else if(key == KeyEvent.VK_ENTER) {
                     switch(menuOptionChosen){
                         case 1:
+                            SoundPlayer.buttonClickedSound();
                             openPlayerMenu();
                             break;
                         case 2:
+                            SoundPlayer.buttonClickedSound();
+                            break;
                             // TODO
                         case 3:
+                            SoundPlayer.buttonClickedSound();
+                            break;
                             // TODO
                         case 4:
+                            SoundPlayer.buttonClickedSound();
+                            break;
                             // TODO
                     }
                 }
@@ -189,4 +209,5 @@ public class MainMenu extends JPanel {
         frame.add(new PlayerMenu(frame));
         frame.pack();
     }
+
 }

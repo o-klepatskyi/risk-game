@@ -48,6 +48,7 @@ public class Game {
     public Game(ArrayList<Player> players) {
         this.players = players;
         numberOfPlayers = players.size();
+        injectBots();
 
         initializeTerritories();
         gameGraph = new Graph();
@@ -212,7 +213,9 @@ public class Game {
         srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
         currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
         gameMap.drawField();
+        playReinforceEffect();
     }
+
 
     public void nextPhase() {
         switch (gameOption) {
@@ -268,9 +271,30 @@ public class Game {
         bonus = Math.max(bonus, 3);
         currentPlayer.setBonus(bonus);
 
-        reinforcePhase();
+        if(currentPlayer.isBot()) {
+            Bot bot = currentPlayer.getBot();
+            bot.reinforce();
+            nextPlayerTurn();
+        }
+        else {
+            reinforcePhase();
+        }
     }
 
+
+    /**
+     *
+     * @param t
+     * @return random territory from list of territories
+     */
+    public static Territory getRandomTerritory(ArrayList<Territory> t) {
+        Random rand = new Random();
+        return t.get(rand.nextInt(t.size()));
+    }
+
+    public static void playReinforceEffect() {
+        //SoundPlayer.play();
+    }
 
 
     private void initializeTerritories() {
@@ -423,11 +447,6 @@ public class Game {
         }
     }
 
-    private Territory getRandomTerritory(ArrayList<Territory> t) {
-        Random rand = new Random();
-        return t.get(rand.nextInt(t.size()));
-    }
-
     private void removeDeadPlayers() {
         players.removeIf(this::playerIsDead);
     }
@@ -506,5 +525,12 @@ public class Game {
         gameOption = GameOption.REINFORCEMENT;
         currentPlayer = players.get(players.size()-1);
         nextPlayerTurn();
+    }
+
+    private void injectBots() {
+        for(Player player : players) {
+            if(player.isBot())
+                player.setBot(new Bot(this, player));
+        }
     }
 }

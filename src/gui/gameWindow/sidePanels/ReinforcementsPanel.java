@@ -3,6 +3,7 @@ package gui.gameWindow.sidePanels;
 import gui.gameWindow.GameWindow;
 import logic.Territory;
 import util.Fonts;
+import util.SoundPlayer;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -76,6 +77,7 @@ public class ReinforcementsPanel extends SidePanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (deployTroopsButton.isEnabled()) {
+                    SoundPlayer.buttonClickedSound();
                     reinforce();
                 }
             }

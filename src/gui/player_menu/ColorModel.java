@@ -2,7 +2,6 @@ package gui.player_menu;
 
 import logic.PlayerColor;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,9 +44,9 @@ public class ColorModel {
      * @return
      */
     public PlayerColor chooseFirstAvailableColor() {
-//        if (availableColors.size() == 0) {
-//            return null;
-//        }
+        if (availableColors.size() == 0) {
+            return null;
+        }
         return availableColors.get(0);
     }
 
@@ -66,8 +65,8 @@ public class ColorModel {
     }
 
     public void addComboBox(ColorComboBox cb) {
-        System.out.println("addComboBox");
-        System.out.println(availableColors);
+        //System.out.println("addComboBox");
+        //System.out.println(availableColors);
         if (colors.size() == comboBoxes.size()) {
             return;
         }

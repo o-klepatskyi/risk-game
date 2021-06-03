@@ -100,7 +100,7 @@ class PlayerPanel extends JPanel {
         return removePlayerButton;
     }
 
-    public Player getPlayerInfo() {
+    public Player getPlayer() {
         return new Player(playerNameField.getPlayerName(), colorComboBox.getOldSelectedItem(), botCheckBox.isSelected());
     }
 }

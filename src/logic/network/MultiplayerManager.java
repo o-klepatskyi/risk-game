@@ -1,19 +1,26 @@
 package logic.network;
 
+import gui.player_menu.PlayerMenu;
 import logic.Game;
 import logic.Player;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public final class MultiplayerManager {
-    private Server server;
+    private static Server server;
     public Client client;
 
     public final NetworkMode networkMode;
     public Game game;
+    private PlayerMenu playerMenu;
 
     public MultiplayerManager(Game game) {
         this.game = game;
         this.networkMode = NetworkMode.SERVER;
     }
+
+    //private ArrayList<Player> players = new ArrayList<>(6);
 
     public MultiplayerManager() {
         this.networkMode = NetworkMode.CLIENT;
@@ -31,7 +38,7 @@ public final class MultiplayerManager {
         server = new Server(portNumber, this);
         new Thread(() -> server.execute()).start();
         startClient("127.0.0.1", portNumber, userName);
-        game.addPlayer(new Player(userName, game.colorModel.chooseFirstAvailableColor(), false)); // todo
+        //game.addPlayer(new Player(userName, game.colorModel.chooseFirstAvailableColor(), false)); // todo
     }
 
     public void startClient(String ipAddress, int portNumber, String username) {
@@ -47,16 +54,20 @@ public final class MultiplayerManager {
         client.sendMessage(msg);
     }
 
-    void addPlayer(Player p) {
-        game.addPlayer(p);
+    void addPlayer(String username) {
+        //game.addPlayer();
+        playerMenu.addPlayer(username);
     }
 
+    public static boolean canStart() {
+        return server == null;
+    }
 
-    public void close() {
-        try {
-            finalize();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+    public Collection<Player> getPlayers() {
+        return playerMenu.getPlayers();
+    }
+
+    public void setPlayerMenu(final PlayerMenu playerMenu) {
+        this.playerMenu = playerMenu;
     }
 }

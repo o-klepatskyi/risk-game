@@ -38,9 +38,7 @@ public class ReadThread extends Thread {
                 try {
                     System.out.println("Client waiting for message...");
                     Message response = (Message) objectInputStream.readObject();
-                    System.out.println("\n" + response);
-
-
+                    System.out.println(response);
                 } catch (IOException | ClassNotFoundException ex) {
                     System.out.println("Error reading from server: " + ex.getMessage());
                     ex.printStackTrace();

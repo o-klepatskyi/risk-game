@@ -2,6 +2,7 @@ package gui.player_menu;
 
 import gui.main_menu.MainMenu;
 import gui.multiplayer_menu.MultiplayerMenu;
+import logic.network.NetworkMode;
 import util.Fonts;
 
 import javax.swing.*;
@@ -32,7 +33,12 @@ class FooterPanel extends JPanel {
         this.parent = parent;
         this.frame = frame;
 
-        add(getAddPlayerButton());
+        if (parent.isMultiplayer) {
+            if (parent.isServer)
+                add(getAddPlayerButton());
+        } else {
+            add(getAddPlayerButton());
+        }
         add(getStartButton());
         add(getBackButton());
 

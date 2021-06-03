@@ -3,9 +3,12 @@ package gui.player_menu;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import logic.Game;
+import logic.Player;
 import logic.network.MultiplayerManager;
+import logic.network.NetworkMode;
 
 public class PlayerMenu extends JPanel {
     private final Image bgImg = new ImageIcon(getClass().getResource("player-menu-bg.jpg")).getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
@@ -20,7 +23,8 @@ public class PlayerMenu extends JPanel {
     private final HeaderPanel hp = new HeaderPanel();
     private final JFrame frame;
 
-    private final boolean isMultiplayer;
+    public final boolean isMultiplayer;
+    public final boolean isServer;
     public final MultiplayerManager multiplayerManager;
     private final ColorModel colorModel;
 
@@ -33,9 +37,12 @@ public class PlayerMenu extends JPanel {
         this.multiplayerManager = multiplayerManager;
         if (multiplayerManager != null) {
             isMultiplayer = true;
+            isServer = multiplayerManager.networkMode == NetworkMode.SERVER;
             colorModel = multiplayerManager.game.colorModel;
+            multiplayerManager.setPlayerMenu(this);
         } else {
             isMultiplayer = false;
+            isServer = false;
             colorModel = new ColorModel();
         }
 
@@ -100,24 +107,30 @@ public class PlayerMenu extends JPanel {
 
 
     public void addPlayer() {
+        addPlayer(null);
+    }
+
+    public void addPlayer(String name) {
         if (currentPlayerNumber < MAX_PLAYER_NUMBER) {
-            addPlayerPanel();
+            addPlayerPanel(name);
             updatePanels();
             //System.out.println("Current player: " + currentPlayerNumber + ", playerPanels.size() = " + playerPanels.size());
         }
     }
 
     private void addPlayerPanel() {
-        PlayerPanel p = new PlayerPanel(this, colorModel);
-        playerPanels.add(p);
-        currentPlayerNumber++;
+        addPlayerPanel(null);
     }
 
     private void addPlayerPanel(String playerName) {
         PlayerPanel p = new PlayerPanel(this, colorModel);
-        p.getPlayerNameField().setEditable(false);
-        p.getPlayerNameField().setText(playerName);
-        p.getBotCheckBox().setEnabled(false);
+
+        if (playerName != null && isMultiplayer) {
+            p.getPlayerNameField().setEditable(false);
+            p.getPlayerNameField().setText(playerName);
+            p.getBotCheckBox().setEnabled(false);
+        }
+
         playerPanels.add(p);
         currentPlayerNumber++;
     }
@@ -146,13 +159,21 @@ public class PlayerMenu extends JPanel {
     public void startGame() {
         Game game = new Game();
 
-        for (PlayerPanel pp : playerPanels) {
-            game.addPlayer(pp.getPlayerInfo());
+        for (Player player : getPlayers()) {
+            game.addPlayer(player);
         }
         game.startGame();
 
         frame.remove(this);
         frame.add(game.getGameWindow());
         frame.pack();
+    }
+
+    public Collection<Player> getPlayers() {
+        ArrayList<Player> players = new ArrayList<>(playerPanels.size());
+        for (PlayerPanel pp : playerPanels) {
+            players.add(pp.getPlayer());
+        }
+        return players;
     }
 }

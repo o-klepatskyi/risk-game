@@ -4,5 +4,7 @@ public enum MessageType {
     CLOSE_CONNECTION,
     NAME_ERROR,
     OK,
-    USERNAME
+    USERNAME,
+    MAX_PLAYERS_ERROR,
+    PLAYERS
 }

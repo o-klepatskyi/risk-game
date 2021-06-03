@@ -1,6 +1,7 @@
 package gui.multiplayer_menu;
 
 import gui.main_menu.MainMenu;
+import logic.network.MultiplayerManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,7 +33,12 @@ public class MultiplayerMenu extends JPanel {
         clientButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                openClientMenu();
+                if (MultiplayerManager.canStart()) {
+                    openClientMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "To connect to another server, please restart the game.",
+                            "Server is running", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         return clientButton;
@@ -46,7 +52,12 @@ public class MultiplayerMenu extends JPanel {
         serverButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                openServerMenu();
+                if (MultiplayerManager.canStart()) {
+                    openServerMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "To start server again, please restart the game",
+                            "Server is running", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         return serverButton;

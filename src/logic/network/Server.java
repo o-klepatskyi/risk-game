@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class Server {
     private int port;
-    private MultiplayerManager manager;
+    MultiplayerManager manager;
     private Set<String> userNames = new HashSet<>();
     private Set<UserThread> userThreads = new HashSet<>();
 
@@ -53,8 +53,9 @@ public class Server {
     /**
      * Stores username of the newly connected client.
      */
-    boolean addUserName(String userName) {
-        return userNames.add(userName);
+    void addUserName(String userName) {
+        userNames.add(userName);
+        manager.addPlayer(userName);
     }
 
     /**

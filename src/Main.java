@@ -30,7 +30,7 @@ public class Main {
         players.add(p1);
         players.add(p2);
         //players.add(p3);
-        Game game = new Game(players);
+        Game game = new Game(); // todo
         frame.add(game.getGameWindow());
         frame.pack();
         frame.setVisible(true);

@@ -36,9 +36,13 @@ class PlayerNameField extends HintTextField {
         return super.getText().isEmpty() ? getHint() : super.getText();
     }
 
+    @Override
+    public void setText(String t) {
+        super.setText(t);
+        showingHint = false;
+    }
 
-
-//    @Override
+    //    @Override
 //    public void focusGained(FocusEvent e) {
 //        if(this.getText().isEmpty()) {
 //            super.setText("");

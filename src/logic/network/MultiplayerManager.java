@@ -1,27 +1,37 @@
 package logic.network;
 
+import logic.Game;
+import logic.Player;
+
 public final class MultiplayerManager {
-    private ChatServer server;
-    public ChatClient client;
+    private Server server;
+    public Client client;
 
     public final NetworkMode networkMode;
+    public Game game;
 
-    public MultiplayerManager(NetworkMode networkMode) {
-        this.networkMode = networkMode;
+    public MultiplayerManager(Game game) {
+        this.game = game;
+        this.networkMode = NetworkMode.SERVER;
+    }
+
+    public MultiplayerManager() {
+        this.networkMode = NetworkMode.CLIENT;
     }
 
     public void startServer(int portNumber, String userName) {
         if (networkMode != NetworkMode.SERVER) {
-            System.err.println("Wrong network mode.");
+            System.err.println("Wrong network mode."); // todo exceptions
             return;
         }
         if (server != null) {
             System.err.println("Server is already activated.");
             return;
         }
-        server = new ChatServer(portNumber);
+        server = new Server(portNumber, this);
         new Thread(() -> server.execute()).start();
         startClient("127.0.0.1", portNumber, userName);
+        game.addPlayer(new Player(userName, game.colorModel.chooseFirstAvailableColor(), false)); // todo
     }
 
     public void startClient(String ipAddress, int portNumber, String username) {
@@ -29,7 +39,24 @@ public final class MultiplayerManager {
             System.err.println("Client is already activated.");
             return;
         }
-        client = new ChatClient(ipAddress, portNumber, username);
+        client = new Client(ipAddress, portNumber, username);
         new Thread(() -> client.execute()).start();
+    }
+
+    public void sendMessage(Message msg) {
+        client.sendMessage(msg);
+    }
+
+    void addPlayer(Player p) {
+        game.addPlayer(p);
+    }
+
+
+    public void close() {
+        try {
+            finalize();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 }

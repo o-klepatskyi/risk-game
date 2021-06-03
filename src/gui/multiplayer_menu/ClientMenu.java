@@ -19,7 +19,7 @@ public class ClientMenu extends JPanel {
     private HintTextField nameField;
     private final JFrame frame;
 
-    private final MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.CLIENT);
+    private final MultiplayerManager multiplayerManager = new MultiplayerManager();
 
     ClientMenu(JFrame frame) {
         this.frame = frame;

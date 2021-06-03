@@ -2,6 +2,7 @@ package logic;
 
 import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
+import gui.player_menu.ColorModel;
 import util.*;
 
 import java.awt.*;
@@ -45,21 +46,50 @@ public class Game {
     private GameOption gameOption;
     private GameMap gameMap;
 
-    public Game(ArrayList<Player> players) {
-        this.players = players;
-        numberOfPlayers = players.size();
+    public Game() {
+        this.players = new ArrayList<>(MAX_PLAYER_NUMBER);
+    }
 
-        initializeTerritories();
-        gameGraph = new Graph();
-        createGraphFromTerritories();
-        distributeTerritories();
+    private boolean gameStarted = false;
+    private final int MAX_PLAYER_NUMBER = 6; // ColorModel.MAX_PLAYERS.size()
+    public final ColorModel colorModel = new ColorModel();
 
-        pickFirstPlayer();
+    /**
+     * add 2+ players before starting game
+     */
+    public void startGame() {
+        if (!gameStarted) {
+            gameStarted = true;
+            numberOfPlayers = players.size();
 
-        gameMap = new GameMap(this);
-        gameMap.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
+            initializeTerritories();
+            gameGraph = new Graph();
+            createGraphFromTerritories();
+            distributeTerritories();
 
-        gameWindow = new GameWindow(this);
+            pickFirstPlayer();
+
+            gameMap = new GameMap(this);
+            gameMap.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
+
+            gameWindow = new GameWindow(this);
+        }
+    }
+
+    public boolean addPlayer(Player p) {
+        if (players.size() < MAX_PLAYER_NUMBER) {
+            players.add(p);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removePlayer(Player p) {
+        return players.remove(p);
+    }
+
+    public Collection<Player> getPlayers() {
+        return players;
     }
 
     public GameWindow getGameWindow() {

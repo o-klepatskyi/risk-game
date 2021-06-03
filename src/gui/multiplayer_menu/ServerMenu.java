@@ -2,6 +2,7 @@ package gui.multiplayer_menu;
 
 import gui.HintTextField;
 import gui.player_menu.PlayerMenu;
+import logic.Game;
 import logic.network.MultiplayerManager;
 import logic.network.NetworkMode;
 
@@ -17,7 +18,7 @@ public class ServerMenu extends JPanel {
     private HintTextField nameField;
     private final JFrame frame;
 
-    private final MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.SERVER);
+    private final MultiplayerManager multiplayerManager = new MultiplayerManager(new Game());
 
     ServerMenu(JFrame frame) {
         this.frame = frame;

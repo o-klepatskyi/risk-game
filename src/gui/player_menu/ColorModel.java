@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-class ColorModel {
+public class ColorModel {
 
-    private final ArrayList<PlayerColor> colors = new ArrayList<>(Arrays.asList(
+    public static final ArrayList<PlayerColor> colors = new ArrayList<>(Arrays.asList(
             new PlayerColor(255,0,0, "red"),
             new PlayerColor(0, 0, 255, "blue"),
             new PlayerColor(34, 177,76, "green"),
@@ -36,8 +36,19 @@ class ColorModel {
         }
     }
 
-    public void chooseColor(Color newColor) {
+    public void chooseColor(PlayerColor newColor) {
         availableColors.remove(newColor);
+    }
+
+    /**
+     * USE ONLY FOR FIRST PLAYER
+     * @return
+     */
+    public PlayerColor chooseFirstAvailableColor() {
+//        if (availableColors.size() == 0) {
+//            return null;
+//        }
+        return availableColors.get(0);
     }
 
     public void update(ColorComboBox comboBox) {

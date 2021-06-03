@@ -6,17 +6,19 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ChatServer {
+public class Server {
     private int port;
+    private MultiplayerManager manager;
     private Set<String> userNames = new HashSet<>();
     private Set<UserThread> userThreads = new HashSet<>();
 
-    public ChatServer(int port) {
+    public Server(int port, MultiplayerManager manager) {
+        this.manager = manager;
         this.port = port;
     }
 
     public void execute() {
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
+        try (ServerSocket serverSocket = new ServerSocket(port);){
 
             System.out.println("Chat Server is listening on port " + port);
 
@@ -27,8 +29,9 @@ public class ChatServer {
                 UserThread newUser = new UserThread(socket, this);
                 userThreads.add(newUser);
                 newUser.start();
-            }
 
+                // todo: close connection to the server with back button
+            }
         } catch (IOException ex) {
             System.out.println("Error in the server: " + ex.getMessage());
             System.out.println("Error in the server: " + ex.getMessage());
@@ -39,7 +42,7 @@ public class ChatServer {
     /**
      * Delivers a message from one user to others (broadcasting)
      */
-    void broadcast(String message, UserThread excludeUser) {
+    void broadcast(Message message, UserThread excludeUser) throws IOException {
         for (UserThread aUser : userThreads) {
             if (aUser != excludeUser) {
                 aUser.sendMessage(message);

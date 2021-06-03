@@ -11,9 +11,9 @@ class PlayerPanel extends JPanel {
     private static final int WIDTH = PlayerMenu.WIDTH-50;
     private static final int HEIGHT = PlayerMenu.HEIGHT/10;
 
-    private final PlayerNameField playerNameField;
+    private PlayerNameField playerNameField;
     private final ColorComboBox colorComboBox;
-    private final JCheckBox botCheckBox;
+    private JCheckBox botCheckBox;
     private JButton removePlayerButton;
     private static int playerNumber = 1;
     private final PlayerMenu parent;
@@ -35,10 +35,8 @@ class PlayerPanel extends JPanel {
         setBackground(new Color(255, 255, 255, 123));
 
         this.colorModel = colorModel;
-        playerNameField = new PlayerNameField("Player " + playerNumber++);
-        playerNameField.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT-10));
-        playerNameField.setFont(TEXTFIELD_FONT);
-        add(playerNameField);
+
+        add(getPlayerNameField());
 
         colorComboBox = new ColorComboBox(colorModel);
         colorComboBox.setPreferredSize(new Dimension((int) (WIDTH * (3.0 / 16.0)), HEIGHT - 10));
@@ -47,13 +45,29 @@ class PlayerPanel extends JPanel {
         colorModel.addComboBox(colorComboBox);
 
 
-        botCheckBox = new JCheckBoxCustomIcon(WIDTH / 8 - 20,HEIGHT - 10);
-        add(botCheckBox);
+
+        add(getBotCheckBox());
 
 
         add(getRemovePlayerButton());
         validate();
         setVisible(true);
+    }
+
+    public JCheckBox getBotCheckBox() {
+        if (botCheckBox == null) {
+            botCheckBox = new JCheckBoxCustomIcon(WIDTH / 8 - 20,HEIGHT - 10);
+        }
+        return botCheckBox;
+    }
+
+    public JTextField getPlayerNameField() {
+        if (playerNameField == null) {
+            playerNameField = new PlayerNameField("Player " + playerNumber++);
+            playerNameField.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT-10));
+            playerNameField.setFont(TEXTFIELD_FONT);
+        }
+        return playerNameField;
     }
 
     protected void paintComponent(Graphics g)

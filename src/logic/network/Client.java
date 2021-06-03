@@ -1,19 +1,19 @@
 package logic.network;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class ChatClient {
+public class Client {
     private String hostname;
     private int port;
     private String userName;
-    private PrintWriter writer;
+    private ObjectOutputStream objectOutputStream;
     private Socket socket;
 
-    public ChatClient(String hostname, int port, String userName) {
+    public Client(String hostname, int port, String userName) {
         this.hostname = hostname;
         this.port = port;
         this.userName = userName;
@@ -25,20 +25,22 @@ public class ChatClient {
 
             try {
                 OutputStream output = socket.getOutputStream();
-                writer = new PrintWriter(output, true);
+                objectOutputStream = new ObjectOutputStream(output);
             } catch (IOException ex) {
-                System.out.println("Error getting output stream: " + ex.getMessage());
+                System.err.println("Error getting output stream: " + ex.getMessage());
                 ex.printStackTrace();
             }
 
-            writer.println(userName);
+            objectOutputStream.writeObject(new Message(MessageType.USERNAME, userName));
 
             new ReadThread(socket, this).start();
-            System.out.println("Connected to the chat server");
+            System.out.println("Connected to the server");
         } catch (UnknownHostException ex) {
-            System.out.println("Server not found: " + ex.getMessage());
+            System.err.println("Server not found: " + ex.getMessage());
         } catch (IOException ex) {
-            System.out.println("I/O Error: " + ex.getMessage());
+            System.err.println("I/O Error: " + ex.getMessage());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
 
     }
@@ -47,17 +49,20 @@ public class ChatClient {
         return this.userName;
     }
 
-    public void sendMessage(String msg) {
+    public void sendMessage(Message msg) {
         System.out.println(userName + " sends message: " + msg);
-        writer.println(msg);
+        try {
+            objectOutputStream.writeObject(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void close() {
         try {
             socket.close();
         } catch (IOException ex) {
-            System.out.println("Error writing to server: " + ex.getMessage());
-            System.out.println("Error writing to server: " + ex.getMessage());
+            System.err.println("Error writing to server: " + ex.getMessage());
         }
     }
 }

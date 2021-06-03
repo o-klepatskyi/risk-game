@@ -10,6 +10,8 @@ public class Logo extends JPanel {
     private final int WIDTH = (int) (GameWindow.WIDTH*0.25);
     private final int HEIGHT = (int) (GameWindow.HEIGHT*0.1);
 
+    //todo: change to red text on the background
+
     private final Image bgImg = new ImageIcon("res" + File.separator + "logo" + File.separator + "logo-small.png").getImage();//.getScaledInstance(WIDTH, HEIGHT,  Image.SCALE_SMOOTH);
 
     public Logo() {

@@ -5,49 +5,49 @@ import java.net.Socket;
 
 public class UserThread extends Thread {
     private final Socket socket;
-    private final ChatServer server;
-    private PrintWriter writer;
+    private final Server server;
+    private ObjectOutputStream objOutputStream;
 
-    public UserThread(Socket socket, ChatServer server) {
+    public UserThread(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
     }
 
     public void run() {
         try {
-            InputStream input = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            InputStream inputStream = socket.getInputStream();
+            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
             OutputStream output = socket.getOutputStream();
-            writer = new PrintWriter(output, true);
+            objOutputStream = new ObjectOutputStream(output);
 
-            String userName = reader.readLine();
-            if (server.hasUser(userName)) {
-                sendMessage(NetworkMessage.NAME_ERROR.toString());
+            //writer = new PrintWriter(output, true);
+
+            Message userName = (Message) objectInputStream.readObject();
+            if (userName.type != MessageType.USERNAME || server.hasUser(userName.getMsg())) {
+                sendMessage(new Message(MessageType.NAME_ERROR));
             } else {
-                sendMessage(NetworkMessage.OK.toString());
+                sendMessage(new Message(MessageType.OK));
                 printUsers();
-                server.addUserName(userName);
-                String serverMessage = "New user connected: " + userName;
-                server.broadcast(serverMessage, this);
-
-                String clientMessage;
+                server.addUserName(userName.getMsg());
+                Message serverMessage, clientMessage;
 
                 do {
                     System.out.println(userName + " thread listening...");
-                    clientMessage = reader.readLine();
-                    serverMessage = "[" + userName + "]: " + clientMessage;
+                    clientMessage = (Message) objectInputStream.readObject();
+                    serverMessage = new Message(MessageType.USERNAME, "kek");
                     server.broadcast(serverMessage, null);
+                } while (!clientMessage.equals(MessageType.CLOSE_CONNECTION.toString()));
 
-                } while (!clientMessage.equals(NetworkMessage.CLOSE_CONNECTION.toString()));
-
-                server.removeUser(userName, this);
+                server.removeUser(userName.getMsg(), this);
                 socket.close();
 
-                serverMessage = userName + " has quit.";
-                server.broadcast(serverMessage, this);
+//                serverMessage = userName + " has quit.";
+//                server.broadcast(serverMessage, this);
             }
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             System.out.println("Error in UserThread: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -56,18 +56,18 @@ public class UserThread extends Thread {
     /**
      * Sends a list of online users to the newly connected user.
      */
-    void printUsers() {
+    void printUsers() throws IOException {
         if (server.hasUsers()) {
-            writer.println("Connected users: " + server.getUserNames());
+            objOutputStream.writeObject("Connected users: " + server.getUserNames());
         } else {
-            writer.println("No other users connected");
+            objOutputStream.writeObject("No other users connected");
         }
     }
 
     /**
      * Sends a message to the client.
      */
-    void sendMessage(String message) {
-        writer.println(message);
+    void sendMessage(Message message) throws IOException {
+        objOutputStream.writeObject(message);
     }
 }

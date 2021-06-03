@@ -5,7 +5,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import logic.Game;
-import logic.Player;
 import logic.network.MultiplayerManager;
 
 public class PlayerMenu extends JPanel {
@@ -13,16 +12,17 @@ public class PlayerMenu extends JPanel {
 
     public static final int WIDTH = 688;
     public static final int HEIGHT = 450;
-    private final int MAX_PLAYER_NUMBER = 6; // can not be bigger than ColorModel availableColors length
+    private final int MAX_PLAYER_NUMBER = ColorModel.colors.size();
     private final int MIN_PLAYER_NUMBER = 1;
     private int currentPlayerNumber = 0;
     private final ArrayList<PlayerPanel> playerPanels = new ArrayList<>();
     private final FooterPanel fp;
     private final HeaderPanel hp = new HeaderPanel();
     private final JFrame frame;
-    private final ColorModel colorModel = new ColorModel();
+
     private final boolean isMultiplayer;
-    private final MultiplayerManager multiplayerManager;
+    public final MultiplayerManager multiplayerManager;
+    private final ColorModel colorModel;
 
     public PlayerMenu(final JFrame frame) {
         this(frame, null);
@@ -31,7 +31,14 @@ public class PlayerMenu extends JPanel {
 
     public PlayerMenu(final JFrame frame, final MultiplayerManager multiplayerManager) {
         this.multiplayerManager = multiplayerManager;
-        isMultiplayer = (multiplayerManager != null);
+        if (multiplayerManager != null) {
+            isMultiplayer = true;
+            colorModel = multiplayerManager.game.colorModel;
+        } else {
+            isMultiplayer = false;
+            colorModel = new ColorModel();
+        }
+
         this.frame = frame;
         fp = new FooterPanel(this, frame);
         Dimension size = new Dimension(WIDTH, HEIGHT);
@@ -47,10 +54,14 @@ public class PlayerMenu extends JPanel {
 
     private void updatePanels() {
         if (playerPanels.size() == 0) {
-            for (int i = 0; i < MIN_PLAYER_NUMBER; i++) {
-                addPlayerPanel();
+            if (!isMultiplayer) {
+                for (int i = 0; i < MIN_PLAYER_NUMBER; i++) {
+                    addPlayerPanel();
+                }
+            } else {
+                // todo
+                addPlayerPanel(new ArrayList<>(multiplayerManager.game.getPlayers()).get(0).getName());
             }
-
             colorModel.updateAll();
             updatePanels();
             return;
@@ -102,6 +113,15 @@ public class PlayerMenu extends JPanel {
         currentPlayerNumber++;
     }
 
+    private void addPlayerPanel(String playerName) {
+        PlayerPanel p = new PlayerPanel(this, colorModel);
+        p.getPlayerNameField().setEditable(false);
+        p.getPlayerNameField().setText(playerName);
+        p.getBotCheckBox().setEnabled(false);
+        playerPanels.add(p);
+        currentPlayerNumber++;
+    }
+
     public void removePlayer(PlayerPanel playerPanel) {
         if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
             removePlayerPanel(playerPanel);
@@ -124,18 +144,15 @@ public class PlayerMenu extends JPanel {
     }
 
     public void startGame() {
-        // gather player info
-        ArrayList<Player> players = new ArrayList<>();
+        Game game = new Game();
 
         for (PlayerPanel pp : playerPanels) {
-            players.add(pp.getPlayerInfo());
+            game.addPlayer(pp.getPlayerInfo());
         }
+        game.startGame();
 
         frame.remove(this);
-        Game game = new Game(players);
         frame.add(game.getGameWindow());
         frame.pack();
-
-        System.out.println(players);
     }
 }

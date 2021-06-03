@@ -1,6 +1,9 @@
 package gui.player_menu;
 
 import logic.PlayerColor;
+import logic.network.Message;
+import logic.network.MessageType;
+import logic.network.MultiplayerManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,9 +14,11 @@ class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
     private final int SIZE = PlayerMenu.HEIGHT/10;
     private PlayerColor oldSelectedColor;
     private final ColorModel colorModel;
+    private MultiplayerManager manager;
 
-    ColorComboBox(final ColorModel colorModel, Color color) throws Exception {
+    ColorComboBox(final ColorModel colorModel, Color color, MultiplayerManager manager) throws Exception {
         this.colorModel = colorModel;
+        this.manager = manager;
         setSize(SIZE, SIZE);
         setPreferredSize(new Dimension(SIZE+20,SIZE));
         setEditable(false);
@@ -21,7 +26,6 @@ class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
         PlayerColor playerColor = PlayerColor.getPlayerColor(color);
 
         if (playerColor != null && colorModel.getAvailableColors().contains(color)) {
-            System.out.println("COLOR IS AVAILABLE!!!");
             oldSelectedColor = playerColor;
             colorModel.chooseColor(playerColor);
         } else throw new Exception("Color is invalid");
@@ -47,10 +51,19 @@ class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
         JComboBox cb = (JComboBox)e.getSource();
         PlayerColor selectedColor = (PlayerColor) cb.getSelectedItem();
         PlayerColor previousSelectedColor = oldSelectedColor;
-        if (selectedColor != null) {
+
+        if (selectedColor != null && !selectedColor.equals(oldSelectedColor)) {
+            System.out.println("Another color");
             oldSelectedColor = selectedColor;
+            colorModel.chooseColor(selectedColor, previousSelectedColor);
+            if (manager != null ) {
+                try {
+                    manager.sendMessage(new Message(MessageType.COLOR_CHANGED, manager.playerMenu.getPlayers()));
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
         }
-        colorModel.chooseColor(selectedColor, previousSelectedColor);
     }
 
     @Override

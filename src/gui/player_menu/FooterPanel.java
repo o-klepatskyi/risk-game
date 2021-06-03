@@ -31,12 +31,7 @@ class FooterPanel extends JPanel {
         this.parent = parent;
         this.frame = frame;
 
-        if (parent.isMultiplayer) {
-            if (parent.isServer)
-                add(getAddPlayerButton());
-        } else {
-            add(getAddPlayerButton());
-        }
+        add(getAddPlayerButton());
         add(getStartButton());
         add(getBackButton());
 
@@ -48,14 +43,31 @@ class FooterPanel extends JPanel {
             addPlayerButton = new JButton("Add player");
             addPlayerButton.setPreferredSize(new Dimension(WIDTH/4, HEIGHT-10));
             addPlayerButton.setFont(BUTTON_FONT);
-            addPlayerButton.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (addPlayerButton.isEnabled()) {
-                        parent.addPlayer();
-                    }
+            if (parent.isMultiplayer) {
+                addPlayerButton.setText("Add bot");
+                if (parent.isServer) {
+                    addPlayerButton.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            if (addPlayerButton.isEnabled()) {
+                                parent.addBot();
+                            }
+                        }
+                    });
+                } else {
+                    addPlayerButton.setEnabled(false);
+                    addPlayerButton.setToolTipText("Only room owner can add bots");
                 }
-            });
+            } else {
+                addPlayerButton.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (addPlayerButton.isEnabled()) {
+                            parent.addPlayer();
+                        }
+                    }
+                });
+            }
         }
         return addPlayerButton;
     }
@@ -66,14 +78,18 @@ class FooterPanel extends JPanel {
             startButton.setPreferredSize(new Dimension(WIDTH/4, HEIGHT-10));
             startButton.setFont(BUTTON_FONT);
             startButton.setEnabled(false);
-            startButton.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (startButton.isEnabled()) {
-                        parent.startGame();
+            if (parent.isMultiplayer && !parent.isServer) {
+                startButton.setToolTipText("Only room owner can start the game");
+            } else {
+                startButton.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (startButton.isEnabled()) {
+                            parent.startGame();
+                        }
                     }
-                }
-            });
+                });
+            }
         }
         return startButton;
     }

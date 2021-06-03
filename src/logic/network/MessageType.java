@@ -6,5 +6,6 @@ public enum MessageType {
     OK,
     USERNAME,
     MAX_PLAYERS_ERROR,
-    PLAYERS
+    PLAYERS,
+    COLOR_CHANGED
 }

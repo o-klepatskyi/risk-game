@@ -13,8 +13,6 @@ public class Message implements Serializable {
     public Collection<Player> players;
     public Game game;
 
-
-
     Message(MessageType type, String username) throws Exception {
         if (type != MessageType.USERNAME) {
             throw new Exception("Message type exception"); // todo unique exception
@@ -23,17 +21,16 @@ public class Message implements Serializable {
         this.msg = username;
     }
 
-    Message(MessageType type) {
+    public Message(MessageType type) {
         this.type = type;
     }
 
-    Message(MessageType type, Collection<Player> players) throws Exception {
-        if (type != MessageType.PLAYERS) {
+    public Message(MessageType type, Collection<Player> players) throws Exception {
+        if (!(type == MessageType.PLAYERS || type == MessageType.COLOR_CHANGED)) {
             throw new Exception("Message type exception"); // todo unique exception
         }
         this.type = type;
         this.players = players;
-        this.game = game;
     }
 
     public String toString() {

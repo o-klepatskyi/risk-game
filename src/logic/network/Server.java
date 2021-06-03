@@ -75,13 +75,6 @@ public class Server {
         return this.userNames;
     }
 
-    /**
-     * Returns true if there are other users connected (not count the currently connected user)
-     */
-    boolean hasUsers() {
-        return !this.userNames.isEmpty();
-    }
-
     public boolean hasUser(String userName) {
         return userNames.contains(userName);
     }

@@ -2,8 +2,6 @@ package gui.player_menu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -74,25 +72,39 @@ public class PlayerMenu extends JPanel {
         add(hp);
 
         for (PlayerPanel panel : playerPanels) {
-            if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
-                panel.getRemovePlayerButton().setEnabled(true);
+            if (!isMultiplayer || isServer) {
+                if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
+                    panel.getRemovePlayerButton().setEnabled(true);
+                }
+                if (currentPlayerNumber <= MIN_PLAYER_NUMBER) {
+                    panel.getRemovePlayerButton().setEnabled(false);
+                }
             }
-            if (currentPlayerNumber == MIN_PLAYER_NUMBER) {
-                panel.getRemovePlayerButton().setEnabled(false);
+
+            if (isMultiplayer) {
+                if (!multiplayerManager.client.username.equals(panel.getPlayerNameField().getText())) {
+                    panel.getColorComboBox().setEnabled(false);
+                }
             }
+
+
+
             add(panel);
         }
 
-        if (currentPlayerNumber == MAX_PLAYER_NUMBER) {
-            fp.getAddPlayerButton().setEnabled(false);
-        } else {
-            fp.getAddPlayerButton().setEnabled(true);
-        }
 
-        if (currentPlayerNumber == MIN_PLAYER_NUMBER) {
-            fp.getStartButton().setEnabled(false);
-        } else {
-            fp.getStartButton().setEnabled(true);
+        if (!isMultiplayer || isServer) {
+            if (currentPlayerNumber == MAX_PLAYER_NUMBER) {
+                fp.getAddPlayerButton().setEnabled(false);
+            } else {
+                fp.getAddPlayerButton().setEnabled(true);
+            }
+
+            if (currentPlayerNumber == MIN_PLAYER_NUMBER) {
+                fp.getStartButton().setEnabled(false);
+            } else {
+                fp.getStartButton().setEnabled(true);
+            }
         }
 
         add(fp);
@@ -119,7 +131,7 @@ public class PlayerMenu extends JPanel {
     public void updatePlayers(Collection<Player> players) {
         this.colorModel = new ColorModel();
         currentPlayerNumber = 0;
-        playerPanels = new ArrayList<>(); // todo ?????
+        playerPanels = new ArrayList<>();
         this.colorModel = new ColorModel();
         if (currentPlayerNumber + players.size() <= MAX_PLAYER_NUMBER) {
             for (Player p : players) {
@@ -198,5 +210,8 @@ public class PlayerMenu extends JPanel {
             players.add(pp.getPlayer());
         }
         return players;
+    }
+
+    public void addBot() {
     }
 }

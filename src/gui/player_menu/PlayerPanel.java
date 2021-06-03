@@ -23,6 +23,9 @@ class PlayerPanel extends JPanel {
 
     private final ColorModel colorModel;
 
+    /**
+     * MULTIPLAYER
+     */
     PlayerPanel(PlayerMenu parent, final ColorModel colorModel, Player player) {
         this.parent = parent;
         this.colorModel = colorModel;
@@ -34,7 +37,7 @@ class PlayerPanel extends JPanel {
         add(getPlayerNameField());
 
         try {
-            colorComboBox = new ColorComboBox(colorModel, player.getColor());
+            colorComboBox = new ColorComboBox(colorModel, player.getColor(), parent.multiplayerManager);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -118,14 +121,19 @@ class PlayerPanel extends JPanel {
             removePlayerButton.setHorizontalAlignment(SwingConstants.CENTER);
             removePlayerButton.setPreferredSize(new Dimension((int) (WIDTH * (3.0 / 16.0)), HEIGHT - 10));
             removePlayerButton.setEnabled(false);
-            PlayerPanel currentPanel = this;
-            removePlayerButton.addMouseListener(new MouseAdapter() {
 
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    parent.removePlayer(currentPanel);
-                }
-            });
+            if (!parent.isMultiplayer || parent.isServer) {
+                PlayerPanel currentPanel = this;
+                removePlayerButton.addMouseListener(new MouseAdapter() {
+
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        parent.removePlayer(currentPanel);
+                    }
+                });
+            } else {
+                removePlayerButton.setToolTipText("Only room owner can remove players");
+            }
         }
         return removePlayerButton;
     }

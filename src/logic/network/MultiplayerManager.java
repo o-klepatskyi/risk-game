@@ -1,6 +1,5 @@
 package logic.network;
 
-import gui.player_menu.ColorModel;
 import gui.player_menu.PlayerMenu;
 import logic.Game;
 import logic.Player;
@@ -14,14 +13,13 @@ public final class MultiplayerManager {
 
     public final NetworkMode networkMode;
     public Game game;
-    private PlayerMenu playerMenu;
+    public PlayerMenu playerMenu;
+    public JFrame frame;
 
     public MultiplayerManager(Game game) {
         this.game = game;
         this.networkMode = NetworkMode.SERVER;
     }
-
-    //private ArrayList<Player> players = new ArrayList<>(6);
 
     public MultiplayerManager() {
         this.networkMode = NetworkMode.CLIENT;
@@ -39,18 +37,16 @@ public final class MultiplayerManager {
         server = new Server(portNumber, this);
         new Thread(() -> server.execute()).start();
         startClient("127.0.0.1", portNumber, userName, frame);
-        //game.addPlayer(new Player(userName, game.colorModel.chooseFirstAvailableColor(), false)); // todo
     }
 
     public void startClient(String ipAddress, int portNumber, String username, JFrame frame) {
+        this.frame = frame;
         if (client != null) {
             System.err.println("Client is already activated.");
             return;
         }
         client = new Client(ipAddress, portNumber, username, this);
         new Thread(() -> client.execute()).start();
-        frame.add(playerMenu);
-        frame.pack();
     }
 
     public void sendMessage(Message msg) {

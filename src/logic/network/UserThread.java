@@ -42,12 +42,11 @@ public class UserThread extends Thread {
                     clientMessage = (Message) objectInputStream.readObject();
                     System.out.println("Server received: " + clientMessage);
 
-                    if (clientMessage.type == MessageType.OK) {
-                        serverMessage = getUsersMessage();
+                    if (clientMessage.type == MessageType.COLOR_CHANGED) {
+                        server.broadcast(new Message(MessageType.PLAYERS, clientMessage.players), this);
                     }
 
 
-                    server.broadcast(serverMessage, null);
                 } while (clientMessage.type != MessageType.CLOSE_CONNECTION);
 
                 server.removeUser(userName.msg, this);
@@ -69,7 +68,7 @@ public class UserThread extends Thread {
         objOutputStream.writeObject(getUsersMessage());
     }
 
-    private Message getUsersMessage() throws Exception {
+    public Message getUsersMessage() throws Exception {
         return new Message(MessageType.PLAYERS, server.manager.getPlayers());
     }
 

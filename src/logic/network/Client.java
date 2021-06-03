@@ -1,5 +1,8 @@
 package logic.network;
 
+import gui.main_menu.MainMenu;
+
+import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -9,7 +12,7 @@ import java.net.UnknownHostException;
 public class Client {
     private String hostname;
     private int port;
-    private String userName;
+    public final String username;
     private ObjectOutputStream objectOutputStream;
     private Socket socket;
     final MultiplayerManager manager;
@@ -17,7 +20,7 @@ public class Client {
     public Client(String hostname, int port, String userName, final MultiplayerManager manager) {
         this.hostname = hostname;
         this.port = port;
-        this.userName = userName;
+        this.username = userName;
         this.manager = manager;
     }
 
@@ -33,29 +36,41 @@ public class Client {
                 ex.printStackTrace();
             }
 
-            objectOutputStream.writeObject(new Message(MessageType.USERNAME, userName));
+            objectOutputStream.writeObject(new Message(MessageType.USERNAME, username));
 
             new ClientReadThread(socket, this).start();
-            System.out.println("User '" + userName + "' connected to the server");
-
-
-            sendMessage(new Message(MessageType.OK));
+            System.out.println("User '" + username + "' connected to the server");
         } catch (UnknownHostException ex) {
-            System.err.println("Server not found: " + ex.getMessage());
+            System.err.println("Server not found with IP-address " + ex.getMessage());
+            JOptionPane.showMessageDialog(null,
+                    ex.getMessage(),
+                    "Server not found",
+                    JOptionPane.ERROR_MESSAGE);
+            openMainMenu();
         } catch (IOException ex) {
             System.err.println("I/O Error: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null,
+                    ex.getMessage(),
+                    "I/O Error",
+                    JOptionPane.ERROR_MESSAGE);
+            openMainMenu();
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    e.getMessage(),
+                    "Network message exception",
+                    JOptionPane.ERROR_MESSAGE);
             System.err.println(e.getMessage());
+            openMainMenu();
         }
 
     }
 
     String getUserName() {
-        return this.userName;
+        return this.username;
     }
 
     public void sendMessage(Message msg) {
-        System.out.println(userName + " sends message: " + msg);
+        System.out.println(username + " sends message: " + msg);
         try {
             objectOutputStream.writeObject(msg);
         } catch (IOException e) {
@@ -69,5 +84,15 @@ public class Client {
         } catch (IOException ex) {
             System.err.println("Error writing to server: " + ex.getMessage());
         }
+    }
+
+    public void openPlayerMenu() {
+       manager.frame.add(manager.playerMenu);
+       manager.frame.pack();
+    }
+
+    public void openMainMenu() {
+        manager.frame.add(new MainMenu(manager.frame));
+        manager.frame.pack();
     }
 }

@@ -1,5 +1,8 @@
 package logic.network;
 
+import gui.main_menu.MainMenu;
+
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 
@@ -28,11 +31,22 @@ public class ClientReadThread extends Thread {
         }
         if (first_response == null || first_response.type.equals(MessageType.NAME_ERROR)) {
             System.out.println("Name " + client.getUserName() + " is already occupied");
+            JOptionPane.showMessageDialog(null,
+                    "Name " + client.getUserName() + " is already occupied",
+                    "Duplicate username",
+                    JOptionPane.ERROR_MESSAGE);
+            client.openMainMenu();
             client.close();
         } else if (!first_response.type.equals(MessageType.OK)) {
             System.out.println("Error occurred while connecting to the room.");
+            JOptionPane.showMessageDialog(null,
+                    "Error occurred while connecting to the room.",
+                    "Connection error",
+                    JOptionPane.ERROR_MESSAGE);
+            client.openMainMenu();
             client.close();
         } else {
+            client.openPlayerMenu();
             while (true) {
                 try {
                     System.out.println("Client waiting for message...");

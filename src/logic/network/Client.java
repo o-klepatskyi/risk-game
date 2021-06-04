@@ -21,7 +21,7 @@ public class Client {
     public Client(String hostname, int port, String userName, final MultiplayerManager manager) {
         this.hostname = hostname;
         this.port = port;
-        this.username = userName;
+        this.username = userName.trim();
         this.manager = manager;
     }
 
@@ -93,6 +93,8 @@ public class Client {
 
     public void openPlayerMenu() {
        manager.frame.add(manager.playerMenu);
+       manager.frame.revalidate();
+       manager.frame.repaint();
        manager.frame.pack();
     }
 
@@ -101,6 +103,8 @@ public class Client {
             manager.frame.remove(manager.playerMenu);
         }
         manager.frame.add(new MainMenu(manager.frame));
+        manager.frame.revalidate();
+        manager.frame.repaint();
         manager.frame.pack();
     }
 }

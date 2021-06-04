@@ -82,7 +82,7 @@ public class PlayerMenu extends JPanel {
                     panel.getRemovePlayerButton().setEnabled(false);
                 }
 
-                if (panel.getPlayerNameField().getText().equals(multiplayerManager.client.username) && isServer) {
+                if (isMultiplayer && panel.getPlayerNameField().getText().equals(multiplayerManager.client.username) && isServer) {
                     panel.getRemovePlayerButton().setEnabled(false);
                 }
             }
@@ -94,8 +94,6 @@ public class PlayerMenu extends JPanel {
                     panel.getColorComboBox().setEnabled(false);
                 }
             }
-
-            System.out.println(panel.getPlayerNameField().getText() + "'s checkbox: " + panel.getBotCheckBox().isSelected());
 
             add(panel);
         }
@@ -173,7 +171,7 @@ public class PlayerMenu extends JPanel {
         PlayerPanel p = new PlayerPanel(this, colorModel);
 
         p.getPlayerNameField().setEditable(false);
-        p.getPlayerNameField().setText("Bot");
+        p.getPlayerNameField().setText(MultiplayerManager.BOT_NAME);
         p.getBotCheckBox().setEnabled(false);
         p.getBotCheckBox().setSelected(true);
 
@@ -198,11 +196,21 @@ public class PlayerMenu extends JPanel {
         }
     }
 
+    public void removePlayer(String username) {
+        if (isMultiplayer) {
+            for (PlayerPanel p : playerPanels) {
+                if (p.getPlayerNameField().getText().equals(username)) {
+                    removePlayerPanel(p);
+                    break;
+                }
+            }
+        }
+    }
+
     public void removePlayer(PlayerPanel playerPanel) {
         if (isMultiplayer) {
             if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
-                removePlayerPanel(playerPanel);
-                if (!playerPanel.getBotCheckBox().isSelected()) {
+                if (!playerPanel.getBotCheckBox().isSelected()) { // when it is not bot, close connection
                     String username = playerPanel.getPlayer().getName();
                     try {
                         multiplayerManager.sendMessage(new Message(MessageType.CONNECTION_CLOSED_BY_ADMIN, username));
@@ -210,11 +218,7 @@ public class PlayerMenu extends JPanel {
                         e.printStackTrace();
                     }
                 }
-                try {
-                    multiplayerManager.sendMessage(new Message(MessageType.PLAYER_DELETED, getPlayers()));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                removePlayerPanel(playerPanel);
             }
         } else {
             if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
@@ -229,6 +233,11 @@ public class PlayerMenu extends JPanel {
         playerPanels.remove(playerPanel);
         playerPanel.setVisible(false);
         colorModel.removeComboBox(playerPanel.getColorComboBox());
+        try {
+            multiplayerManager.sendMessage(new Message(MessageType.PLAYER_DELETED, getPlayers()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

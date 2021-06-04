@@ -47,7 +47,7 @@ public class ClientMenu extends JPanel {
 
         multiplayerManager.setPlayerMenu(pm);
         multiplayerManager.startClient(ipAddress, portNumber, username, frame);
-
+        setVisible(false);
         frame.remove(this);
     }
 
@@ -130,8 +130,11 @@ public class ClientMenu extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                currentMenu.setVisible(false);
                 frame.remove(currentMenu);
                 frame.add(new MultiplayerMenu(frame));
+                frame.revalidate();
+                frame.repaint();
                 frame.pack();
             }
         });

@@ -41,7 +41,6 @@ public class ServerMenu extends JPanel {
     private JButton getEnterButton() {
         JButton enterButton = new JButton("Create room");
         enterButton.setSize(new Dimension(100,35));
-        enterButton.setVisible(true);
         enterButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -55,6 +54,7 @@ public class ServerMenu extends JPanel {
                 }
             }
         });
+        enterButton.setVisible(true);
         return enterButton;
     }
 
@@ -64,6 +64,7 @@ public class ServerMenu extends JPanel {
         multiplayerManager.setPlayerMenu(pm);
         multiplayerManager.startServer(portNumber, username, frame);
 
+        setVisible(false);
         frame.remove(this);
     }
 
@@ -98,8 +99,11 @@ public class ServerMenu extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                currentMenu.setVisible(false);
                 frame.remove(currentMenu);
                 frame.add(new MultiplayerMenu(frame));
+                frame.revalidate();
+                frame.repaint();
                 frame.pack();
             }
         });

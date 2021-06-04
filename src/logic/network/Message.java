@@ -10,7 +10,7 @@ import static logic.network.MessageType.*;
 public class Message implements Serializable {
     public final MessageType type;
 
-    public String msg;
+    public String username;
     public Collection<Player> players;
     public Game game;
 
@@ -19,7 +19,7 @@ public class Message implements Serializable {
             throw new Exception("Message type exception"); // todo unique exception
         }
         this.type = type;
-        this.msg = username;
+        this.username = username;
     }
 
     public Message(MessageType type) {
@@ -39,8 +39,8 @@ public class Message implements Serializable {
 
     public String toString() {
         String str = "Message[type= " + type;
-        if (msg != null) {
-            str += ", msg = "  + msg;
+        if (username != null) {
+            str += ", msg = "  + username;
         }
         if (players != null) {
             str += ", players= " + players;

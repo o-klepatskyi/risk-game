@@ -23,21 +23,25 @@ public class UserThread extends Thread {
             objOutputStream = new ObjectOutputStream(output);
 
 
-            Message userName = (Message) objectInputStream.readObject();
-            System.out.println("Server thread received message: " + userName);
-            if (userName.type != USERNAME || server.hasUser(userName.msg)) {
+            Message userNameMsg = (Message) objectInputStream.readObject();
+
+            if (userNameMsg.type != USERNAME) {
+                sendMessage(new Message(CLOSE_CONNECTION));
+            } else if (userNameMsg.username.equals(MultiplayerManager.BOT_NAME)) {
+                sendMessage(new Message(INVALID_NAME));
+            } else if(server.hasUser(userNameMsg.username)) {
                 sendMessage(new Message(NAME_ERROR));
             } else if (server.getUserNames().size() == 6) {
                 sendMessage(new Message(MAX_PLAYERS_ERROR));
             } else {
                 sendMessage(new Message(OK));
-                server.addUserName(userName.msg);
-                this.username = userName.msg;
+                server.addUserName(userNameMsg.username);
+                this.username = userNameMsg.username;
                 printUsers();
                 Message clientMessage;
 
                 do {
-                    System.out.println(userName.msg + " thread listening...");
+                    System.out.println(userNameMsg.username + " thread listening...");
                     clientMessage = (Message) objectInputStream.readObject();
                     System.out.println("Server received: " + clientMessage);
 
@@ -45,7 +49,7 @@ public class UserThread extends Thread {
                         server.broadcast(new Message(PLAYERS, clientMessage.players), null);
                     }
                     if (clientMessage.type == CONNECTION_CLOSED_BY_ADMIN) {
-                        server.sendMessage(new Message(CONNECTION_CLOSED_BY_ADMIN), clientMessage.msg);
+                        server.sendMessage(new Message(CONNECTION_CLOSED_BY_ADMIN), clientMessage.username);
                     }
                 } while (clientMessage.type != CLOSE_CONNECTION);
 

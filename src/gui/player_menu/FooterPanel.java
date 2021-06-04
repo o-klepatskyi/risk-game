@@ -103,18 +103,21 @@ class FooterPanel extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (parent.isMultiplayer) {
-                    parent.multiplayerManager.sendMessage(new Message(MessageType.CLOSE_CONNECTION));
-                    if (parent.isServer) {
-                        parent.multiplayerManager.closeServer();
-                    }
-                } else {
-                    frame.remove(parent);
-                    frame.add(new MainMenu(frame));
-                    frame.pack();
-                }
+                closeAction();
             }
         });
         return backButton;
+    }
+
+    private void closeAction() {
+        if (parent.isMultiplayer) {
+            parent.multiplayerManager.closeClient();
+        } else {
+            frame.remove(parent);
+            frame.add(new MainMenu(frame));
+            frame.revalidate();
+            frame.repaint();
+            frame.pack();
+        }
     }
 }

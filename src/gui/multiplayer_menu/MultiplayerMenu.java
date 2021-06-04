@@ -61,6 +61,7 @@ public class MultiplayerMenu extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                currentMenu.setVisible(false);
                 frame.remove(currentMenu);
                 frame.add(new MainMenu(frame));
                 frame.pack();
@@ -70,6 +71,7 @@ public class MultiplayerMenu extends JPanel {
     }
 
     private void openServerMenu() {
+        setVisible(false);
         frame.remove(this);
         frame.add(new ServerMenu(frame));
         frame.pack();
@@ -78,6 +80,8 @@ public class MultiplayerMenu extends JPanel {
     private void openClientMenu() {
         frame.remove(this);
         frame.add(new ClientMenu(frame));
+        frame.revalidate();
+        frame.repaint();
         frame.pack();
     }
 }

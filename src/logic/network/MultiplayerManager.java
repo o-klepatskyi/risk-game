@@ -72,9 +72,19 @@ public final class MultiplayerManager {
         try {
             server.broadcast(new Message(MessageType.CONNECTION_CLOSED_BY_ADMIN), null);
             server.isClosed = true;
-            new Socket("127.0.0.1", server.port);
+            new Socket("127.0.0.1", server.port); // to close the cycle in Server class
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static final String BOT_NAME = "Bot";
+
+    public void closeClient() {
+        sendMessage(new Message(MessageType.CLOSE_CONNECTION));
+        client.close();
+        if (networkMode == SERVER) {
+            closeServer();
         }
     }
 }

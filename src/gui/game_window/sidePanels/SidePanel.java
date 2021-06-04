@@ -40,6 +40,5 @@ public class SidePanel extends JPanel {
     public void updateTerritories(Territory src, Territory dst) {
         this.src = src;
         this.dst = dst;
-        System.out.println("updated territories in side panel");
     }
 }

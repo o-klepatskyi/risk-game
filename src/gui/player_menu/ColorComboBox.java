@@ -53,7 +53,6 @@ class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
         PlayerColor previousSelectedColor = oldSelectedColor;
 
         if (selectedColor != null && !selectedColor.equals(oldSelectedColor)) {
-            System.out.println("Another color");
             oldSelectedColor = selectedColor;
             colorModel.chooseColor(selectedColor, previousSelectedColor);
             if (manager != null ) {

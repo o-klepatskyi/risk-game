@@ -166,12 +166,14 @@ public class MainMenu extends JPanel {
     }
 
     private void openPlayerMenu() {
+        panel.setVisible(false);
         frame.remove(panel);
         frame.add(new PlayerMenu(frame));
         frame.pack();
     }
 
     private void openMultiplayerMenu() {
+        panel.setVisible(false);
         frame.remove(panel);
         frame.add(new MultiplayerMenu(frame));
         frame.pack();

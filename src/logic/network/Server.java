@@ -71,6 +71,7 @@ public class Server {
         boolean removed = userNames.remove(userName);
         if (removed) {
             userThreads.remove(aUser);
+            manager.playerMenu.removePlayer(userName);
         }
     }
 

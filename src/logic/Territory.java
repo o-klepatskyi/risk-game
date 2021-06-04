@@ -1,10 +1,12 @@
 package logic;
 
+
 import util.Coordinates;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Territory {
+public class Territory implements Serializable {
     private int troops;
     private Player owner;
     private String name;
@@ -63,5 +65,10 @@ public class Territory {
                 Objects.equals(owner, territory.owner) &&
                 Objects.equals(name, territory.name) &&
                 Objects.equals(coordinates, territory.coordinates);
+    }
+
+    public static Territory getIdentical(Territory t) {
+        if (t == null) return null;
+        return new Territory(t.getName(), t.getTroops(), t.getOwner(), t.getCoordinates());
     }
 }

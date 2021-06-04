@@ -1,24 +1,23 @@
 package logic;
 
-import gui.gameWindow.GameMap;
-import gui.gameWindow.GameWindow;
+import gui.game_window.GameMap;
+import gui.game_window.GameWindow;
+import logic.network.MultiplayerManager;
 import util.*;
 
 import java.awt.*;
 import java.util.*;
 import java.util.stream.IntStream;
 
-import static gui.gameWindow.GameWindow.HEIGHT;
-import static gui.gameWindow.GameWindow.WIDTH;
+import static gui.game_window.GameWindow.HEIGHT;
+import static gui.game_window.GameWindow.WIDTH;
 
 public class Game {
-    private final int numberOfTerritories = 42;
+    private final ArrayList<Player> players;
+    private final int numberOfPlayers;
 
-    private ArrayList<Player> players;
-    private int numberOfPlayers;
-
-    private ArrayList<Territory> territories;
-    private final String[] namesOfTerritories = {
+    private static ArrayList<Territory> territories;
+    private static final String[] namesOfTerritories = {
             "Afghanistan", "Alaska", "Alberta", "Argentina", "Brazil", "Central America",
             "China", "Congo", "East Africa", "Eastern Australia", "Eastern United States", "Egypt",
             "Great Britain", "Greenland", "Iceland", "India", "Indonesia", "Irkutsk",
@@ -28,7 +27,9 @@ public class Game {
             "Ural", "Venezuela", "Western Australia", "Western Europe", "Western United States", "Yakutsk"
     };
 
-    private final Coordinates[] coordinates = {
+    private static final int numberOfTerritories = namesOfTerritories.length;
+
+    private static final Coordinates[] coordinates = {
             new Coordinates(640, 240), new Coordinates(60, 105), new Coordinates(150, 155), new Coordinates(245, 510), new Coordinates(300, 430), new Coordinates(165, 315),
             new Coordinates(750, 290), new Coordinates(515, 480), new Coordinates(550, 430), new Coordinates(880, 535), new Coordinates(220, 250), new Coordinates(515, 370),
             new Coordinates(385, 210), new Coordinates(330, 70), new Coordinates(405, 135), new Coordinates(680, 330), new Coordinates(780, 475), new Coordinates(750, 175),
@@ -39,28 +40,67 @@ public class Game {
     };
 
     private GameWindow gameWindow;
-    private Graph gameGraph;
+    private final Graph gameGraph;
 
     private Player currentPlayer;
     private GameOption gameOption;
     private GameMap gameMap;
 
-    public Game(ArrayList<Player> players) {
-        this.players = players;
+    public final boolean isMultiplayer;
+    public final MultiplayerManager manager;
+
+    public Game(Collection<Player> players) {
+        if (players.size() < 2) throw new IllegalArgumentException();
+        this.manager = null;
+        isMultiplayer = false;
+        this.players = new ArrayList<>(players);
         numberOfPlayers = players.size();
+
         injectBots();
+        gameGraph = getStartGraph(numberOfPlayers, this.players);
+        start();
+    }
 
+    /**
+     * FOR MULTIPLAYER
+     */
+    public Game(Collection<Player> players, Graph graph, MultiplayerManager manager) {
+        if (players.size() < 2) throw new IllegalArgumentException();
+        this.manager = manager;
+        isMultiplayer = true;
+        this.players = new ArrayList<>(players);
+        numberOfPlayers = players.size();
+        gameGraph = graph;
+        start();
+    }
+
+    public static Graph getStartGraph(int numberOfPlayers, ArrayList<Player> players) {
+        if (players.size() < 2) throw new IllegalArgumentException();
         initializeTerritories();
-        gameGraph = new Graph();
-        createGraphFromTerritories();
-        distributeTerritories();
+        Graph gameGraph = new Graph();
+        createGraphFromTerritories(gameGraph);
+        distributeTerritories(gameGraph, numberOfPlayers, players);
+        return gameGraph;
+    }
 
+    private void start() {
         pickFirstPlayer();
 
         gameMap = new GameMap(this);
         gameMap.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
-
         gameWindow = new GameWindow(this);
+    }
+
+    public boolean isCurrentPlayerActive() {
+        return getCurrentPlayer().getName().equals(manager.client.username);
+    }
+
+    public boolean removePlayer(Player p) {
+        return players.remove(p);
+    }
+
+    public Collection<Player> getPlayers() {
+        return players;
     }
 
     public GameWindow getGameWindow() {
@@ -84,11 +124,7 @@ public class Game {
     }
 
     /**
-     *
      * @return probability of a battle between GameMap src and dst territories
-     * @throws SrcNotStatedException
-     * @throws DstNotStatedException
-     * @throws WrongTerritoriesPairException
      */
     public int calculateProbability() throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException {
         Territory srcTerritory = gameMap.getSrcTerritory();
@@ -118,12 +154,7 @@ public class Game {
     }
 
     /**
-     *
      * @return true if attacker wins, else - false
-     * @throws SrcNotStatedException
-     * @throws DstNotStatedException
-     * @throws WrongTerritoriesPairException
-     * @throws IllegalNumberOfAttackTroopsException
      */
     public boolean attack() throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfAttackTroopsException {
         Territory srcTerritory = gameMap.getSrcTerritory();
@@ -137,6 +168,19 @@ public class Game {
 
         if(!gameGraph.hasEdge(srcTerritory, dstTerritory))
             throw new WrongTerritoriesPairException("These territories are not adjacent!");
+
+        return attack(srcTerritory, dstTerritory);
+    }
+
+    public boolean attack(Territory src, Territory dst) throws IllegalNumberOfAttackTroopsException, SrcNotStatedException, DstNotStatedException {
+        Territory srcTerritory = findTerritory(src);
+        Territory dstTerritory = findTerritory(dst);
+
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory is invalid!");
+
+        if(dstTerritory == null)
+            throw new DstNotStatedException("Destination territory is invalid!");
 
         int attackTroops = srcTerritory.getTroops();
         int defendTroops = dstTerritory.getTroops();
@@ -163,14 +207,6 @@ public class Game {
         }
     }
 
-    /**
-     *
-     * @param numberOfTroops
-     * @throws SrcNotStatedException
-     * @throws DstNotStatedException
-     * @throws WrongTerritoriesPairException
-     * @throws IllegalNumberOfFortifyTroopsException
-     */
     public void fortify(int numberOfTroops) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException {
         Territory srcTerritory = gameMap.getSrcTerritory();
         Territory dstTerritory = gameMap.getDstTerritory();
@@ -181,6 +217,18 @@ public class Game {
         if(dstTerritory == null)
             throw new DstNotStatedException("Destination territory was not stated!");
 
+        fortify(srcTerritory, dstTerritory, numberOfTroops);
+    }
+
+    public void fortify(Territory src, Territory dst, int numberOfTroops) throws IllegalNumberOfFortifyTroopsException, WrongTerritoriesPairException, SrcNotStatedException, DstNotStatedException {
+        Territory srcTerritory = findTerritory(src);
+        Territory dstTerritory = findTerritory(dst);
+
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory is invalid!");
+
+        if(dstTerritory == null)
+            throw new DstNotStatedException("Destination territory is invalid!");
 
         ArrayList<Territory> connectedTerritories = gameGraph.getConnectedTerritories(srcTerritory);
         if(connectedTerritories.contains(dstTerritory)) {
@@ -198,12 +246,6 @@ public class Game {
         gameMap.drawField();
     }
 
-    /**
-     *
-     * @param numberOfTroops
-     * @throws SrcNotStatedException
-     * @throws IllegalNumberOfReinforceTroopsException
-     */
     public void reinforce(int numberOfTroops) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
         Territory srcTerritory = gameMap.getSrcTerritory();
         if(srcTerritory == null)
@@ -212,10 +254,25 @@ public class Game {
         if(numberOfTroops > currentPlayer.getBonus())
             throw new IllegalNumberOfReinforceTroopsException("Number of troops for reinforcement exceeds bonus!");
 
+        reinforce(numberOfTroops, srcTerritory);
+    }
+
+    public void reinforce(int numberOfTroops, Territory src) throws SrcNotStatedException {
+        Territory srcTerritory = findTerritory(src);
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory is invalid!");
+
         srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
         currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
         gameMap.drawField();
         playReinforceEffect();
+    }
+
+    private Territory findTerritory(Territory territory) {
+        for (Territory t : gameGraph.getTerritories()) {
+            if (territory.equals(t)) return t;
+        }
+        return null;
     }
 
 
@@ -273,25 +330,11 @@ public class Game {
         bonus = Math.max(bonus, 3);
         currentPlayer.setBonus(bonus);
 
-        if(currentPlayer.isBot()) {
-            Bot bot = currentPlayer.getBot();
-            bot.reinforce();
-            nextPlayerTurn();
-        }
-        else {
+        if (currentPlayer.isBot()) {
+            nextPlayerTurn(); // skip for now
+        } else {
             reinforcePhase();
         }
-    }
-
-
-    /**
-     *
-     * @param t
-     * @return random territory from list of territories
-     */
-    public static Territory getRandomTerritory(ArrayList<Territory> t) {
-        Random rand = new Random();
-        return t.get(rand.nextInt(t.size()));
     }
 
     public static void playReinforceEffect() {
@@ -299,14 +342,14 @@ public class Game {
     }
 
 
-    private void initializeTerritories() {
+    private static void initializeTerritories() {
         territories = new ArrayList<>();
         for(int i = 0; i < numberOfTerritories; i++) {
             territories.add(new Territory(namesOfTerritories[i], coordinates[i]));
         }
     }
 
-    private void createGraphFromTerritories() {
+    private static void createGraphFromTerritories(Graph gameGraph) {
         gameGraph.addEdge(findTerritory("Afghanistan"), findTerritory("China"));
         gameGraph.addEdge(findTerritory("Afghanistan"), findTerritory("India"));
         gameGraph.addEdge(findTerritory("Afghanistan"), findTerritory("Middle East"));
@@ -392,7 +435,7 @@ public class Game {
         gameGraph.addEdge(findTerritory("Ukraine"), findTerritory("Ural"));
     }
 
-    private Territory findTerritory(String name) {
+    private static Territory findTerritory(String name) {
         for(Territory territory : territories) {
             if(territory.getName().equals(name))
                 return territory;
@@ -401,7 +444,7 @@ public class Game {
     }
 
 
-    private void distributeTerritories() {
+    private static void distributeTerritories(Graph gameGraph, int numberOfPlayers, ArrayList<Player> players) {
         int territoriesLeft = numberOfTerritories;
         for(int i = 0; i < numberOfPlayers; i++) {
             int playerTerritoriesNumber = numberOfTerritories / numberOfPlayers;
@@ -448,6 +491,12 @@ public class Game {
             territoriesLeft -= playerTerritoriesNumber;
         }
     }
+
+    private static Territory getRandomTerritory(ArrayList<Territory> t) {
+        Random rand = new Random();
+        return t.get(rand.nextInt(t.size()));
+    }
+
 
     private void removeDeadPlayers() {
         players.removeIf(this::playerIsDead);

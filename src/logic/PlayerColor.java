@@ -2,7 +2,8 @@ package logic;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PlayerColor extends Color {
     private String colorName;
@@ -15,12 +16,8 @@ public class PlayerColor extends Color {
     }
 
     private static ImageIcon createImageIcon(String name) {
-        String path = "res" + File.separator + "color-icons" + File.separator + name + ".png";
-        ImageIcon imageIcon = new ImageIcon(path); // load the image to a imageIcon
-        Image image = imageIcon.getImage(); // transform it
-        Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-        imageIcon = new ImageIcon(newimg);  // transform it back
-        return imageIcon;
+        String path = "color-icons/" + name + ".png";
+        return new ImageIcon(new ImageIcon(PlayerColor.class.getResource(path)).getImage().getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH));
     }
 
     public ImageIcon getIcon() {
@@ -35,4 +32,20 @@ public class PlayerColor extends Color {
     public String toString() {
         return colorName;
     }
+
+    public static PlayerColor getPlayerColor(Color c) {
+        ArrayList<PlayerColor> colors = new ArrayList<>(Arrays.asList(RED,BLUE,GREEN,YELLOW,ORANGE,PINK));
+
+        for (PlayerColor color : colors) {
+            if (c.equals(color)) return color;
+        }
+        return null;
+    }
+    
+    public static final PlayerColor RED = new PlayerColor(255,0,0, "red");
+    public static final PlayerColor BLUE = new PlayerColor(0, 0, 255, "blue");
+    public static final PlayerColor GREEN = new PlayerColor(34, 177,76, "green");
+    public static final PlayerColor YELLOW = new PlayerColor(255, 201, 14, "yellow");
+    public static final PlayerColor ORANGE = new PlayerColor(255,127,39, "orange");
+    public static final PlayerColor PINK = new PlayerColor(255, 64, 127, "pink");
 }

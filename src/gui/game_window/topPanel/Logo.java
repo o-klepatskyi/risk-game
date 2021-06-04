@@ -16,8 +16,7 @@ public class Logo extends JPanel {
 
     public Logo() {
         setOpaque(true);
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        System.out.println(WIDTH + " " + HEIGHT);
+        setPreferredSize(new Dimension(WIDTH, HEIGHT)); // 320, 72
     }
 
     @Override

@@ -80,6 +80,9 @@ public class ClientReadThread extends Thread {
                 if (response.type == PLAYERS) {
                     client.manager.updatePlayerMenu(response.players);
                 }
+                if (response.type == START_GAME) {
+                    client.manager.startGame(response.gameGraph);
+                }
                 if (response.type == CONNECTION_CLOSED_BY_ADMIN) {
                     client.sendMessage(new Message(CLOSE_CONNECTION));
                     client.close();

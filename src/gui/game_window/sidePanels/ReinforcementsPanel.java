@@ -53,7 +53,6 @@ public class ReinforcementsPanel extends SidePanel {
             label.setFont(LABEL_FONT);
             label.setForeground(Color.white);
             label.setAlignmentX(0.5f);
-            //label.setBorder(new LineBorder(Color.red));
             add(label);
         }
     }

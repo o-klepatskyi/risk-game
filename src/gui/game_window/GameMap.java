@@ -28,7 +28,6 @@ public class GameMap extends JPanel {
         this.game = game;
         this.gameGraph = game.getGameGraph();
         panel = this;
-        //setBackground(new Color(0, 145, 182));
         buttons = new ArrayList<>();
         drawField();
 
@@ -59,6 +58,12 @@ public class GameMap extends JPanel {
     }
 
     private void updateTerritories() {
+//        if (getSrcTerritory() == null) System.out.println("null");
+//        else
+//        System.out.println("SRC :" + getSrcTerritory().getName() + " - " + getSrcTerritory().getTroops());
+//        if (getDstTerritory() == null) System.out.println("null");
+//        else
+//        System.out.println("DST: " + getDstTerritory().getName() + " - " + getDstTerritory().getTroops());
         game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
     }
 
@@ -110,7 +115,6 @@ public class GameMap extends JPanel {
     }
 
     /**
-     *
      * @return territory from dst button(by name)
      */
     public Territory getDstTerritory() {
@@ -137,14 +141,17 @@ public class GameMap extends JPanel {
         for(JButton button : buttons){
             button.addMouseListener(new MouseListener() {
                 public void mouseClicked(MouseEvent e) {
-                    if(!buttonClicked && button.getBackground() == game.getCurrentPlayer().getColor()) {
+                    System.out.println("Current player color: " + game.getCurrentPlayer().getColor());
+                    System.out.println("Button color: " + button.getBackground());
+                    if(!buttonClicked && button.getBackground().equals(game.getCurrentPlayer().getColor())) {
+                        System.out.println("option 1");
                         resetButtons();
                         highlightButton(button, "src");
                         showOptions(game.getGameOption());
-                    }
-                    else {
-                        if(button.getBackground() == DISABLED_COLOR) {
-                            if( button.getForeground() == game.getCurrentPlayer().getColor()) {
+                    } else {
+                        if(button.getBackground().equals(DISABLED_COLOR)) {
+                            System.out.println("option 2");
+                            if(button.getForeground().equals(game.getCurrentPlayer().getColor())) {
                                 if(!button.equals(src)) {
                                     resetButtons();
                                     highlightButton(button, "src");
@@ -153,15 +160,16 @@ public class GameMap extends JPanel {
                                 else
                                     resetButtons();
                             }
-                        }
-                        else {
+                        } else {
                             if(game.getGameOption().equals(GameOption.REINFORCEMENT)) {
+                                System.out.println("option 3");
                                 resetButtons();
                                 highlightButton(button, "src");
                                 showOptions(game.getGameOption());
                             }
                             else {
                                 if (!button.equals(src) && src != null) {
+                                    System.out.println("option 4");
                                     if (dst != null)
                                         dst.setBorder(null);
                                     if (dst != button)
@@ -171,8 +179,10 @@ public class GameMap extends JPanel {
                                         dst = null;
                                     }
                                 }
-                                else
+                                else {
+                                    System.out.println("option 5");
                                     resetButtons();
+                                }
                             }
                         }
                     }
@@ -246,7 +256,6 @@ public class GameMap extends JPanel {
                     makeButtonInactive(b);
                 }
             }
-
         }
     }
 

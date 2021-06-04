@@ -29,13 +29,8 @@ public class Client {
         try {
             socket = new Socket(hostname, port);
 
-            try {
-                OutputStream output = socket.getOutputStream();
-                objectOutputStream = new ObjectOutputStream(output);
-            } catch (IOException ex) {
-                System.err.println("Error getting output stream: " + ex.getMessage());
-                ex.printStackTrace();
-            }
+            OutputStream output = socket.getOutputStream();
+            objectOutputStream = new ObjectOutputStream(output);
 
             objectOutputStream.writeObject(new Message(MessageType.USERNAME, username));
 
@@ -55,15 +50,7 @@ public class Client {
                     "I/O Error",
                     JOptionPane.ERROR_MESSAGE);
             openMainMenu();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
-                    e.getMessage(),
-                    "Network message exception",
-                    JOptionPane.ERROR_MESSAGE);
-            System.err.println(e.getMessage());
-            openMainMenu();
         }
-
     }
 
     String getUserName() {

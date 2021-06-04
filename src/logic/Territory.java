@@ -1,8 +1,9 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Territory {
+public class Territory implements Serializable {
     private int troops;
     private Player owner;
     private String name;

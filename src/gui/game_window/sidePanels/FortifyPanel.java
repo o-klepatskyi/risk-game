@@ -40,7 +40,7 @@ public class FortifyPanel extends SidePanel {
 
         if (src != null & dst != null) {
             int availableTroops = src.getTroops()-1;
-            if (availableTroops > 1) {
+            if (availableTroops >= 1) {
                 fortifyButton.setEnabled(true);
                 troopsToTransferSpinner.setModel(new SpinnerNumberModel(availableTroops,1, availableTroops, 1));
             } else {

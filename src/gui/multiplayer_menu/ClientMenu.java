@@ -4,6 +4,7 @@ import gui.HintTextField;
 import gui.player_menu.PlayerMenu;
 import gui.player_menu.PlayerNameField;
 import logic.network.MultiplayerManager;
+import logic.network.NetworkMode;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
@@ -26,7 +27,7 @@ public class ClientMenu extends JPanel {
     private String ipAddress;
     private int portNumber;
 
-    private final MultiplayerManager multiplayerManager = new MultiplayerManager();
+    private final MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.CLIENT);
 
     ClientMenu(JFrame frame) {
         this.frame = frame;

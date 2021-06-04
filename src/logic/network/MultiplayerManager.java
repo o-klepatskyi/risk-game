@@ -2,13 +2,16 @@ package logic.network;
 
 import gui.player_menu.PlayerMenu;
 import logic.Game;
+import logic.Graph;
 import logic.Player;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Collection;
 import static logic.network.NetworkMode.*;
+import static logic.network.MessageType.*;
 
 public final class MultiplayerManager {
     public Server server;
@@ -18,14 +21,10 @@ public final class MultiplayerManager {
     public Game game;
     public PlayerMenu playerMenu;
     public JFrame frame;
+    public ArrayList<Player> players;
 
-    public MultiplayerManager(Game game) {
-        this.game = game;
-        this.networkMode = SERVER;
-    }
-
-    public MultiplayerManager() {
-        this.networkMode = CLIENT;
+    public MultiplayerManager(NetworkMode mode) {
+        this.networkMode = mode;
     }
 
     public void startServer(int portNumber, String userName, JFrame frame) {
@@ -69,22 +68,44 @@ public final class MultiplayerManager {
     }
 
     public void closeServer() {
-        try {
-            server.broadcast(new Message(MessageType.CONNECTION_CLOSED_BY_ADMIN), null);
-            server.isClosed = true;
-            new Socket("127.0.0.1", server.port); // to close the cycle in Server class
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (networkMode == SERVER) {
+            try {
+                server.broadcast(new Message(CONNECTION_CLOSED_BY_ADMIN));
+                server.isClosed = true;
+                new Socket("127.0.0.1", server.port); // to close the cycle in Server class
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public static final String BOT_NAME = "Bot";
 
     public void closeClient() {
-        sendMessage(new Message(MessageType.CLOSE_CONNECTION));
+        sendMessage(new Message(CLOSE_CONNECTION));
         client.close();
         if (networkMode == SERVER) {
             closeServer();
         }
+    }
+
+    public void initGame() {
+        players = new ArrayList<>(getPlayers());
+        try {
+            server.broadcast(new Message(START_GAME, Game.getStartGraph(players.size(), players)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * client-only
+     */
+    public void startGame(Graph gameGraph) {
+        game = new Game(players, gameGraph);
+        frame.remove(playerMenu);
+        frame.add(game.getGameWindow());
+        frame.pack();
+        playerMenu = null;
     }
 }

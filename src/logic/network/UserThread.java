@@ -46,7 +46,7 @@ public class UserThread extends Thread {
                     System.out.println("Server received: " + clientMessage);
 
                     if (clientMessage.type == COLOR_CHANGED || clientMessage.type == BOT_ADDED || clientMessage.type == PLAYER_DELETED) {
-                        server.broadcast(new Message(PLAYERS, clientMessage.players), null);
+                        server.broadcast(new Message(PLAYERS, clientMessage.players));
                     }
                     if (clientMessage.type == CONNECTION_CLOSED_BY_ADMIN) {
                         server.sendMessage(new Message(CONNECTION_CLOSED_BY_ADMIN), clientMessage.username);
@@ -71,7 +71,7 @@ public class UserThread extends Thread {
         objOutputStream.writeObject(getUsersMessage());
     }
 
-    public Message getUsersMessage() throws Exception {
+    public Message getUsersMessage() {
         return new Message(MessageType.PLAYERS, server.manager.getPlayers());
     }
 

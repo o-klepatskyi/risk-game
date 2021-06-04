@@ -3,8 +3,8 @@ package gui.multiplayer_menu;
 import gui.HintTextField;
 import gui.player_menu.PlayerMenu;
 import gui.player_menu.PlayerNameField;
-import logic.Game;
 import logic.network.MultiplayerManager;
+import logic.network.NetworkMode;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
@@ -21,7 +21,7 @@ public class ServerMenu extends JPanel {
     private HintTextField nameField;
     private final JFrame frame;
 
-    private final MultiplayerManager multiplayerManager = new MultiplayerManager(new Game());
+    private final MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.SERVER);
 
     private String username;
     private int portNumber;

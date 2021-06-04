@@ -11,8 +11,8 @@ public class Server {
     public boolean isClosed = false;
     public final int port;
     MultiplayerManager manager;
-    private Set<String> userNames = new HashSet<>();
-    private Set<UserThread> userThreads = new HashSet<>();
+    private final Set<String> userNames = new HashSet<>();
+    private final Set<UserThread> userThreads = new HashSet<>();
 
     public Server(int port, MultiplayerManager manager) {
         this.manager = manager;
@@ -53,6 +53,10 @@ public class Server {
                 userThread.sendMessage(message);
             }
         }
+    }
+
+    void broadcast(Message message) throws IOException {
+        broadcast(message, null);
     }
 
     /**

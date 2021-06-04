@@ -2,25 +2,21 @@ package logic;
 
 import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
-import gui.player_menu.ColorModel;
 import util.*;
 
 import java.awt.*;
-import java.io.Serializable;
 import java.util.*;
 import java.util.stream.IntStream;
 
 import static gui.game_window.GameWindow.HEIGHT;
 import static gui.game_window.GameWindow.WIDTH;
 
-public class Game implements Serializable {
-    private final int numberOfTerritories = 42;
+public class Game {
+    private final ArrayList<Player> players;
+    private final int numberOfPlayers;
 
-    private ArrayList<Player> players;
-    private int numberOfPlayers;
-
-    private ArrayList<Territory> territories;
-    private final String[] namesOfTerritories = {
+    private static ArrayList<Territory> territories;
+    private static final String[] namesOfTerritories = {
             "Afghanistan", "Alaska", "Alberta", "Argentina", "Brazil", "Central America",
             "China", "Congo", "East Africa", "Eastern Australia", "Eastern United States", "Egypt",
             "Great Britain", "Greenland", "Iceland", "India", "Indonesia", "Irkutsk",
@@ -30,7 +26,9 @@ public class Game implements Serializable {
             "Ural", "Venezuela", "Western Australia", "Western Europe", "Western United States", "Yakutsk"
     };
 
-    private final Coordinates[] coordinates = {
+    private static final int numberOfTerritories = namesOfTerritories.length;
+
+    private static final Coordinates[] coordinates = {
             new Coordinates(640, 240), new Coordinates(60, 105), new Coordinates(150, 155), new Coordinates(245, 510), new Coordinates(300, 430), new Coordinates(165, 315),
             new Coordinates(750, 290), new Coordinates(515, 480), new Coordinates(550, 430), new Coordinates(880, 535), new Coordinates(220, 250), new Coordinates(515, 370),
             new Coordinates(385, 210), new Coordinates(330, 70), new Coordinates(405, 135), new Coordinates(680, 330), new Coordinates(780, 475), new Coordinates(750, 175),
@@ -41,48 +39,45 @@ public class Game implements Serializable {
     };
 
     private GameWindow gameWindow;
-    private Graph gameGraph;
+    private final Graph gameGraph;
 
     private Player currentPlayer;
     private GameOption gameOption;
     private GameMap gameMap;
 
-    public Game() {
-        this.players = new ArrayList<>(MAX_PLAYER_NUMBER);
+    public Game(Collection<Player> players) {
+        this.players = new ArrayList<>(players);
+        numberOfPlayers = players.size();
+        gameGraph = getStartGraph(numberOfPlayers, this.players);
+        start();
     }
-
-    private boolean gameStarted = false;
-    private final int MAX_PLAYER_NUMBER = 6; // ColorModel.MAX_PLAYERS.size()
-    public final ColorModel colorModel = new ColorModel();
 
     /**
-     * add 2+ players before starting game
+     * FOR MULTIPLAYER
      */
-    public void startGame() {
-        if (!gameStarted) {
-            gameStarted = true;
-            numberOfPlayers = players.size();
-
-            initializeTerritories();
-            gameGraph = new Graph();
-            createGraphFromTerritories();
-            distributeTerritories();
-
-            pickFirstPlayer();
-
-            gameMap = new GameMap(this);
-            gameMap.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
-
-            gameWindow = new GameWindow(this);
-        }
+    public Game(Collection<Player> players, Graph graph) {
+        if (players.size() < 2) throw new IllegalArgumentException();
+        this.players = new ArrayList<>(players);
+        numberOfPlayers = players.size();
+        gameGraph = graph;
+        start();
     }
 
-    public boolean addPlayer(Player p) {
-        if (players.size() < MAX_PLAYER_NUMBER) {
-            players.add(p);
-            return true;
-        }
-        return false;
+    public static Graph getStartGraph(int numberOfPlayers, ArrayList<Player> players) {
+        if (players.size() < 2) throw new IllegalArgumentException();
+        initializeTerritories();
+        Graph gameGraph = new Graph();
+        createGraphFromTerritories(gameGraph);
+        distributeTerritories(gameGraph, numberOfPlayers, players);
+        return gameGraph;
+    }
+
+    private void start() {
+        pickFirstPlayer();
+
+        gameMap = new GameMap(this);
+        gameMap.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
+        gameWindow = new GameWindow(this);
     }
 
     public boolean removePlayer(Player p) {
@@ -114,11 +109,7 @@ public class Game implements Serializable {
     }
 
     /**
-     *
      * @return probability of a battle between GameMap src and dst territories
-     * @throws SrcNotStatedException
-     * @throws DstNotStatedException
-     * @throws WrongTerritoriesPairException
      */
     public int calculateProbability() throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException {
         Territory srcTerritory = gameMap.getSrcTerritory();
@@ -148,12 +139,7 @@ public class Game implements Serializable {
     }
 
     /**
-     *
      * @return true if attacker wins, else - false
-     * @throws SrcNotStatedException
-     * @throws DstNotStatedException
-     * @throws WrongTerritoriesPairException
-     * @throws IllegalNumberOfAttackTroopsException
      */
     public boolean attack() throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfAttackTroopsException {
         Territory srcTerritory = gameMap.getSrcTerritory();
@@ -191,14 +177,6 @@ public class Game implements Serializable {
         }
     }
 
-    /**
-     *
-     * @param numberOfTroops
-     * @throws SrcNotStatedException
-     * @throws DstNotStatedException
-     * @throws WrongTerritoriesPairException
-     * @throws IllegalNumberOfFortifyTroopsException
-     */
     public void fortify(int numberOfTroops) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException {
         Territory srcTerritory = gameMap.getSrcTerritory();
         Territory dstTerritory = gameMap.getDstTerritory();
@@ -226,12 +204,6 @@ public class Game implements Serializable {
         gameMap.drawField();
     }
 
-    /**
-     *
-     * @param numberOfTroops
-     * @throws SrcNotStatedException
-     * @throws IllegalNumberOfReinforceTroopsException
-     */
     public void reinforce(int numberOfTroops) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
         Territory srcTerritory = gameMap.getSrcTerritory();
         if(srcTerritory == null)
@@ -304,14 +276,14 @@ public class Game implements Serializable {
 
 
 
-    private void initializeTerritories() {
+    private static void initializeTerritories() {
         territories = new ArrayList<>();
         for(int i = 0; i < numberOfTerritories; i++) {
             territories.add(new Territory(namesOfTerritories[i], coordinates[i]));
         }
     }
 
-    private void createGraphFromTerritories() {
+    private static void createGraphFromTerritories(Graph gameGraph) {
         gameGraph.addEdge(findTerritory("Afghanistan"), findTerritory("China"));
         gameGraph.addEdge(findTerritory("Afghanistan"), findTerritory("India"));
         gameGraph.addEdge(findTerritory("Afghanistan"), findTerritory("Middle East"));
@@ -397,7 +369,7 @@ public class Game implements Serializable {
         gameGraph.addEdge(findTerritory("Ukraine"), findTerritory("Ural"));
     }
 
-    private Territory findTerritory(String name) {
+    private static Territory findTerritory(String name) {
         for(Territory territory : territories) {
             if(territory.getName().equals(name))
                 return territory;
@@ -406,7 +378,7 @@ public class Game implements Serializable {
     }
 
 
-    private void distributeTerritories() {
+    private static void distributeTerritories(Graph gameGraph, int numberOfPlayers, ArrayList<Player> players) {
         int territoriesLeft = numberOfTerritories;
         for(int i = 0; i < numberOfPlayers; i++) {
             int playerTerritoriesNumber = numberOfTerritories / numberOfPlayers;
@@ -454,7 +426,7 @@ public class Game implements Serializable {
         }
     }
 
-    private Territory getRandomTerritory(ArrayList<Territory> t) {
+    private static Territory getRandomTerritory(ArrayList<Territory> t) {
         Random rand = new Random();
         return t.get(rand.nextInt(t.size()));
     }

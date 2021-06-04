@@ -6,7 +6,6 @@ import gui.game_window.GameWindow;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 public class SidePanel extends JPanel {
     private final int WIDTH = (int) (GameWindow.WIDTH*0.25);

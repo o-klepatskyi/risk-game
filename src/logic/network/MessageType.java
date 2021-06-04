@@ -11,5 +11,6 @@ public enum MessageType {
     BOT_ADDED,
     CONNECTION_CLOSED_BY_ADMIN,
     PLAYER_DELETED,
-    INVALID_NAME
+    INVALID_NAME,
+    START_GAME
 }

@@ -7,10 +7,7 @@ import java.util.Collection;
 
 import logic.Game;
 import logic.Player;
-import logic.network.Message;
-import logic.network.MessageType;
-import logic.network.MultiplayerManager;
-import logic.network.NetworkMode;
+import logic.network.*;
 
 public class PlayerMenu extends JPanel {
     private final Image bgImg = new ImageIcon(getClass().getResource("player-menu-bg.jpg")).getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
@@ -212,11 +209,7 @@ public class PlayerMenu extends JPanel {
             if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
                 if (!playerPanel.getBotCheckBox().isSelected()) { // when it is not bot, close connection
                     String username = playerPanel.getPlayer().getName();
-                    try {
-                        multiplayerManager.sendMessage(new Message(MessageType.CONNECTION_CLOSED_BY_ADMIN, username));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    multiplayerManager.sendMessage(new Message(MessageType.CONNECTION_CLOSED_BY_ADMIN, username));
                 }
                 removePlayerPanel(playerPanel);
             }
@@ -247,16 +240,14 @@ public class PlayerMenu extends JPanel {
     }
 
     public void startGame() {
-        Game game = new Game();
-
-        for (Player player : getPlayers()) {
-            game.addPlayer(player);
+        if (isMultiplayer) {
+            multiplayerManager.initGame();
+        } else {
+            Game game = new Game(getPlayers());
+            frame.remove(this);
+            frame.add(game.getGameWindow());
+            frame.pack();
         }
-        game.startGame();
-
-        frame.remove(this);
-        frame.add(game.getGameWindow());
-        frame.pack();
     }
 
     public Collection<Player> getPlayers() {

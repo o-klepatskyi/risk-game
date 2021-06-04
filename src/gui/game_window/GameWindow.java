@@ -64,18 +64,23 @@ public class GameWindow extends JPanel {
 
     private void updateSidePanel(GameOption gameOption) {
         remove(sidePanel);
-        switch (gameOption) {
-            case REINFORCEMENT:
-                sidePanel = createReinforcementsPanel();
-                break;
-            case ATTACK:
-                sidePanel = new AttackPanel(this);
-                break;
-            case FORTIFY:
-                sidePanel = new FortifyPanel(this);
-                break;
-            default:
-                sidePanel = SidePanel.getEmptyPanel();
+        if (game.isMultiplayer && !game.isCurrentPlayerActive()) {
+            sidePanel = SidePanel.getEmptyPanel();
+        } else {
+            remove(sidePanel);
+            switch (gameOption) {
+                case REINFORCEMENT:
+                    sidePanel = createReinforcementsPanel();
+                    break;
+                case ATTACK:
+                    sidePanel = new AttackPanel(this);
+                    break;
+                case FORTIFY:
+                    sidePanel = new FortifyPanel(this);
+                    break;
+                default:
+                    sidePanel = SidePanel.getEmptyPanel();
+            }
         }
         gbc.gridx = 0;
         gbc.gridy = 1;

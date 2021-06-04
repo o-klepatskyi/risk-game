@@ -102,7 +102,7 @@ public final class MultiplayerManager {
      * client-only
      */
     public void startGame(Graph gameGraph) {
-        game = new Game(players, gameGraph);
+        game = new Game(players, gameGraph, this);
         frame.remove(playerMenu);
         frame.add(game.getGameWindow());
         frame.pack();

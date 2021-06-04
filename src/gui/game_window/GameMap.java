@@ -58,12 +58,6 @@ public class GameMap extends JPanel {
     }
 
     private void updateTerritories() {
-//        if (getSrcTerritory() == null) System.out.println("null");
-//        else
-//        System.out.println("SRC :" + getSrcTerritory().getName() + " - " + getSrcTerritory().getTroops());
-//        if (getDstTerritory() == null) System.out.println("null");
-//        else
-//        System.out.println("DST: " + getDstTerritory().getName() + " - " + getDstTerritory().getTroops());
         game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
     }
 
@@ -95,7 +89,14 @@ public class GameMap extends JPanel {
             buttons.add(button);
 
         }
-        addListeners();
+        if (game.isMultiplayer) {
+            if (game.isCurrentPlayerActive()) {
+                addListeners();
+            }
+        } else {
+            addListeners();
+        }
+
         if(game.getGameOption().equals(GameOption.REINFORCEMENT))
             showOptions(GameOption.REINFORCEMENT);
         if (game.getGameWindow() != null) {

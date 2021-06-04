@@ -2,6 +2,7 @@ package logic;
 
 import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
+import logic.network.MultiplayerManager;
 import util.*;
 
 import java.awt.*;
@@ -45,7 +46,13 @@ public class Game {
     private GameOption gameOption;
     private GameMap gameMap;
 
+    public final boolean isMultiplayer;
+    public final MultiplayerManager manager;
+
     public Game(Collection<Player> players) {
+        if (players.size() < 2) throw new IllegalArgumentException();
+        this.manager = null;
+        isMultiplayer = false;
         this.players = new ArrayList<>(players);
         numberOfPlayers = players.size();
         gameGraph = getStartGraph(numberOfPlayers, this.players);
@@ -55,8 +62,10 @@ public class Game {
     /**
      * FOR MULTIPLAYER
      */
-    public Game(Collection<Player> players, Graph graph) {
+    public Game(Collection<Player> players, Graph graph, MultiplayerManager manager) {
         if (players.size() < 2) throw new IllegalArgumentException();
+        this.manager = manager;
+        isMultiplayer = true;
         this.players = new ArrayList<>(players);
         numberOfPlayers = players.size();
         gameGraph = graph;
@@ -78,6 +87,10 @@ public class Game {
         gameMap = new GameMap(this);
         gameMap.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
         gameWindow = new GameWindow(this);
+    }
+
+    public boolean isCurrentPlayerActive() {
+        return getCurrentPlayer().getName().equals(manager.client.username);
     }
 
     public boolean removePlayer(Player p) {

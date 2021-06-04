@@ -6,6 +6,7 @@ import gui.game_window.topPanel.TopPanel;
 import logic.Game;
 import logic.GameOption;
 import logic.Territory;
+import util.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +17,7 @@ public class GameWindow extends JPanel {
 
     private SidePanel sidePanel;
     private TopPanel gameFlow;
-    private Game game;
+    public final Game game;
     private GameMap gameMap;
     private GridBagConstraints gbc = new GridBagConstraints();
 
@@ -96,13 +97,8 @@ public class GameWindow extends JPanel {
         sidePanel.updateTerritories(src, dst);
     }
 
-    public void reinforce(int reinforcedTroops) {
-        try {
-            game.reinforce(reinforcedTroops);
-        } catch (Exception e) {
-            System.out.print("REINFORCE in Game Window: ");
-            System.err.println(e.getMessage());
-        }
+    public void reinforce(int reinforcedTroops) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
+        game.reinforce(reinforcedTroops);
     }
 
     public void nextPhase() {
@@ -110,13 +106,8 @@ public class GameWindow extends JPanel {
         updatePhase();
     }
 
-    public void attack() {
-        try {
-            game.attack();
-        } catch (Exception e) {
-            System.out.print("ATTACK in Game Window: ");
-            System.err.println(e.getMessage());
-        }
+    public void attack() throws DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfAttackTroopsException, SrcNotStatedException {
+        game.attack();
     }
 
     public int calculateProbability() {
@@ -129,13 +120,13 @@ public class GameWindow extends JPanel {
         return 0;
     }
 
-    public void fortify(int troopsToTransfer) {
-        try {
-            game.fortify(troopsToTransfer);
-            nextPhase();
-        } catch (Exception e) {
-            System.out.print("FORTIFY in Game Window: ");
-            System.err.println(e.getMessage());
-        }
+    public void fortify(int troopsToTransfer) throws DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException, SrcNotStatedException {
+        game.fortify(troopsToTransfer);
+        nextPhase();
+    }
+
+    public void fortify(Territory src, Territory dst, int troopsToTransfer) throws WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException, DstNotStatedException, SrcNotStatedException {
+        game.fortify(src, dst, troopsToTransfer);
+        nextPhase();
     }
 }

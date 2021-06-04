@@ -2,7 +2,11 @@ package gui.game_window.sidePanels;
 
 import gui.game_window.GameWindow;
 import logic.Territory;
+import logic.network.Message;
+import logic.network.MessageType;
 import util.Fonts;
+import util.IllegalNumberOfReinforceTroopsException;
+import util.SrcNotStatedException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,14 +102,27 @@ public class ReinforcementsPanel extends SidePanel {
 
     public void reinforce() {
         int reinforcedTroops = (int) troopsLeftSpinner.getValue();
-        gameWindow.reinforce(reinforcedTroops);
-        troopsLeft -= reinforcedTroops;
-        if (troopsLeft == 0) {
-            gameWindow.nextPhase();
-        } else {
-            troopsLeftSpinner.setModel(new SpinnerNumberModel(troopsLeft, 1, troopsLeft, 1));
-            reinforcementsLeft.setValue(troopsLeft);
-            deployTroopsButton.setEnabled(false);
+
+        try {
+            Territory src = Territory.getIdentical(this.src);
+            gameWindow.reinforce(reinforcedTroops);
+            if (gameWindow.game.isMultiplayer) {
+                gameWindow.game.manager.sendMessage(new Message(MessageType.REINFORCE, src, reinforcedTroops));
+            }
+
+            troopsLeft -= reinforcedTroops;
+            if (troopsLeft == 0) {
+                gameWindow.nextPhase();
+                if (gameWindow.game.isMultiplayer) {
+                    gameWindow.game.manager.sendMessage(new Message(MessageType.END_REINFORCE));
+                }
+            } else {
+                troopsLeftSpinner.setModel(new SpinnerNumberModel(troopsLeft, 1, troopsLeft, 1));
+                reinforcementsLeft.setValue(troopsLeft);
+                deployTroopsButton.setEnabled(false);
+            }
+        } catch (SrcNotStatedException | IllegalNumberOfReinforceTroopsException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -44,12 +44,20 @@ public class UserThread extends Thread {
                     System.out.println(userNameMsg.username + " thread listening...");
                     clientMessage = (Message) objectInputStream.readObject();
                     System.out.println("Server received: " + clientMessage);
-
-                    if (clientMessage.type == COLOR_CHANGED || clientMessage.type == BOT_ADDED || clientMessage.type == PLAYER_DELETED) {
+                    MessageType type = clientMessage.type;
+                    if (type == COLOR_CHANGED || type == BOT_ADDED || type == PLAYER_DELETED) {
                         server.broadcast(new Message(PLAYERS, clientMessage.players));
                     }
-                    if (clientMessage.type == CONNECTION_CLOSED_BY_ADMIN) {
+                    if (type == CONNECTION_CLOSED_BY_ADMIN) {
                         server.sendMessage(new Message(CONNECTION_CLOSED_BY_ADMIN), clientMessage.username);
+                    }
+
+                    if (type == REINFORCE ||
+                        type == END_REINFORCE ||
+                        type == END_ATTACK ||
+                        type == ATTACK ||
+                        type == FORTIFY) {
+                        server.broadcast(clientMessage, this);
                     }
                 } while (clientMessage.type != CLOSE_CONNECTION);
 
@@ -59,7 +67,7 @@ public class UserThread extends Thread {
                 System.out.println("User '" + username + "' left server.");
             }
         } catch (Exception ex) {
-            System.out.println("Error in UserThread: " + ex.getMessage());
+            System.err.println("Error in UserThread: " + ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -79,6 +87,7 @@ public class UserThread extends Thread {
      * Sends a message to the client.
      */
     void sendMessage(Message message) throws IOException {
+        System.out.println(username + " sends: " + message);
         objOutputStream.writeObject(message);
     }
 }

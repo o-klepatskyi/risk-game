@@ -2,7 +2,9 @@ package gui.game_window.sidePanels;
 
 import gui.game_window.GameWindow;
 import logic.Territory;
-import util.Fonts;
+import logic.network.Message;
+import logic.network.MessageType;
+import util.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -95,7 +97,7 @@ public class FortifyPanel extends SidePanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (fortifyButton.isEnabled()) {
-                    gameWindow.fortify((int) troopsToTransferSpinner.getValue());
+                    fortify();
                 }
             }
         });
@@ -117,5 +119,20 @@ public class FortifyPanel extends SidePanel {
             }
         });
         add(skipButton);
+    }
+
+    private void fortify() {
+        try {
+            int troopsToTransfer = (int) troopsToTransferSpinner.getValue();
+            Territory src = Territory.getIdentical(this.src), dst = Territory.getIdentical(this.dst);
+            gameWindow.fortify(troopsToTransfer);
+
+            if (gameWindow.game.isMultiplayer) {
+                gameWindow.game.manager.sendMessage(new Message(MessageType.FORTIFY, src,dst, troopsToTransfer));
+            }
+        } catch (DstNotStatedException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException e) {
+            e.printStackTrace();
+        }
+
     }
 }

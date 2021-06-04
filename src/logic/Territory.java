@@ -63,4 +63,9 @@ public class Territory implements Serializable {
                 Objects.equals(name, territory.name) &&
                 Objects.equals(coordinates, territory.coordinates);
     }
+
+    public static Territory getIdentical(Territory t) {
+        if (t == null) return null;
+        return new Territory(t.getName(), t.getTroops(), t.getOwner(), t.getCoordinates());
+    }
 }

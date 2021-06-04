@@ -1,5 +1,7 @@
 package logic.network;
 
+import util.*;
+
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
@@ -77,21 +79,35 @@ public class ClientReadThread extends Thread {
                 System.out.println(client.username + " is waiting for message...");
                 Message response = (Message) objectInputStream.readObject();
                 System.out.println(client.username + " received: " + response);
-                if (response.type == PLAYERS) {
+                
+                MessageType type = response.type;
+                
+                if (type == PLAYERS) {
                     client.manager.updatePlayerMenu(response.players);
                 }
-                if (response.type == START_GAME) {
+                if (type == START_GAME) {
                     client.manager.startGame(response.gameGraph);
                 }
-                if (response.type == CONNECTION_CLOSED_BY_ADMIN) {
+                if (type == CONNECTION_CLOSED_BY_ADMIN) {
                     client.sendMessage(new Message(CLOSE_CONNECTION));
                     client.close();
                     break;
                 }
-            } catch (IOException | ClassNotFoundException ex) {
+                if (type == REINFORCE) {
+                    client.manager.game.reinforce(response.troops, response.src);
+                }
+                if (type == END_REINFORCE || response.type == END_ATTACK) {
+                    client.manager.game.getGameWindow().nextPhase();
+                }
+                if (type == ATTACK) {
+                    client.manager.game.attack(response.src, response.dst);
+                }
+                if (type == FORTIFY) {
+                    client.manager.game.getGameWindow().fortify(response.src, response.dst, response.troops);
+                }
+            } catch (IOException | ClassNotFoundException | IllegalNumberOfAttackTroopsException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException | DstNotStatedException ex) {
                 System.out.println("Error reading from server: " + ex.getMessage());
                 ex.printStackTrace();
-                break;
             }
         }
     }

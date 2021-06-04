@@ -167,6 +167,19 @@ public class Game {
         if(!gameGraph.hasEdge(srcTerritory, dstTerritory))
             throw new WrongTerritoriesPairException("These territories are not adjacent!");
 
+        return attack(srcTerritory, dstTerritory);
+    }
+
+    public boolean attack(Territory src, Territory dst) throws IllegalNumberOfAttackTroopsException, SrcNotStatedException, DstNotStatedException {
+        Territory srcTerritory = findTerritory(src);
+        Territory dstTerritory = findTerritory(dst);
+
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory is invalid!");
+
+        if(dstTerritory == null)
+            throw new DstNotStatedException("Destination territory is invalid!");
+
         int attackTroops = srcTerritory.getTroops();
         int defendTroops = dstTerritory.getTroops();
 
@@ -200,6 +213,18 @@ public class Game {
         if(dstTerritory == null)
             throw new DstNotStatedException("Destination territory was not stated!");
 
+        fortify(srcTerritory, dstTerritory, numberOfTroops);
+    }
+
+    public void fortify(Territory src, Territory dst, int numberOfTroops) throws IllegalNumberOfFortifyTroopsException, WrongTerritoriesPairException, SrcNotStatedException, DstNotStatedException {
+        Territory srcTerritory = findTerritory(src);
+        Territory dstTerritory = findTerritory(dst);
+
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory is invalid!");
+
+        if(dstTerritory == null)
+            throw new DstNotStatedException("Destination territory is invalid!");
 
         ArrayList<Territory> connectedTerritories = gameGraph.getConnectedTerritories(srcTerritory);
         if(connectedTerritories.contains(dstTerritory)) {
@@ -225,9 +250,24 @@ public class Game {
         if(numberOfTroops > currentPlayer.getBonus())
             throw new IllegalNumberOfReinforceTroopsException("Number of troops for reinforcement exceeds bonus!");
 
+        reinforce(numberOfTroops, srcTerritory);
+    }
+
+    public void reinforce(int numberOfTroops, Territory src) throws SrcNotStatedException {
+        Territory srcTerritory = findTerritory(src);
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory is invalid!");
+
         srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
         currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
         gameMap.drawField();
+    }
+
+    private Territory findTerritory(Territory territory) {
+        for (Territory t : gameGraph.getTerritories()) {
+            if (territory.equals(t)) return t;
+        }
+        return null;
     }
 
     public void nextPhase() {
@@ -283,6 +323,10 @@ public class Game {
         int bonus = gameGraph.getTerritories(currentPlayer).size() / 3;
         bonus = Math.max(bonus, 3);
         currentPlayer.setBonus(bonus);
+
+        if (currentPlayer.isBot()) {
+            nextPlayerTurn(); // skip for now
+        }
 
         reinforcePhase();
     }

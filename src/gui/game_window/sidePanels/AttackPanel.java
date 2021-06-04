@@ -2,6 +2,12 @@ package gui.game_window.sidePanels;
 
 import gui.game_window.GameWindow;
 import logic.Territory;
+import logic.network.Message;
+import logic.network.MessageType;
+import util.DstNotStatedException;
+import util.IllegalNumberOfAttackTroopsException;
+import util.SrcNotStatedException;
+import util.WrongTerritoriesPairException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,9 +64,7 @@ public class AttackPanel extends SidePanel {
         attackButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (attackButton.isEnabled()) {
-                    gameWindow.attack();
-                }
+                attack();
             }
         });
         add(attackButton);
@@ -74,10 +78,31 @@ public class AttackPanel extends SidePanel {
         endAttack.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                gameWindow.nextPhase();
+                endAttack();
             }
         });
         add(endAttack);
+    }
+
+    private void endAttack() {
+        gameWindow.nextPhase();
+        if (gameWindow.game.isMultiplayer) {
+            gameWindow.game.manager.sendMessage(new Message(MessageType.END_ATTACK));
+        }
+    }
+
+    private void attack() {
+        if (attackButton.isEnabled()) {
+            try {
+                Territory src = Territory.getIdentical(this.src), dst = Territory.getIdentical(this.dst);
+                gameWindow.attack();
+                if (gameWindow.game.isMultiplayer) {
+                    gameWindow.game.manager.sendMessage(new Message(MessageType.ATTACK, src,dst));
+                }
+            } catch (DstNotStatedException | SrcNotStatedException | IllegalNumberOfAttackTroopsException | WrongTerritoriesPairException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

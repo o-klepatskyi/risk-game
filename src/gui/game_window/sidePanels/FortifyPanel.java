@@ -101,7 +101,9 @@ public class FortifyPanel extends SidePanel {
         fortifyButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                fortify();
+                if (fortifyButton.isEnabled()) {
+                    fortify();
+                }
             }
         });
         bottomPanel.add(troopsToTransferSpinner);

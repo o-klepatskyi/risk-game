@@ -159,8 +159,8 @@ public class ServerMenu extends JPanel {
         username = nameField.getText();
         try {
             portNumber = Integer.parseInt(portField.getText());
-            if (portNumber < 0 || portNumber >= 0xFFFF) {
-                throw new Exception("Wrong port number"); // todo check this info
+            if (portNumber < 1 || portNumber >= 0xFFFF) {
+                throw new Exception("Wrong port number");
             }
         } catch (Exception e) {
             return false;

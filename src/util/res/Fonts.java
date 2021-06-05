@@ -10,7 +10,7 @@ public abstract class Fonts {
     public static Font BUTTON_FONT;
     public static Font FIELD_FONT = new Font("Serif", Font.BOLD, 20);
 
-    public static void initFonts() {
+    static {
         try {
             // create fonts
             LABEL_FONT = Font.createFont(Font.TRUETYPE_FONT, getInputStream(("fonts/ITCBLKAD.TTF"))).deriveFont(DEFAULT_SIZE).deriveFont(Font.BOLD);

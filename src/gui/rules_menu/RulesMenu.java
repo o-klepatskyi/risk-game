@@ -1,9 +1,13 @@
 package gui.rules_menu;
 
+import gui.main_menu.MainMenu;
 import util.res.Fonts;
+import util.res.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class RulesMenu extends JPanel {
@@ -13,7 +17,7 @@ public class RulesMenu extends JPanel {
     public static final Dimension SIZE = new Dimension(WIDTH, HEIGHT);
 
     private JFrame frame;
-    private JPanel panel, north, center, south;
+    private JPanel panel, north, center, south, buttonPanel;
     private JButton prev, back, next;
 
     private int slide = 0;
@@ -48,13 +52,39 @@ public class RulesMenu extends JPanel {
     }
 
     private void initButtons() {
-        JPanel buttonPanel = new JPanel();
+        buttonPanel = new JPanel();
         buttonPanel.setMaximumSize(new Dimension(WIDTH, 45));
         ArrayList<JButton> buttons = new ArrayList<>();
         prev = new JButton("< PREV");
+        prev.setEnabled(false);
+        prev.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (prev.isEnabled()) {
+                    SoundPlayer.buttonClickedSound();
+                    prevSlide();
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // todo
+            }
+        });
         buttons.add(prev);
         prev.setEnabled(false);
         back = new JButton("BACK");
+        back.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                back();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // todo
+            }
+        });
         buttons.add(back);
         next = new JButton("NEXT >");
         buttons.add(next);
@@ -66,6 +96,20 @@ public class RulesMenu extends JPanel {
         }
 
         south.add(buttonPanel);
+    }
+
+    private void back() {
+        panel.setVisible(false);
+        frame.remove(panel);
+        frame.add(new MainMenu(frame));
+        frame.pack();
+    }
+
+    private void prevSlide() {
+    }
+
+    private void nextSlide() {
+
     }
 
     private void addLabels() {
@@ -85,11 +129,56 @@ public class RulesMenu extends JPanel {
 
     private String[][] lines = new String[][] {
             {"Welcome to Risk - the Ultimate Battle!","It is the game of 2 to 6 generals, represented by each player.",
-                    "Your task will be to eliminate all other players and to stay the last on the global map."}
+                    "Your task will be to eliminate all other players and to stay the last on the global map."},
+            {"At the start of each one of your turns, you will receive additional units, which you will",
+                    "place on the board to reinforce your army. Then you will attack your enemies, if you want.",
+                    "After you are done with combat, you will get one chance to relocate some of your units."},
+            {},
+            {"1 - Top panel which shows current player and turn phase.",
+                    "2 - Side panel which is used to give your orders.",
+                    "3 - World map where territories are represented by colored rectangles.",
+                    "They are all clickable, you will use them to interact with the game."},
+            {"At the start of your turn, you gain additional units to reinforce your territories.",
+                    "The number of units you get will be shown on the side panel.",
+                    "The math behind it is simple - you get the 1/3 (without remainder) of territories",
+                    "you conquered and additional units for controlling the continents."},
+            {"Now choose your territory on the game map and the amount of troops to send there.",
+                    "If everything goes OK, troops will appear in the chosen territory.",
+                    "You can choose to put all of your reinforcements into one territory or spread them out",
+                    "across your territories. Remember: You must place ALL of these reinforcements."},
+            {"You can invade from any one territory you control into an adjacent enemy territory.",
+                    "Remember: territories are adjacent if they share a border, or a sea-line runs between them.",
+                    "You can even attack more than one territory on your turn.",
+                    "You can only invade an enemy's territory - not your own."},
+            {"Click on your territory and all territories you can attack will be shown.",
+                    "After considering winning chances click \"Attack\" button on side panel.",
+                    "All your troops will now attack enemy. The results will appear simultaneously.",
+                    "When you end your battles for this move, click \"End attack\" button to end phase."},
+            {"After you are finished attacking, you get ONE fortification (or \"free move\") with your units.",
+                    "This is not an attack; it is simply a movement from one of your territories to another.",
+                    "Territories are \"connected\" if all the territories in between are also CONTROLLED BY YOU.",
+                    "You cannot pass through enemy territories."},
+            {"Now choose one territory with at least 2 troops to transfer.",
+                    "Remember: you MUST leave at least one unit behind — you cannot abandon a territory.",
+                    "Then choose a destination from shown options and click Fortify to send them there.",
+                    "Your move is now ended."},
+            {"You win if you are the last player in the game,",
+                    "meaning you control all 42 territories on the board.",
+                    "You are the ruler of the world. Congrats!"}
     };
 
     private String[] titles = new String[] {
-            "Welcome to Risk"
+            "Welcome to Risk",
+            "Overview",
+            "Interface - Player lobby",
+            "Interface - Game menu",
+            "Step 1: receive and place reinforcements",
+            "Step 1: reinforcement example",
+            "Step 2: attack",
+            "Step 2: attack example",
+            "Step 3: fortify your position",
+            "Step 3: fortifying example",
+            "Winning"
     };
 
     public static void main(String[] args) {

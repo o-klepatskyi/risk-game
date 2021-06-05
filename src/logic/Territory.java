@@ -1,8 +1,6 @@
 package logic;
 
 
-import util.Coordinates;
-
 import java.io.Serializable;
 import java.util.Objects;
 

@@ -8,9 +8,9 @@ import java.util.Collection;
 import logic.Game;
 import logic.Player;
 import logic.network.*;
+import util.Images;
 
 public class PlayerMenu extends JPanel {
-    private final Image bgImg = new ImageIcon(getClass().getResource("player-menu-bg.jpg")).getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
 
     public static final int WIDTH = 688;
     public static final int HEIGHT = 450;
@@ -227,7 +227,7 @@ public class PlayerMenu extends JPanel {
         playerPanel.setVisible(false);
         colorModel.removeComboBox(playerPanel.getColorComboBox());
         try {
-            multiplayerManager.sendMessage(new Message(MessageType.PLAYER_DELETED, getPlayers()));
+            multiplayerManager.sendMessage(new Message(MessageType.PLAYER_DELETED, getPlayers())); // todo bug
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -236,7 +236,7 @@ public class PlayerMenu extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(bgImg, 0, 0, this);
+        g.drawImage(Images.PLAYER_MENU_BG, 0, 0, WIDTH, HEIGHT, this);
     }
 
     public void startGame() {

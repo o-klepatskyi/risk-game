@@ -1,5 +1,6 @@
 package gui.game_window.sidePanels;
 
+import gui.game_window.GameWindow;
 import logic.Territory;
 import util.SoundPlayer;
 

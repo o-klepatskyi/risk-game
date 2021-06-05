@@ -3,6 +3,7 @@ package gui.main_menu;
 import gui.multiplayer_menu.MultiplayerMenu;
 import gui.player_menu.PlayerMenu;
 import util.Fonts;
+import util.Images;
 import util.SoundPlayer;
 
 import javax.swing.*;
@@ -16,9 +17,6 @@ public class MainMenu extends JPanel {
     private JButton play, load, multiplayer, rules;
     private GridBagConstraints gbc;
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
-
-    ImageIcon backgroundImage = new ImageIcon(getClass().getResource("logo.png"));
-    ImageIcon menuPanel = new ImageIcon(getClass().getResource("woodSign.jpg"));
 
     private final int SIZE = 500;
     private int menuOptionChosen;
@@ -48,9 +46,8 @@ public class MainMenu extends JPanel {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(backgroundImage.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
-        g.drawImage(menuPanel.getImage(), SIZE/4, SIZE/2 - SIZE/20, SIZE/2, SIZE/2 - SIZE/10, null);
-
+        g.drawImage(Images.MAIN_MENU_BG, 0, 0, this.getWidth(), this.getHeight(), null);
+        g.drawImage(Images.MENU_PANEL, SIZE/6, SIZE/3 + SIZE/20, 3*SIZE/4 - SIZE / 12, SIZE/2+SIZE/20 , null);
     }
 
     private void resetButtons() {

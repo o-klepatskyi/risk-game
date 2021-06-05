@@ -1,27 +1,23 @@
 package gui.game_window.topPanel;
 
 import gui.game_window.GameWindow;
+import util.Images;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 public class Logo extends JPanel {
     private final int WIDTH = (int) (GameWindow.WIDTH*0.25);
     private final int HEIGHT = (int) (GameWindow.HEIGHT*0.1);
-    
-    //todo: change the logo
-
-    private final Image bgImg = new ImageIcon(getClass().getResource("logo-small.png")).getImage();//.getScaledInstance(WIDTH, HEIGHT,  Image.SCALE_SMOOTH);
 
     public Logo() {
         setOpaque(true);
-        setPreferredSize(new Dimension(WIDTH, HEIGHT)); // 320, 72
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(bgImg, 0, 0, this);
+        g.drawImage(Images.SMALL_LOGO, 0, 0,WIDTH,HEIGHT, this);
     }
 }

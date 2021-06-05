@@ -2,6 +2,7 @@ import gui.main_menu.MainMenu;
 import gui.player_menu.PlayerMenu;
 import logic.Game;
 import logic.Player;
+import util.Fonts;
 import util.SoundPlayer;
 
 import javax.swing.*;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
+        Fonts.initFonts();
         openMainMenu();
         SoundPlayer.menuBackgroundMusic();
     }

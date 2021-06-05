@@ -492,7 +492,7 @@ public class Game {
         }
     }
 
-    private static Territory getRandomTerritory(ArrayList<Territory> t) {
+    static Territory getRandomTerritory(ArrayList<Territory> t) {
         Random rand = new Random();
         return t.get(rand.nextInt(t.size()));
     }

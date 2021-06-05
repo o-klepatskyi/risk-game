@@ -1,21 +1,20 @@
 package util;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public abstract class Fonts {
     public static final float DEFAULT_SIZE = 25f;
 
-    public static Font LABEL_FONT; // = new Font("Blackadder ITC", Font.BOLD, 25);
-    public static Font BUTTON_FONT; //  = new Font("Footlight MT Light", Font.PLAIN, 25);
+    public static Font LABEL_FONT;
+    public static Font BUTTON_FONT;
     public static Font FIELD_FONT = new Font("Serif", Font.BOLD, 20);
 
-    static {
+    public static void initFonts() {
         try {
             // create fonts
-            LABEL_FONT = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/ITCBLKAD.TTF")).deriveFont(DEFAULT_SIZE).deriveFont(Font.BOLD);
-            BUTTON_FONT = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/FTLTLT.TTF")).deriveFont(DEFAULT_SIZE);
+            LABEL_FONT = Font.createFont(Font.TRUETYPE_FONT, getInputStream(("res/fonts/ITCBLKAD.TTF"))).deriveFont(DEFAULT_SIZE).deriveFont(Font.BOLD);
+            BUTTON_FONT = Font.createFont(Font.TRUETYPE_FONT, getInputStream("res/fonts/FTLTLT.TTF")).deriveFont(DEFAULT_SIZE);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font
             ge.registerFont(LABEL_FONT);
@@ -24,4 +23,9 @@ public abstract class Fonts {
             e.printStackTrace();
         }
     }
+
+    private static InputStream getInputStream(String path) throws IOException {
+        return Fonts.class.getResourceAsStream(path);
+    }
+
 }

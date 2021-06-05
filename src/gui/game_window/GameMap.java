@@ -1,14 +1,14 @@
 package gui.game_window;
 
 import logic.*;
+import util.Images;
+import util.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.TimerTask;
-import java.util.Timer;
 
 // todo: fortifying with 1 troop
 public class GameMap extends JPanel {
@@ -22,9 +22,6 @@ public class GameMap extends JPanel {
 
     private boolean buttonClicked = false;
     private JButton src, dst;
-
-    Image backgroundImage = new ImageIcon(getClass().getResource("map-bg.jpg")).getImage();//.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
-    ImageIcon map = new ImageIcon(getClass().getResource("map.png"));
 
     public GameMap(Game game) {
         this.setLayout(null);
@@ -140,7 +137,7 @@ public class GameMap extends JPanel {
         }
         if(territoryButton != null) {
             int SIZE = 50;
-            ImageIcon explosionIcon = new ImageIcon("res/explosion.png");
+            ImageIcon explosionIcon = new ImageIcon(Images.EXPLOSION);
             JLabel explosion = new JLabel(explosionIcon);
             explosion.setBounds(coordinates.getX()-SIZE/2, coordinates.getY()-SIZE/2, SIZE, SIZE);
             territoryButton.setVisible(false);
@@ -162,9 +159,8 @@ public class GameMap extends JPanel {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // todo
-        g.drawImage(backgroundImage, 0, 0,getWidth(),getHeight(), this);
-        g.drawImage(map.getImage(), 0, 0, this.getWidth(), this.getHeight(), this);
+        g.drawImage(Images.GAME_MAP_BG, 0, 0,getWidth(),getHeight(), this);
+        g.drawImage(Images.MAP_EARTH, 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
     private void clearField() {
@@ -178,10 +174,7 @@ public class GameMap extends JPanel {
         for(JButton button : buttons){
             button.addMouseListener(new MouseListener() {
                 public void mouseClicked(MouseEvent e) {
-                    System.out.println("Current player color: " + game.getCurrentPlayer().getColor());
-                    System.out.println("Button color: " + button.getBackground());
                     if(!buttonClicked && button.getBackground().equals(game.getCurrentPlayer().getColor())) {
-                        System.out.println("option 1");
                         resetButtons();
                         highlightButton(button, "src");
                         showOptions(game.getGameOption());
@@ -201,7 +194,6 @@ public class GameMap extends JPanel {
                             }
                         } else {
                             if(game.getGameOption().equals(GameOption.REINFORCEMENT)) {
-                                System.out.println("option 3");
                                 resetButtons();
                                 highlightButton(button, "src");
                                 showOptions(game.getGameOption());
@@ -209,7 +201,6 @@ public class GameMap extends JPanel {
                             }
                             else {
                                 if (!button.equals(src) && src != null) {
-                                    System.out.println("option 4");
                                     if (dst != null)
                                         dst.setBorder(null);
                                     if (dst != button) {
@@ -222,7 +213,6 @@ public class GameMap extends JPanel {
                                     }
                                 }
                                 else {
-                                    System.out.println("option 5");
                                     resetButtons();
                                 }
                             }

@@ -3,6 +3,9 @@ package gui;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 
 /**
@@ -18,6 +21,23 @@ public class HintTextField extends JTextField implements FocusListener {
         this.hint = hint;
         this.showingHint = true;
         super.addFocusListener(this);
+    }
+
+    public HintTextField (final String hint, final int maxCharacters) {
+        this(hint);
+        setDocument(new PlainDocument() {
+            @Override
+            public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
+                if (str == null)
+                    return;
+
+                if ((getLength() + str.length()) <= maxCharacters) {
+                    super.insertString(offset, str, attr);
+                }
+            }
+        });
+        setText(hint);
+        showingHint = true;
     }
 
     @Override
@@ -41,4 +61,10 @@ public class HintTextField extends JTextField implements FocusListener {
     }
 
     public String getHint() {return hint;}
+
+    @Override
+    public void setText(String t) {
+        super.setText(t);
+        showingHint = false;
+    }
 }

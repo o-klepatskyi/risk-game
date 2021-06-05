@@ -1,6 +1,7 @@
 package gui.player_menu;
 
 import logic.Player;
+import util.res.Fonts;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,26 +16,22 @@ class PlayerPanel extends JPanel {
     private ColorComboBox colorComboBox;
     private JCheckBox botCheckBox;
     private JButton removePlayerButton;
-    private static int playerNumber = 1;
     private final PlayerMenu parent;
 
-    private final Font TEXTFIELD_FONT = new Font("Footlight MT Light", Font.PLAIN, HEIGHT-20);
-    private final Font BUTTON_FONT  = new Font("Footlight MT Light", Font.PLAIN, HEIGHT-32);
-
-    private final ColorModel colorModel;
+    private final Font TEXTFIELD_FONT = Fonts.BUTTON_FONT.deriveFont((float) HEIGHT-20);
+    private final Font BUTTON_FONT  = Fonts.BUTTON_FONT.deriveFont((float) HEIGHT-32);
 
     /**
      * MULTIPLAYER
      */
     PlayerPanel(PlayerMenu parent, final ColorModel colorModel, Player player) {
         this.parent = parent;
-        this.colorModel = colorModel;
         init();
-        getPlayerNameField();
 
+        add(getPlayerNameField());
         playerNameField.setText(player.getName());
         playerNameField.setEditable(false);
-        add(getPlayerNameField());
+        add(playerNameField);
 
         try {
             colorComboBox = new ColorComboBox(colorModel, player.getColor(), parent.multiplayerManager);
@@ -49,6 +46,9 @@ class PlayerPanel extends JPanel {
         colorModel.addComboBox(colorComboBox);
 
         add(getBotCheckBox());
+        botCheckBox.setEnabled(false);
+        botCheckBox.setSelected(player.isBot());
+
         add(getRemovePlayerButton());
 
         repaint();
@@ -56,10 +56,8 @@ class PlayerPanel extends JPanel {
         setVisible(true);
     }
 
-
     PlayerPanel(PlayerMenu parent, final ColorModel colorModel) {
         this.parent = parent;
-        this.colorModel = colorModel;
         init();
 
         add(getPlayerNameField());
@@ -94,9 +92,10 @@ class PlayerPanel extends JPanel {
         return botCheckBox;
     }
 
-    public JTextField getPlayerNameField() {
+    public PlayerNameField getPlayerNameField() {
         if (playerNameField == null) {
-            playerNameField = new PlayerNameField("Player " + playerNumber++);
+            int i = parent.getTotalNumberOfPlayers() + 1;
+            playerNameField = new PlayerNameField("Player " + i);
             playerNameField.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT-10));
             playerNameField.setFont(TEXTFIELD_FONT);
         }

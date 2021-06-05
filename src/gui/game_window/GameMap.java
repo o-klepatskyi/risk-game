@@ -181,15 +181,14 @@ public class GameMap extends JPanel {
                         SoundPlayer.territoryClickedSound();
                     }
                     else {
-                        if(button.getBackground() == DISABLED_COLOR) {
-                            if( button.getForeground() == game.getCurrentPlayer().getColor()) {
+                        if(button.getBackground().equals(DISABLED_COLOR)) {
+                            if(button.getForeground().equals(game.getCurrentPlayer().getColor())) {
                                 if(!button.equals(src)) {
                                     resetButtons();
                                     highlightButton(button, "src");
                                     showOptions(game.getGameOption());
                                     SoundPlayer.territoryClickedSound();
-                                }
-                                else
+                                } else
                                     resetButtons();
                             }
                         } else {

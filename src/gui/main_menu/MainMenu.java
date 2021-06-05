@@ -44,10 +44,11 @@ public class MainMenu extends JPanel {
         gbc.insets = new Insets(85, 0, -70, 0);
     }
 
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(Images.MAIN_MENU_BG, 0, 0, this.getWidth(), this.getHeight(), null);
-        g.drawImage(Images.MENU_PANEL, SIZE/6, SIZE/3 + SIZE/20, 3*SIZE/4 - SIZE / 12, SIZE/2+SIZE/20 , null);
+        g.drawImage(Images.MENU_PANEL, SIZE/6, SIZE/3 + SIZE/40, 3*SIZE/4 - SIZE / 12, SIZE/2+SIZE/20+SIZE/40, null);
     }
 
     private void resetButtons() {

@@ -18,7 +18,7 @@ public class SidePanel extends JPanel {
 
     protected Territory src, dst;
 
-    protected final Color FONT_COLOR = Color.black;
+    protected final Color FONT_COLOR = Color.white;
 
 
     SidePanel() {

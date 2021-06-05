@@ -2,90 +2,77 @@ package gui.multiplayer_menu;
 
 import gui.HintTextField;
 import gui.player_menu.PlayerMenu;
-import gui.player_menu.PlayerNameField;
 import logic.network.MultiplayerManager;
 import logic.network.NetworkMode;
+import util.res.Fonts;
+import util.res.Images;
+import util.res.SoundPlayer;
 
 import javax.swing.*;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
-// todo: design
-// todo: similar methods to parent class
+// todo add setKeyListener method to manipulate with mouse
 public class ClientMenu extends JPanel {
 
-    private HintTextField portField;
-    private HintTextField ipField;
-    private HintTextField nameField;
+    private HintTextField portField, ipField, nameField;
+    private JButton enterButton, backButton;
     private final JFrame frame;
+    private final JPanel panel;
+    private GridBagConstraints gbc;
+    private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
 
-    private String username;
-    private String ipAddress;
+    private String username, ipAddress;
     private int portNumber;
+    private int menuOptionChosen;
 
-    private final MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.CLIENT);
+    private final int SIZE = 500;
 
     ClientMenu(JFrame frame) {
         this.frame = frame;
-        setPreferredSize(new Dimension(500,500));
-        setLayout(new GridLayout(0,1,15,15));
-        add(new FillerButton(100,0));
-        add(getNameField());
-        add(getIPField());
-        add(getPortNumberField());
-        add(getEnterButton());
-        add(getBackButton());
-        add(new FillerButton(100,0));
-        setVisible(true);
+        panel = this;
+
+        initWindow();
+        initTextFields();
+        initButtons();
     }
 
-    private void openPlayerMenu() {
-        PlayerMenu pm = new PlayerMenu(frame, multiplayerManager);
+    private void initWindow() {
+        setFocusable(true);
+        setPreferredSize(new Dimension(SIZE,SIZE));
+        setLayout(new GridBagLayout());
 
-        multiplayerManager.setPlayerMenu(pm);
-        multiplayerManager.startClient(ipAddress, portNumber, username, frame);
-        setVisible(false);
-        frame.remove(this);
+        gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(85,0,-70,0);
     }
 
-    private HintTextField getNameField() {
-        if (nameField == null) {
-            nameField = new HintTextField("Enter username");
-            nameField.setSize(new Dimension(150,35));
-            nameField.setDocument(new PlainDocument() {
-                @Override
-                public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
-                    if (str == null)
-                        return;
+    private void initTextFields() {
+        ArrayList<JTextField> fields = new ArrayList<>();
+        nameField = new HintTextField("Enter username", 20);
+        fields.add(nameField);
+        ipField = new HintTextField("Enter IP-address");
+        fields.add(ipField);
+        portField = new HintTextField("Enter port number", 20);
+        fields.add(portField);
 
-                    if ((getLength() + str.length()) <= PlayerNameField.MAX_CHARACTERS) {
-                        super.insertString(offset, str, attr);
-                    }
-                }
-            });
+        for (JTextField field : fields) {
+            field.setPreferredSize(new Dimension(SIZE/2,35));
+            field.setFont(Fonts.BUTTON_FONT.deriveFont(20f));
+            add(field, gbc);
         }
-        return nameField;
     }
 
-    private JTextField getIPField() {
-        if (ipField == null) {
-            ipField = new HintTextField("Enter IP address");
-            ipField.setSize(new Dimension(150,35));
-        }
-        return ipField;
-    }
-
-    private JButton getEnterButton() {
-        JButton enterButton = new JButton("Connect");
-        enterButton.setSize(new Dimension(150,35));
-        enterButton.setVisible(true);
+    private void initButtons() {
+        ArrayList<JButton> buttons = new ArrayList<>();
+        enterButton = new JButton("Connect");
         enterButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                SoundPlayer.buttonClickedSound();
                 if (!getClientInfo()) {
                     JOptionPane.showMessageDialog(null,
                             "Enter all the information carefully.",
@@ -95,8 +82,75 @@ public class ClientMenu extends JPanel {
                     openPlayerMenu();
                 }
             }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
+                menuOptionChosen = 4;
+                highlightOption(menuOptionChosen);
+            }
         });
-        return enterButton;
+        buttons.add(enterButton);
+
+        backButton = new JButton("Back");
+        backButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                back();
+                SoundPlayer.buttonClickedSound();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
+                menuOptionChosen = 5;
+                highlightOption(menuOptionChosen);
+            }
+        });
+        buttons.add(backButton);
+
+        for (JButton button: buttons) {
+            button.setFont(LABEL_FONT);
+            button.setContentAreaFilled(false);
+            button.setBorderPainted(false);
+            button.setFocusPainted(false);
+            button.setForeground(Color.WHITE);
+            add(button,gbc);
+        }
+    }
+
+    private void highlightOption(int option) {
+        resetButtons();
+        switch (option) {
+            case 4:
+                enterButton.setForeground(Color.YELLOW);
+                enterButton.setText("< Connect >");
+                SoundPlayer.optionChosenSound();
+                break;
+            case 5:
+                backButton.setForeground(Color.YELLOW);
+                backButton.setText("< Back >");
+                SoundPlayer.optionChosenSound();
+                break;
+        }
+    }
+
+    private void resetButtons() {
+        enterButton.setForeground(Color.WHITE);
+        enterButton.setText("Connect");
+
+        backButton.setForeground(Color.WHITE);
+        backButton.setText("Back");
+    }
+
+    private void openPlayerMenu() {
+        MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.CLIENT);
+        PlayerMenu pm = new PlayerMenu(frame, multiplayerManager);
+
+        multiplayerManager.setPlayerMenu(pm);
+        multiplayerManager.startClient(ipAddress, portNumber, username, frame);
+        setVisible(false);
+        frame.remove(this);
     }
 
     private boolean getClientInfo() {
@@ -107,39 +161,23 @@ public class ClientMenu extends JPanel {
         } catch (Exception e) {
             return false;
         }
-
         if (username.length() == 0 || ipAddress.length() == 0) {
             return false;
         }
-
         return true;
     }
 
-    private JTextField getPortNumberField() {
-        if (portField == null) {
-            portField = new HintTextField("Enter port number");
-            portField.setSize(new Dimension(100,35));
-        }
-        return portField;
+    private void back() {
+        panel.setVisible(false);
+        frame.remove(panel);
+        frame.add(new MultiplayerMenu(frame));
+        frame.pack();
     }
 
-    private JButton getBackButton() {
-        JButton backButton = new JButton("Back");
-        backButton.setSize(new Dimension(100,35));
-        backButton.setVisible(true);
-        JPanel currentMenu = this;
-        backButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                currentMenu.setVisible(false);
-                frame.remove(currentMenu);
-                frame.add(new MultiplayerMenu(frame));
-                frame.revalidate();
-                frame.repaint();
-                frame.pack();
-            }
-        });
-        return backButton;
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(Images.MAIN_MENU_BG, 0, 0, this.getWidth(), this.getHeight(), null);
+        g.drawImage(Images.MENU_PANEL, SIZE/6, SIZE/3 + SIZE/40, 3*SIZE/4 - SIZE / 12, SIZE/2+SIZE/20+SIZE/40, null);
     }
 }
-

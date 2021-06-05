@@ -22,7 +22,6 @@ public class UserThread extends Thread {
             OutputStream output = socket.getOutputStream();
             objOutputStream = new ObjectOutputStream(output);
 
-
             Message userNameMsg = (Message) objectInputStream.readObject();
 
             if (userNameMsg.type != USERNAME) {
@@ -34,9 +33,9 @@ public class UserThread extends Thread {
             } else if (server.getUserNames().size() == 6) {
                 sendMessage(new Message(MAX_PLAYERS_ERROR));
             } else {
-                sendMessage(new Message(OK));
                 server.addUserName(userNameMsg.username);
                 this.username = userNameMsg.username;
+                sendMessage(new Message(OK));
                 printUsers();
                 Message clientMessage;
 

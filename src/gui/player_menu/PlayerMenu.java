@@ -16,7 +16,7 @@ public class PlayerMenu extends JPanel {
     public static final int HEIGHT = 450;
     private final int MAX_PLAYER_NUMBER = ColorModel.colors.size();
     private final int MIN_PLAYER_NUMBER = 1;
-    private int currentPlayerNumber = 0;
+    private int currentPlayerNumber = 0, totalNumberOfPlayers = 0;
     private ArrayList<PlayerPanel> playerPanels = new ArrayList<>();
     private final FooterPanel fp;
     private final HeaderPanel hp = new HeaderPanel();
@@ -57,6 +57,7 @@ public class PlayerMenu extends JPanel {
     }
 
     private void updatePanels() {
+        System.out.println("update panels: " + getPlayers());
         if (!isMultiplayer && playerPanels.size() == 0) {
             for (int i = 0; i < MIN_PLAYER_NUMBER; i++) {
                 addPlayerPanel();
@@ -86,7 +87,7 @@ public class PlayerMenu extends JPanel {
 
             if (isMultiplayer) {
                 if (isServer && panel.getBotCheckBox().isSelected()) {
-                    // skip
+                    // todo bot integration
                 } else if (!multiplayerManager.client.username.equals(panel.getPlayerNameField().getText())) {
                     panel.getColorComboBox().setEnabled(false);
                 }
@@ -162,13 +163,15 @@ public class PlayerMenu extends JPanel {
 
         playerPanels.add(p);
         currentPlayerNumber++;
+        totalNumberOfPlayers++;
     }
 
     public void addBot() {
         PlayerPanel p = new PlayerPanel(this, colorModel);
 
-        p.getPlayerNameField().setEditable(false);
         p.getPlayerNameField().setText(MultiplayerManager.BOT_NAME);
+        p.getPlayerNameField().setEditable(false);
+
         p.getBotCheckBox().setEnabled(false);
         p.getBotCheckBox().setSelected(true);
 
@@ -185,9 +188,6 @@ public class PlayerMenu extends JPanel {
     private void addPlayerPanel(Player player) {
         if (player != null && isMultiplayer) {
             PlayerPanel p = new PlayerPanel(this, colorModel, player);
-            p.getPlayerNameField().setEditable(false);
-            p.getBotCheckBox().setEnabled(false);
-            p.getBotCheckBox().setSelected(player.isBot());
             playerPanels.add(p);
             currentPlayerNumber++;
         }
@@ -252,5 +252,9 @@ public class PlayerMenu extends JPanel {
             players.add(pp.getPlayer());
         }
         return players;
+    }
+
+    public int getTotalNumberOfPlayers() {
+        return totalNumberOfPlayers;
     }
 }

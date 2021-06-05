@@ -2,6 +2,7 @@ package gui.main_menu;
 
 import gui.multiplayer_menu.MultiplayerMenu;
 import gui.player_menu.PlayerMenu;
+import gui.rules_menu.RulesMenu;
 import util.res.Fonts;
 import util.res.Images;
 import util.res.SoundPlayer;
@@ -141,7 +142,7 @@ public class MainMenu extends JPanel {
         rules.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
-                // TODO
+                openRulesMenu();
             }
 
             public void mouseEntered(MouseEvent e) {
@@ -216,6 +217,13 @@ public class MainMenu extends JPanel {
         panel.setVisible(false);
         frame.remove(panel);
         frame.add(new MultiplayerMenu(frame));
+        frame.pack();
+    }
+
+    private void openRulesMenu() {
+        panel.setVisible(false);
+        frame.remove(panel);
+        frame.add(new RulesMenu(frame));
         frame.pack();
     }
 

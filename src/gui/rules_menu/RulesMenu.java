@@ -2,14 +2,13 @@ package gui.rules_menu;
 
 import gui.main_menu.MainMenu;
 import util.res.Fonts;
-import util.res.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-
+// todo add photos
 public class RulesMenu extends JPanel {
     public static final int WIDTH = 900;
     public static final int HEIGHT = 650;
@@ -61,14 +60,16 @@ public class RulesMenu extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (prev.isEnabled()) {
-                    SoundPlayer.buttonClickedSound();
+                    //SoundPlayer.buttonClickedSound();
                     prevSlide();
                 }
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                // todo
+                if (prev.isEnabled()) {
+                    // todo
+                }
             }
         });
         buttons.add(prev);
@@ -77,6 +78,7 @@ public class RulesMenu extends JPanel {
         back.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                //SoundPlayer.buttonClickedSound();
                 back();
             }
 
@@ -87,6 +89,22 @@ public class RulesMenu extends JPanel {
         });
         buttons.add(back);
         next = new JButton("NEXT >");
+        next.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (next.isEnabled()) {
+                    //SoundPlayer.buttonClickedSound();
+                    nextSlide();
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (next.isEnabled()) {
+                    // todo
+                }
+            }
+        });
         buttons.add(next);
 
         for (JButton button : buttons) {
@@ -106,10 +124,24 @@ public class RulesMenu extends JPanel {
     }
 
     private void prevSlide() {
+        if (slide > 0) slide--;
+        changeSlide();
     }
 
     private void nextSlide() {
+        if (slide < titles.length - 1) slide++;
+        changeSlide();
+    }
 
+    private void changeSlide() {
+        prev.setEnabled(slide != 0);
+        next.setEnabled(slide != titles.length - 1);
+        north.removeAll();
+        south.removeAll();
+        south.add(buttonPanel);
+        addLabels();
+        frame.revalidate();
+        frame.repaint();
     }
 
     private void addLabels() {
@@ -117,28 +149,34 @@ public class RulesMenu extends JPanel {
         title.setFont(Fonts.LABEL_FONT.deriveFont(35f));
         title.setAlignmentX(0.5f);
         title.setAlignmentY(0.5f);
+        title.setVisible(true);
         north.add(title);
+
+        System.out.println(title);
 
         for (String str : lines[slide]) {
             JLabel line = new JLabel(str);
             line.setFont(Fonts.BUTTON_FONT.deriveFont(25f));
             line.setAlignmentX(0.5f);
+            line.setVisible(true);
             south.add(line);
         }
     }
 
     private String[][] lines = new String[][] {
-            {"Welcome to Risk - the Ultimate Battle!","It is the game of 2 to 6 generals, represented by each player.",
+            {       "Welcome to Risk - the Ultimate Battle!",
+                    "It is the game of 2 to 6 generals, represented by each player.",
                     "Your task will be to eliminate all other players and to stay the last on the global map."},
-            {"At the start of each one of your turns, you will receive additional units, which you will",
-                    "place on the board to reinforce your army. Then you will attack your enemies, if you want.",
+            {       "At the start of each one of your turns, you will receive additional units, which",
+                    "you will place on the board to reinforce your army.",
+                    "Then you will attack your enemies, if you want.",
                     "After you are done with combat, you will get one chance to relocate some of your units."},
             {},
-            {"1 - Top panel which shows current player and turn phase.",
+            {       "1 - Top panel which shows current player and turn phase.",
                     "2 - Side panel which is used to give your orders.",
                     "3 - World map where territories are represented by colored rectangles.",
                     "They are all clickable, you will use them to interact with the game."},
-            {"At the start of your turn, you gain additional units to reinforce your territories.",
+            {       "At the start of your turn, you gain additional units to reinforce your territories.",
                     "The number of units you get will be shown on the side panel.",
                     "The math behind it is simple - you get the 1/3 (without remainder) of territories",
                     "you conquered and additional units for controlling the continents."},
@@ -147,17 +185,17 @@ public class RulesMenu extends JPanel {
                     "You can choose to put all of your reinforcements into one territory or spread them out",
                     "across your territories. Remember: You must place ALL of these reinforcements."},
             {"You can invade from any one territory you control into an adjacent enemy territory.",
-                    "Remember: territories are adjacent if they share a border, or a sea-line runs between them.",
+                    "Territories are adjacent if they share a border, or a sea-line runs between them.",
                     "You can even attack more than one territory on your turn.",
                     "You can only invade an enemy's territory - not your own."},
             {"Click on your territory and all territories you can attack will be shown.",
                     "After considering winning chances click \"Attack\" button on side panel.",
                     "All your troops will now attack enemy. The results will appear simultaneously.",
                     "When you end your battles for this move, click \"End attack\" button to end phase."},
-            {"After you are finished attacking, you get ONE fortification (or \"free move\") with your units.",
+            {"After you are finished attacking, you get ONE fortification.",
                     "This is not an attack; it is simply a movement from one of your territories to another.",
-                    "Territories are \"connected\" if all the territories in between are also CONTROLLED BY YOU.",
-                    "You cannot pass through enemy territories."},
+                    "Territories are \"connected\" if all the territories in between are also",
+                    "CONTROLLED BY YOU. You cannot pass through enemy territories."},
             {"Now choose one territory with at least 2 troops to transfer.",
                     "Remember: you MUST leave at least one unit behind — you cannot abandon a territory.",
                     "Then choose a destination from shown options and click Fortify to send them there.",
@@ -180,13 +218,4 @@ public class RulesMenu extends JPanel {
             "Step 3: fortifying example",
             "Winning"
     };
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("RULES");
-        frame.add(new RulesMenu(frame));
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-    }
 }

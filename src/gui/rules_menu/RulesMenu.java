@@ -70,7 +70,7 @@ public class RulesMenu extends JPanel {
 
     private void addLabels() {
         JLabel title = new JLabel(titles[slide]);
-        title.setFont(Fonts.LABEL_FONT.deriveFont(30f).deriveFont(Font.PLAIN));
+        title.setFont(Fonts.LABEL_FONT.deriveFont(35f));
         title.setAlignmentX(0.5f);
         title.setAlignmentY(0.5f);
         north.add(title);
@@ -89,7 +89,7 @@ public class RulesMenu extends JPanel {
     };
 
     private String[] titles = new String[] {
-            "WELCOME"
+            "Welcome to Risk"
     };
 
     public static void main(String[] args) {

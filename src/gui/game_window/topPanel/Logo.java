@@ -1,7 +1,7 @@
 package gui.game_window.topPanel;
 
 import gui.game_window.GameWindow;
-import util.Images;
+import util.res.Images;
 
 import javax.swing.*;
 import java.awt.*;

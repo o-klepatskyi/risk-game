@@ -6,7 +6,7 @@ import gui.game_window.topPanel.TopPanel;
 import logic.Game;
 import logic.GameOption;
 import logic.Territory;
-import util.*;
+import util.exceptions.*;
 
 import javax.swing.*;
 import java.awt.*;

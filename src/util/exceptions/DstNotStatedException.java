@@ -1,4 +1,4 @@
-package util;
+package util.exceptions;
 
 public class DstNotStatedException extends Exception {
     public DstNotStatedException(String message) {

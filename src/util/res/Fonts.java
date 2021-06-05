@@ -1,4 +1,4 @@
-package util;
+package util.res;
 
 import java.awt.*;
 import java.io.*;
@@ -13,8 +13,8 @@ public abstract class Fonts {
     public static void initFonts() {
         try {
             // create fonts
-            LABEL_FONT = Font.createFont(Font.TRUETYPE_FONT, getInputStream(("res/fonts/ITCBLKAD.TTF"))).deriveFont(DEFAULT_SIZE).deriveFont(Font.BOLD);
-            BUTTON_FONT = Font.createFont(Font.TRUETYPE_FONT, getInputStream("res/fonts/FTLTLT.TTF")).deriveFont(DEFAULT_SIZE);
+            LABEL_FONT = Font.createFont(Font.TRUETYPE_FONT, getInputStream(("fonts/ITCBLKAD.TTF"))).deriveFont(DEFAULT_SIZE).deriveFont(Font.BOLD);
+            BUTTON_FONT = Font.createFont(Font.TRUETYPE_FONT, getInputStream("fonts/FTLTLT.TTF")).deriveFont(DEFAULT_SIZE);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font
             ge.registerFont(LABEL_FONT);

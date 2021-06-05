@@ -2,14 +2,14 @@ package gui.game_window.sidePanels;
 
 import gui.game_window.GameWindow;
 import logic.Territory;
-import util.SoundPlayer;
+import util.res.SoundPlayer;
 
 import logic.network.Message;
 import logic.network.MessageType;
-import util.DstNotStatedException;
-import util.IllegalNumberOfAttackTroopsException;
-import util.SrcNotStatedException;
-import util.WrongTerritoriesPairException;
+import util.exceptions.DstNotStatedException;
+import util.exceptions.IllegalNumberOfAttackTroopsException;
+import util.exceptions.SrcNotStatedException;
+import util.exceptions.WrongTerritoriesPairException;
 
 import javax.swing.*;
 import java.awt.*;

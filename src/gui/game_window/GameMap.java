@@ -1,8 +1,8 @@
 package gui.game_window;
 
 import logic.*;
-import util.Images;
-import util.SoundPlayer;
+import util.res.Images;
+import util.res.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;

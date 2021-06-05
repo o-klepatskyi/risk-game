@@ -3,7 +3,7 @@ package gui.game_window.topPanel;
 import gui.game_window.GameWindow;
 import logic.GameOption;
 import logic.Player;
-import util.Fonts;
+import util.res.Fonts;
 
 import javax.swing.*;
 import java.awt.*;

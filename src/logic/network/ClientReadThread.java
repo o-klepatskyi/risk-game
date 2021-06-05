@@ -1,6 +1,6 @@
 package logic.network;
 
-import util.*;
+import util.exceptions.*;
 
 import javax.swing.*;
 import java.io.*;

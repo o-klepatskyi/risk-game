@@ -2,9 +2,9 @@ package gui.main_menu;
 
 import gui.multiplayer_menu.MultiplayerMenu;
 import gui.player_menu.PlayerMenu;
-import util.Fonts;
-import util.Images;
-import util.SoundPlayer;
+import util.res.Fonts;
+import util.res.Images;
+import util.res.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;

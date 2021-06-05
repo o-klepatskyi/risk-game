@@ -4,10 +4,10 @@ import gui.game_window.GameWindow;
 import logic.Territory;
 import logic.network.Message;
 import logic.network.MessageType;
-import util.Fonts;
-import util.SoundPlayer;
-import util.IllegalNumberOfReinforceTroopsException;
-import util.SrcNotStatedException;
+import util.res.Fonts;
+import util.res.SoundPlayer;
+import util.exceptions.IllegalNumberOfReinforceTroopsException;
+import util.exceptions.SrcNotStatedException;
 
 import javax.swing.*;
 import java.awt.*;

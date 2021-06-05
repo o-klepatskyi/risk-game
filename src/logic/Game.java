@@ -3,7 +3,7 @@ package logic;
 import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
 import logic.network.MultiplayerManager;
-import util.*;
+import util.exceptions.*;
 
 import java.awt.*;
 import java.util.*;

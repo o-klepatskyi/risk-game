@@ -1,9 +1,7 @@
 package gui.player_menu;
 
 import gui.main_menu.MainMenu;
-import logic.network.Message;
-import logic.network.MessageType;
-import util.Fonts;
+import util.res.Fonts;
 
 import javax.swing.*;
 import java.awt.*;

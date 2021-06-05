@@ -1,6 +1,6 @@
 package gui.player_menu;
 
-import util.Fonts;
+import util.res.Fonts;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;

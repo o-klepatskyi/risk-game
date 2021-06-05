@@ -1,9 +1,9 @@
 package gui.game_window.sidePanels;
 
 import logic.Territory;
-import util.Fonts;
+import util.res.Fonts;
 import gui.game_window.GameWindow;
-import util.Images;
+import util.res.Images;
 
 import javax.swing.*;
 import java.awt.*;

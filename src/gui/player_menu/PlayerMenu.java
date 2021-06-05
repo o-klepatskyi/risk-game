@@ -8,7 +8,7 @@ import java.util.Collection;
 import logic.Game;
 import logic.Player;
 import logic.network.*;
-import util.Images;
+import util.res.Images;
 
 public class PlayerMenu extends JPanel {
 

@@ -1,7 +1,7 @@
 package gui.player_menu;
 
 import java.awt.*;
-import static util.Images.*;
+import static util.res.Images.*;
 
 import javax.swing.*;
 

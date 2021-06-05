@@ -1,6 +1,6 @@
 package gui.player_menu;
 
-import util.Fonts;
+import util.res.Fonts;
 import gui.HintTextField;
 
 import javax.swing.text.AttributeSet;

@@ -212,6 +212,7 @@ public class PlayerMenu extends JPanel {
                     multiplayerManager.sendMessage(new Message(MessageType.CONNECTION_CLOSED_BY_ADMIN, username));
                 }
                 removePlayerPanel(playerPanel);
+                multiplayerManager.sendMessage(new Message(MessageType.PLAYER_DELETED, getPlayers()));
             }
         } else {
             if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
@@ -226,11 +227,6 @@ public class PlayerMenu extends JPanel {
         playerPanels.remove(playerPanel);
         playerPanel.setVisible(false);
         colorModel.removeComboBox(playerPanel.getColorComboBox());
-        try {
-            multiplayerManager.sendMessage(new Message(MessageType.PLAYER_DELETED, getPlayers())); // todo bug
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

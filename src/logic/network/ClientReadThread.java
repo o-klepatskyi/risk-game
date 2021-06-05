@@ -5,6 +5,8 @@ import util.exceptions.*;
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
+
 import static logic.network.MessageType.*;
 
 public class ClientReadThread extends Thread {
@@ -105,7 +107,11 @@ public class ClientReadThread extends Thread {
                 if (type == FORTIFY) {
                     client.manager.game.getGameWindow().fortify(response.src, response.dst, response.troops);
                 }
-            } catch (IOException | ClassNotFoundException | IllegalNumberOfAttackTroopsException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException | DstNotStatedException ex) {
+            } catch (SocketException ex) {
+                System.err.println("Socket closed.");
+                break;
+            }
+            catch (IOException | ClassNotFoundException | IllegalNumberOfAttackTroopsException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException | DstNotStatedException ex) {
                 System.out.println("Error reading from server: " + ex.getMessage());
                 ex.printStackTrace();
             }

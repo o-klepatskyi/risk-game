@@ -215,8 +215,8 @@ public class Game {
     }
 
     public void attack(Territory dst, Graph graph) {
+        System.out.println(gameGraph == graph);
         gameGraph = graph;
-        gameMap.setGameGraph(graph);
         gameMap.drawField();
         gameMap.explosionEffect(dst.getCoordinates());
     }

@@ -104,7 +104,7 @@ public class AttackPanel extends SidePanel {
                 if (gameWindow.game.isMultiplayer) {
                     //Territory newSrc = findTerritory(src.getName()), newDst = findTerritory(dst.getName());
                     //gameWindow.game.manager.sendMessage(new Message(MessageType.ATTACK, src,dst, newSrc, newDst));
-                    gameWindow.game.manager.sendMessage(new Message(MessageType.ATTACK, dst, gameWindow.game.getGameMap().getGameGraph()));
+                    gameWindow.game.manager.sendMessage(new Message(MessageType.ATTACK, dst, gameWindow.game.getGameGraph()));
                 }
             } catch (DstNotStatedException | SrcNotStatedException | IllegalNumberOfAttackTroopsException | WrongTerritoriesPairException e) {
                 e.printStackTrace();

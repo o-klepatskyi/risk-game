@@ -6,16 +6,16 @@ import util.res.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-// todo: fortifying with 1 troop
+// todo: attacking with one troop
 public class GameMap extends JPanel {
     private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
     private final int BORDER_MARGIN = 5;
 
-    private Graph gameGraph;
     private Game game;
     private ArrayList<JButton> buttons;
     private final JPanel panel;
@@ -26,43 +26,18 @@ public class GameMap extends JPanel {
     public GameMap(Game game) {
         this.setLayout(null);
         this.game = game;
-        this.gameGraph = game.getGameGraph();
         panel = this;
         buttons = new ArrayList<>();
         drawField();
 
-        panel.addMouseListener(new MouseListener() {
+        panel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if(!game.getGameOption().equals(GameOption.REINFORCEMENT)) {
                     resetButtons();
                     updateTerritories();
                 }
             }
-
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
         });
-    }
-
-    public void setGameGraph(Graph graph) {
-        gameGraph = graph;
-    }
-
-    public Graph getGameGraph() {
-        return gameGraph;
     }
 
     private void updateTerritories() {
@@ -77,7 +52,7 @@ public class GameMap extends JPanel {
         clearField();
         buttons.clear();
 
-        ArrayList<Territory> territories = gameGraph.getTerritories();
+        ArrayList<Territory> territories = game.getGameGraph().getTerritories();
         int BUTTON_WIDTH = 50;
         int BUTTON_HEIGHT = 25;
         int BUTTON_MARGIN_LEFT = 20;
@@ -111,10 +86,12 @@ public class GameMap extends JPanel {
             game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
         }
 
-        if (game.getGameWindow() != null && game.isMultiplayer) {
-            game.getGameWindow().repaint();
-            game.getGameWindow().revalidate();
-        }
+//        if (game.getGameWindow() != null && game.isMultiplayer) {
+//            game.getGameWindow().repaint();
+//            game.getGameWindow().revalidate();
+//        }
+        revalidate();
+        repaint();
     }
 
     /**
@@ -125,7 +102,7 @@ public class GameMap extends JPanel {
         if(src == null)
             return null;
 
-        return gameGraph.getVertex(src.getName());
+        return game.getGameGraph().getVertex(src.getName());
     }
 
     /**
@@ -135,12 +112,12 @@ public class GameMap extends JPanel {
         if(dst == null)
             return null;
 
-        return gameGraph.getVertex(dst.getName());
+        return game.getGameGraph().getVertex(dst.getName());
     }
 
     public void explosionEffect(Coordinates coordinates) {
         SoundPlayer.explosionSound();
-        String territoryName = gameGraph.getVertex(coordinates).getName();
+        String territoryName = game.getGameGraph().getVertex(coordinates).getName();
         JButton territoryButton = null;
         for(JButton button : buttons) {
             if(button.getName().equals(territoryName)) {
@@ -283,23 +260,23 @@ public class GameMap extends JPanel {
             ArrayList<Territory> filter = new ArrayList<>();
             Territory territory = null;
             if(src != null)
-                territory = gameGraph.getVertex(src.getName());
+                territory = game.getGameGraph().getVertex(src.getName());
             switch (option) {
                 case REINFORCEMENT:
-                    filter = gameGraph.getTerritories(game.getCurrentPlayer());
+                    filter = game.getGameGraph().getTerritories(game.getCurrentPlayer());
                     break;
                 case ATTACK:
-                    filter = gameGraph.getAdjacentTerritories(territory);
+                    filter = game.getGameGraph().getAdjacentTerritories(territory);
                     break;
                 case FORTIFY:
-                    filter = gameGraph.getConnectedTerritories(territory);
+                    filter = game.getGameGraph().getConnectedTerritories(territory);
                     break;
 
             }
 
             Territory dst;
             for(JButton b : buttons) {
-                dst = gameGraph.getVertex(b.getName());
+                dst = game.getGameGraph().getVertex(b.getName());
                 if(!filter.contains(dst)){
                     makeButtonInactive(b);
                 }
@@ -309,7 +286,7 @@ public class GameMap extends JPanel {
 
     private void resetButtons() {
         for(JButton b : buttons) {
-            b.setBackground(gameGraph.getVertex(b.getName()).getOwner().getColor());
+            b.setBackground(game.getGameGraph().getVertex(b.getName()).getOwner().getColor());
             b.setBorder(null);
             b.setForeground(Color.WHITE);
         }

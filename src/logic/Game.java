@@ -411,30 +411,38 @@ public class Game {
         int bonus = gameGraph.getTerritories(currentPlayer).size() / 3;
         bonus = Math.max(bonus, 3);
         currentPlayer.setBonus(bonus);
-
+        continents = new ArrayList<>();
+        continents.add("From territories - " + bonus);
         // check for continents bonus
         ArrayList<Territory> territories = gameGraph.getTerritories(currentPlayer);
         if(territories.containsAll(southAmerica)) {
             currentPlayer.setBonus(currentPlayer.getBonus() + 2);
+            continents.add("South America - 2");
         }
         if(territories.containsAll(northAmerica)) {
             currentPlayer.setBonus(currentPlayer.getBonus() + 5);
+            continents.add("North America - 5");
         }
         if(territories.containsAll(europe)) {
             currentPlayer.setBonus(currentPlayer.getBonus() + 5);
+            continents.add("Europe - 5");
         }
         if(territories.containsAll(australia)) {
             currentPlayer.setBonus(currentPlayer.getBonus() + 2);
+            continents.add("Australia - 2");
         }
         if(territories.containsAll(asia)) {
             currentPlayer.setBonus(currentPlayer.getBonus() + 7);
+            continents.add("Asia - 7");
         }
         if(territories.containsAll(africa)) {
             currentPlayer.setBonus(currentPlayer.getBonus() + 3);
+            continents.add("Africa - 3");
         }
         Log.write(currentPlayer.getName() + " receives bonus: " + "(" + currentPlayer.getBonus() + ")");
-
     }
+
+    public ArrayList<String> continents;
 
 
     private static void initializeTerritories() {

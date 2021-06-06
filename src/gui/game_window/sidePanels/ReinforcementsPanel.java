@@ -25,11 +25,13 @@ public class ReinforcementsPanel extends SidePanel {
 
     private int playerBonus, troopsLeft;
     private GameWindow gameWindow;
+    private ArrayList<String> labelsBonuses;
 
-    public ReinforcementsPanel(GameWindow gameWindow, int bonus) {
+    public ReinforcementsPanel(GameWindow gameWindow, int bonus, ArrayList<String> labels) {
         this.gameWindow = gameWindow;
         playerBonus = bonus;
         troopsLeft = bonus;
+        this.labelsBonuses = labels;
         initLabels();
         initButtons();
     }
@@ -37,17 +39,21 @@ public class ReinforcementsPanel extends SidePanel {
     private void initLabels() {
         reinforcementsGot = new ValueJLabel("Reinforcements got: ", playerBonus);
         reinforcementsLeft = new ValueJLabel("Reinforcements Left: ", troopsLeft);
-        fromTerritories = new ValueJLabel("From territories: ");
+
         fromContinentsControlled = new JLabel("From continents controlled: ");
-        // todo: add continents
         territoryChosen = new JLabel("Territory chosen:");
         territory = new JLabel("<none>");
 
         ArrayList<JLabel> labels = new ArrayList<>();
 
         labels.add(reinforcementsGot);
-        labels.add(fromTerritories);
-        labels.add(fromContinentsControlled);
+        labels.add(new JLabel(labelsBonuses.get(0)));
+        if (labelsBonuses.size() > 1) {
+            labels.add(fromContinentsControlled);
+            for (int i = 1; i < labelsBonuses.size(); i++) {
+                labels.add(new JLabel(labelsBonuses.get(i)));
+            }
+        }
         while (labels.size() < 10)  labels.add(new JLabel(" "));
         labels.add(reinforcementsLeft);
         labels.add(territoryChosen);

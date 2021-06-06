@@ -1,0 +1,15 @@
+Game started
+Argentina reinforced (7)
+Player 1 vs Player 2
+Argentina vs Peru
+Attacker wins!
+Argentina(1) Peru(7)
+Player 1 vs Player 2
+Peru vs Venezuela
+Attacker wins!
+Peru(1) Venezuela(6)
+Player 2 turn
+Player 2 receives bonus: (6)
+Eastern United States reinforced (6)
+Player 1 turn
+Player 1 receives bonus: (9)

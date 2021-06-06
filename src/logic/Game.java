@@ -40,7 +40,7 @@ public class Game {
     };
 
     private GameWindow gameWindow;
-    private final Graph gameGraph;
+    private Graph gameGraph;
 
     private Player currentPlayer;
     private GameOption gameOption;
@@ -212,6 +212,13 @@ public class Game {
 
         gameMap.drawField();
         gameMap.explosionEffect(dstTerritory.getCoordinates());
+    }
+
+    public void attack(Territory dst, Graph graph) {
+        gameGraph = graph;
+        gameMap.setGameGraph(graph);
+        gameMap.drawField();
+        gameMap.explosionEffect(dst.getCoordinates());
     }
 
     public void fortify(int numberOfTroops) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException {

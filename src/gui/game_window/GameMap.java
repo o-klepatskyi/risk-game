@@ -57,6 +57,14 @@ public class GameMap extends JPanel {
         });
     }
 
+    public void setGameGraph(Graph graph) {
+        gameGraph = graph;
+    }
+
+    public Graph getGameGraph() {
+        return gameGraph;
+    }
+
     private void updateTerritories() {
         game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
     }
@@ -101,6 +109,11 @@ public class GameMap extends JPanel {
             showOptions(GameOption.REINFORCEMENT);
         if (game.getGameWindow() != null) {
             game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
+        }
+
+        if (game.getGameWindow() != null && game.isMultiplayer) {
+            game.getGameWindow().repaint();
+            game.getGameWindow().revalidate();
         }
     }
 

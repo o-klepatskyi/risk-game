@@ -102,7 +102,7 @@ public class ClientReadThread extends Thread {
                     client.manager.game.getGameWindow().nextPhase();
                 }
                 if (type == ATTACK) {
-                    client.manager.game.attack(response.src, response.dst, response.newSrc, response.newDst);
+                    client.manager.game.attack(response.dst, response.gameGraph);
                 }
                 if (type == FORTIFY) {
                     client.manager.game.getGameWindow().fortify(response.src, response.dst, response.troops);
@@ -111,7 +111,7 @@ public class ClientReadThread extends Thread {
                 System.err.println("Socket closed.");
                 break;
             }
-            catch (IOException | ClassNotFoundException | IllegalNumberOfAttackTroopsException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException | DstNotStatedException ex) {
+            catch (IOException | ClassNotFoundException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException | DstNotStatedException ex) {
                 System.out.println("Error reading from server: " + ex.getMessage());
                 ex.printStackTrace();
             }

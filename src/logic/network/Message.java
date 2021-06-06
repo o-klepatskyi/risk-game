@@ -48,6 +48,13 @@ public class Message implements Serializable {
         this.gameGraph = gameGraph;
     }
 
+    public Message(MessageType type, Territory dst, Graph gameGraph) {
+        if (type != ATTACK) throw new InvalidParameterException("Message type exception");
+        this.type = type;
+        this.dst = dst;
+        this.gameGraph = gameGraph;
+    }
+
     public Message(MessageType type, Territory src, int troops) {
         if (type != REINFORCE) throw new InvalidParameterException("Message type exception");
         this.type = type;
@@ -73,7 +80,7 @@ public class Message implements Serializable {
     }
 
     public String toString() {
-        String str = hashCode() + "\nMessage[type= " + type;
+        String str = "Message[type= " + type;
         if (username != null) {
             str += ", username = "  + username;
         }
@@ -100,37 +107,5 @@ public class Message implements Serializable {
         }
         str += "]";
         return str;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Message message = (Message) o;
-
-        if (troops != message.troops) return false;
-        if (type != message.type) return false;
-        if (username != null ? !username.equals(message.username) : message.username != null) return false;
-        if (players != null ? !players.equals(message.players) : message.players != null) return false;
-        if (gameGraph != null ? !gameGraph.equals(message.gameGraph) : message.gameGraph != null) return false;
-        if (src != null ? !src.equals(message.src) : message.src != null) return false;
-        if (dst != null ? !dst.equals(message.dst) : message.dst != null) return false;
-        if (newSrc != null ? !newSrc.equals(message.newSrc) : message.newSrc != null) return false;
-        return newDst != null ? newDst.equals(message.newDst) : message.newDst == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = type != null ? type.hashCode() : 0;
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (players != null ? players.hashCode() : 0);
-        result = 31 * result + (gameGraph != null ? gameGraph.hashCode() : 0);
-        result = 31 * result + (src != null ? src.hashCode() : 0);
-        result = 31 * result + (dst != null ? dst.hashCode() : 0);
-        result = 31 * result + (newSrc != null ? newSrc.hashCode() : 0);
-        result = 31 * result + (newDst != null ? newDst.hashCode() : 0);
-        result = 31 * result + troops;
-        return result;
     }
 }

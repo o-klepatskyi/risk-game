@@ -1,6 +1,7 @@
 package gui.game_window.sidePanels;
 
 import gui.game_window.GameWindow;
+import logic.Game;
 import logic.Territory;
 import util.res.SoundPlayer;
 
@@ -101,12 +102,20 @@ public class AttackPanel extends SidePanel {
                 Territory src = Territory.getIdentical(this.src), dst = Territory.getIdentical(this.dst);
                 gameWindow.attack();
                 if (gameWindow.game.isMultiplayer) {
-                    gameWindow.game.manager.sendMessage(new Message(MessageType.ATTACK, src,dst));
+                    Territory newSrc = findTerritory(src.getName()), newDst = findTerritory(dst.getName());
+                    gameWindow.game.manager.sendMessage(new Message(MessageType.ATTACK, src,dst, newSrc, newDst));
                 }
             } catch (DstNotStatedException | SrcNotStatedException | IllegalNumberOfAttackTroopsException | WrongTerritoriesPairException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private Territory findTerritory(String name) {
+        for (Territory t : gameWindow.game.getGameGraph().getTerritories()) {
+            if (t.getName().equals(name)) return t;
+        }
+        return null;
     }
 
     @Override

@@ -102,7 +102,7 @@ public class ClientReadThread extends Thread {
                     client.manager.game.getGameWindow().nextPhase();
                 }
                 if (type == ATTACK) {
-                    client.manager.game.attack(response.src, response.dst);
+                    client.manager.game.attack(response.src, response.dst, response.newSrc, response.newDst);
                 }
                 if (type == FORTIFY) {
                     client.manager.game.getGameWindow().fortify(response.src, response.dst, response.troops);

@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 // todo add setKeyListener method to manipulate with mouse
+// todo add loading panel
 public class ServerMenu extends JPanel {
 
     private HintTextField portField, nameField;

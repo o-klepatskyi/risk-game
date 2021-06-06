@@ -169,19 +169,6 @@ public class Game {
         if(!gameGraph.hasEdge(srcTerritory, dstTerritory))
             throw new WrongTerritoriesPairException("These territories are not adjacent!");
 
-        return attack(srcTerritory, dstTerritory);
-    }
-
-    public boolean attack(Territory src, Territory dst) throws IllegalNumberOfAttackTroopsException, SrcNotStatedException, DstNotStatedException {
-        Territory srcTerritory = findTerritory(src);
-        Territory dstTerritory = findTerritory(dst);
-
-        if(srcTerritory == null)
-            throw new SrcNotStatedException("Source territory is invalid!");
-
-        if(dstTerritory == null)
-            throw new DstNotStatedException("Destination territory is invalid!");
-
         int attackTroops = srcTerritory.getTroops();
         int defendTroops = dstTerritory.getTroops();
 
@@ -205,6 +192,26 @@ public class Game {
             gameMap.explosionEffect(dstTerritory.getCoordinates());
             return false;
         }
+    }
+
+    public void attack(Territory src, Territory dst, Territory newSrc, Territory newDst) throws IllegalNumberOfAttackTroopsException, SrcNotStatedException, DstNotStatedException {
+        Territory srcTerritory = findTerritory(src);
+        Territory dstTerritory = findTerritory(dst);
+        if(srcTerritory == null || dstTerritory == null || newSrc == null || newDst == null) {
+            throw new IllegalArgumentException("Null territories in attack");
+        }
+//        Territory newSrcTerritory = Territory.getIdentical(newSrc);
+//        Territory newDstTerritory = Territory.getIdentical(newDst);
+//
+//        srcTerritory = newSrcTerritory;
+//        dstTerritory = newDstTerritory;
+        srcTerritory.setTroops(newSrc.getTroops());
+        srcTerritory.setOwner(newSrc.getOwner());
+        dstTerritory.setTroops(newDst.getTroops());
+        dstTerritory.setOwner(newDst.getOwner());
+
+        gameMap.drawField();
+        gameMap.explosionEffect(dstTerritory.getCoordinates());
     }
 
     public void fortify(int numberOfTroops) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException {
@@ -435,7 +442,7 @@ public class Game {
         gameGraph.addEdge(findTerritory("Ukraine"), findTerritory("Ural"));
     }
 
-    private static Territory findTerritory(String name) {
+    public static Territory findTerritory(String name) {
         for(Territory territory : territories) {
             if(territory.getName().equals(name))
                 return territory;

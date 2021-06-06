@@ -10,7 +10,6 @@ public class Player implements Serializable {
     private boolean isBot;
 
     private int bonus;
-    private Bot bot;
 
     public Player(String name, Color color, boolean isBot) {
         this.name = name;
@@ -18,7 +17,6 @@ public class Player implements Serializable {
         this.isBot = isBot;
 
         bonus = 0;
-        bot = null;
     }
 
     public void setName(String name) {
@@ -60,14 +58,6 @@ public class Player implements Serializable {
 
     public int getBonus() {
         return bonus;
-    }
-
-    public void setBot(Bot bot) {
-        this.bot = bot;
-    }
-
-    public Bot getBot() {
-        return bot;
     }
 
     @Override

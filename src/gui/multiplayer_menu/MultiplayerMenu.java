@@ -158,8 +158,10 @@ public class MultiplayerMenu extends JPanel {
     private void back() {
         panel.setVisible(false);
         frame.remove(panel);
-        frame.add(new MainMenu(frame));
+        JPanel menu = new MultiplayerMenu(frame);
+        frame.add(menu);
         frame.pack();
+        menu.setFocusable(true);
     }
 
 

@@ -170,8 +170,10 @@ public class ClientMenu extends JPanel {
     private void back() {
         panel.setVisible(false);
         frame.remove(panel);
-        frame.add(new MultiplayerMenu(frame));
+        JPanel menu = new MultiplayerMenu(frame);
+        frame.add(menu);
         frame.pack();
+        menu.setFocusable(true);
     }
 
     @Override

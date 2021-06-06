@@ -1,10 +1,13 @@
 package logic;
 
+import gui.game_over_window.GameOverWindow;
 import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
+import gui.rules_menu.RulesMenu;
 import logic.network.MultiplayerManager;
 import util.exceptions.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -39,6 +42,10 @@ public class Game {
             new Coordinates(650, 150), new Coordinates(220, 365), new Coordinates(820, 565), new Coordinates(400, 305), new Coordinates(145, 225), new Coordinates(770, 85)
     };
 
+    private final ArrayList<Territory> southAmerica = new ArrayList<>(), northAmerica = new ArrayList<>(),
+            europe = new ArrayList<>(), asia = new ArrayList<>(), africa = new ArrayList<>(),
+            australia = new ArrayList<>();
+
     private GameWindow gameWindow;
     private Graph gameGraph;
 
@@ -56,7 +63,6 @@ public class Game {
         this.players = new ArrayList<>(players);
         numberOfPlayers = players.size();
 
-        injectBots();
         gameGraph = getStartGraph(numberOfPlayers, this.players);
         start();
     }
@@ -84,11 +90,15 @@ public class Game {
     }
 
     private void start() {
+        initContinents();
         pickFirstPlayer();
 
         gameMap = new GameMap(this);
         gameMap.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
         gameWindow = new GameWindow(this);
+
+        Log.initLog();
+        Log.write("Game started");
     }
 
     public boolean isCurrentPlayerActive() {
@@ -177,12 +187,18 @@ public class Game {
 
         int[] troopsLeft = dice_rolls(attackTroops, defendTroops);
 
+        Log.write(src.getOwner().getName() + " vs " + dst.getOwner().getName());
+        Log.write(srcTerritory.getName() + " vs " + dstTerritory.getName());
         if(attackerWins(troopsLeft)) {
             srcTerritory.setTroops(1);
             dstTerritory.setTroops(troopsLeft[0]);
             dstTerritory.setOwner(srcTerritory.getOwner());
             gameMap.drawField();
             gameMap.explosionEffect(dstTerritory.getCoordinates());
+            Log.write("Attacker wins!");
+            Log.write(srcTerritory.getName() + "(" + srcTerritory.getTroops() +  ") "
+                    + dstTerritory.getName() + "(" + dstTerritory.getTroops() + ")");
+            checkForGameOver();
             return true;
         }
         else {
@@ -190,6 +206,9 @@ public class Game {
             dstTerritory.setTroops(troopsLeft[1]);
             gameMap.drawField();
             gameMap.explosionEffect(dstTerritory.getCoordinates());
+            Log.write("Defender wins!");
+            Log.write(srcTerritory.getName() + "(" + srcTerritory.getTroops() +  ")"
+                    + dstTerritory.getName() + "(" + dstTerritory.getTroops() + ")");
             return false;
         }
     }
@@ -284,6 +303,8 @@ public class Game {
             throw new WrongTerritoriesPairException("These territories are not connected!");
         }
         gameMap.drawField();
+        Log.write(srcTerritory.getOwner().getName() + " fortifies territory");
+        Log.write(srcTerritory.getName() + " -> " + dstTerritory.getName() + "(" + String.valueOf(numberOfTroops) + ")");
     }
 
     public void reinforce(int numberOfTroops) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
@@ -305,7 +326,7 @@ public class Game {
         srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
         currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
         gameMap.drawField();
-        playReinforceEffect();
+        Log.write(srcTerritory.getName() + " reinforced (" + numberOfTroops + ")");
     }
 
     private Territory findTerritory(Territory territory) {
@@ -364,21 +385,55 @@ public class Game {
         if(index == players.size())
             index = 0;
 
+        checkForGameOver();
         currentPlayer = players.get(index);
+        checkForGameOver();
+        Log.write(currentPlayer.getName() + " turn");
+        setBonus();
 
+        reinforcePhase();
+    }
+
+    private void checkForGameOver() {
+        removeDeadPlayers();
+        if(players.size() == 1) {
+            Log.write("GAME OVER!!!");
+            Log.write(currentPlayer.getName() + " IS A WINNER");
+            JFrame frame = gameWindow.getFrame();
+            gameWindow.setVisible(false);
+            frame.remove(gameWindow);
+            frame.add(new GameOverWindow(frame, currentPlayer));
+            frame.pack();
+        }
+    }
+
+    private void setBonus() {
         int bonus = gameGraph.getTerritories(currentPlayer).size() / 3;
         bonus = Math.max(bonus, 3);
         currentPlayer.setBonus(bonus);
 
-        if (currentPlayer.isBot()) {
-            nextPlayerTurn(); // skip for now
-        } else {
-            reinforcePhase();
+        // check for continents bonus
+        ArrayList<Territory> territories = gameGraph.getTerritories(currentPlayer);
+        if(territories.containsAll(southAmerica)) {
+            currentPlayer.setBonus(currentPlayer.getBonus() + 2);
         }
-    }
+        if(territories.containsAll(northAmerica)) {
+            currentPlayer.setBonus(currentPlayer.getBonus() + 5);
+        }
+        if(territories.containsAll(europe)) {
+            currentPlayer.setBonus(currentPlayer.getBonus() + 5);
+        }
+        if(territories.containsAll(australia)) {
+            currentPlayer.setBonus(currentPlayer.getBonus() + 2);
+        }
+        if(territories.containsAll(asia)) {
+            currentPlayer.setBonus(currentPlayer.getBonus() + 7);
+        }
+        if(territories.containsAll(africa)) {
+            currentPlayer.setBonus(currentPlayer.getBonus() + 3);
+        }
+        Log.write(currentPlayer.getName() + " receives bonus: " + "(" + currentPlayer.getBonus() + ")");
 
-    public static void playReinforceEffect() {
-        //SoundPlayer.play();
     }
 
 
@@ -626,10 +681,55 @@ public class Game {
         nextPlayerTurn();
     }
 
-    private void injectBots() {
-        for(Player player : players) {
-            if(player.isBot())
-                player.setBot(new Bot(this, player));
-        }
+    private void initContinents() {
+        southAmerica.add(gameGraph.getVertex("Brazil"));
+        southAmerica.add(gameGraph.getVertex("Peru"));
+        southAmerica.add(gameGraph.getVertex("Argentina"));
+        southAmerica.add(gameGraph.getVertex("Venezuela"));
+
+        northAmerica.add(gameGraph.getVertex("Central America"));
+        northAmerica.add(gameGraph.getVertex("Eastern United States"));
+        northAmerica.add(gameGraph.getVertex("Western United States"));
+        northAmerica.add(gameGraph.getVertex("Alberta"));
+        northAmerica.add(gameGraph.getVertex("Ontario"));
+        northAmerica.add(gameGraph.getVertex("Quebec"));
+        northAmerica.add(gameGraph.getVertex("Ontario"));
+        northAmerica.add(gameGraph.getVertex("Greenland"));
+        northAmerica.add(gameGraph.getVertex("Alaska"));
+        northAmerica.add(gameGraph.getVertex("Northwest Territory"));
+
+        europe.add(gameGraph.getVertex("Western Europe"));
+        europe.add(gameGraph.getVertex("Southern Europe"));
+        europe.add(gameGraph.getVertex("Northern Europe"));
+        europe.add(gameGraph.getVertex("Great Britain"));
+        europe.add(gameGraph.getVertex("Scandinavia"));
+        europe.add(gameGraph.getVertex("Ukraine"));
+        europe.add(gameGraph.getVertex("Iceland"));
+
+        africa.add(gameGraph.getVertex("North Africa"));
+        africa.add(gameGraph.getVertex("Egypt"));
+        africa.add(gameGraph.getVertex("East Africa"));
+        africa.add(gameGraph.getVertex("Congo"));
+        africa.add(gameGraph.getVertex("South Africa"));
+        africa.add(gameGraph.getVertex("Madagascar"));
+
+        asia.add(gameGraph.getVertex("Middle East"));
+        asia.add(gameGraph.getVertex("Afghanistan"));
+        asia.add(gameGraph.getVertex("Ural"));
+        asia.add(gameGraph.getVertex("Siberia"));
+        asia.add(gameGraph.getVertex("India"));
+        asia.add(gameGraph.getVertex("China"));
+        asia.add(gameGraph.getVertex("Siam"));
+        asia.add(gameGraph.getVertex("Mongolia"));
+        asia.add(gameGraph.getVertex("Irkutsk"));
+        asia.add(gameGraph.getVertex("Yakutsk"));
+        asia.add(gameGraph.getVertex("Kamchatka"));
+        asia.add(gameGraph.getVertex("Japan"));
+
+        australia.add(gameGraph.getVertex("Western Australia"));
+        australia.add(gameGraph.getVertex("Eastern Australia"));
+        australia.add(gameGraph.getVertex("New Guinea"));
+        australia.add(gameGraph.getVertex("Indonesia"));
     }
+
 }

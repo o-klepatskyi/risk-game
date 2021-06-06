@@ -1,3 +1,4 @@
+import gui.game_over_window.GameOverWindow;
 import gui.main_menu.MainMenu;
 import gui.player_menu.PlayerMenu;
 import logic.Game;

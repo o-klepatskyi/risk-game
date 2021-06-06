@@ -8,6 +8,8 @@ public class SoundPlayer {
     private static Clip backgroundMusic;
     private static Clip currentClip;
 
+    private static boolean muted = false;
+
     public static Clip play(AudioInputStream audioInputStream) {
         Clip clip = null;
         try {
@@ -21,42 +23,53 @@ public class SoundPlayer {
         } catch (LineUnavailableException | IOException e) {
             e.printStackTrace();
         }
-        return clip;
+        if(!muted)
+            return clip;
+
+        return null;
     }
 
     public static void gameOverSound() {
         currentClip = SoundPlayer.play(getInputStream("sounds/game_over.wav"));
-        currentClip.start();
+        if(currentClip != null)
+            currentClip.start();
     }
 
     public static void optionChosenSound() {
         currentClip = SoundPlayer.play(getInputStream("sounds/territory_chosen.wav"));
-        currentClip.start();
+        if(currentClip != null)
+            currentClip.start();
     }
 
     public static void buttonClickedSound() {
         currentClip = SoundPlayer.play(getInputStream("sounds/button_clicked.wav"));
-        currentClip.start();
+        System.out.println(currentClip + " " + muted);
+        if(currentClip != null)
+            currentClip.start();
     }
 
     public static void territoryChosenSound() {
         currentClip = SoundPlayer.play(getInputStream("sounds/territory_chosen.wav"));
-        currentClip.start();
+        if(currentClip != null)
+            currentClip.start();
     }
 
     public static void territoryClickedSound() {
         currentClip = SoundPlayer.play(getInputStream("sounds/territory_clicked.wav"));
-        currentClip.start();
+        if(currentClip != null)
+            currentClip.start();
     }
 
     public static void explosionSound() {
         currentClip = SoundPlayer.play(getInputStream("sounds/explosion.wav"));
-        currentClip.start();
+        if(currentClip != null)
+            currentClip.start();
     }
 
     public static void menuBackgroundMusic() {
         backgroundMusic = SoundPlayer.play(getInputStream("sounds/menu_music.wav"));
-        backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
+        if(backgroundMusic != null)
+            backgroundMusic.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     private static AudioInputStream getInputStream(String path) {
@@ -65,6 +78,27 @@ public class SoundPlayer {
         } catch (UnsupportedAudioFileException | IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static boolean getMuted() {
+        return muted;
+    }
+
+    public static void setMuted(boolean state) {
+        muted = state;
+        if(muted) {
+            if(backgroundMusic != null)
+                backgroundMusic.stop();
+
+            if(currentClip != null)
+                currentClip.stop();
+
+            backgroundMusic = null;
+            currentClip = null;
+        }
+        else {
+            menuBackgroundMusic();
         }
     }
 }

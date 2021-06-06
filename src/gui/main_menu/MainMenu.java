@@ -203,6 +203,9 @@ public class MainMenu extends JPanel {
                             break;
                     }
                 }
+                else if(key == KeyEvent.VK_M) {
+                    SoundPlayer.setMuted(!SoundPlayer.getMuted());
+                }
 
             }
         });

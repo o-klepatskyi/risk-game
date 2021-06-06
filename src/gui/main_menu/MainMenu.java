@@ -200,8 +200,6 @@ public class MainMenu extends JPanel {
                         case 4:
                             SoundPlayer.buttonClickedSound();
                             System.exit(0);
-
-                            openRulesMenu();
                             break;
                     }
                 }

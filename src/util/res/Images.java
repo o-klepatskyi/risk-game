@@ -15,4 +15,17 @@ public abstract class Images {
     public static final Image GAME_MAP_BG       = new ImageIcon(Images.class.getResource("images/water.jpg")).getImage();
     public static final Image DISABLED_CHECKBOX = new ImageIcon(Images.class.getResource("images/disabledIcon.jpg")).getImage();
     public static final Image SELECTED_CHECKBOX = new ImageIcon(Images.class.getResource("images/selectedIcon.png")).getImage();
+
+    public static Image getSlideImage(int slide) {
+        String path = "";
+        switch (slide) {
+            case 0:
+            case 3:
+                path = "images/main-menu-logo.jpg";
+                break;
+            default:
+                path = "images/slide" + slide + ".jpg";
+        }
+        return new ImageIcon(Images.class.getResource(path)).getImage();
+    }
 }

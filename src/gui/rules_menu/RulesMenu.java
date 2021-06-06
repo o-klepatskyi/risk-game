@@ -2,13 +2,16 @@ package gui.rules_menu;
 
 import gui.main_menu.MainMenu;
 import util.res.Fonts;
+import util.res.Images;
+import util.res.SoundPlayer;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-// todo add photos
+
 public class RulesMenu extends JPanel {
     public static final int WIDTH = 900;
     public static final int HEIGHT = 650;
@@ -31,7 +34,7 @@ public class RulesMenu extends JPanel {
 
         initPanels();
         initButtons();
-        addLabels();
+        changeSlide();
     }
 
     private void initPanels() {
@@ -40,8 +43,9 @@ public class RulesMenu extends JPanel {
         add(north, BorderLayout.NORTH);
 
         center = new JPanel();
+        center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.setPreferredSize(new Dimension(WIDTH, HEIGHT*8/12));
-        center.setBackground(Color.yellow);
+//        center.setBackground(Color.yellow);
         add(center, BorderLayout.CENTER);
 
         south = new JPanel();
@@ -60,7 +64,7 @@ public class RulesMenu extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (prev.isEnabled()) {
-                    //SoundPlayer.buttonClickedSound();
+                    SoundPlayer.buttonClickedSound();
                     prevSlide();
                 }
             }
@@ -78,7 +82,7 @@ public class RulesMenu extends JPanel {
         back.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //SoundPlayer.buttonClickedSound();
+                SoundPlayer.buttonClickedSound();
                 back();
             }
 
@@ -93,7 +97,7 @@ public class RulesMenu extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (next.isEnabled()) {
-                    //SoundPlayer.buttonClickedSound();
+                    SoundPlayer.buttonClickedSound();
                     nextSlide();
                 }
             }
@@ -137,11 +141,26 @@ public class RulesMenu extends JPanel {
         prev.setEnabled(slide != 0);
         next.setEnabled(slide != titles.length - 1);
         north.removeAll();
+        center.removeAll();
         south.removeAll();
         south.add(buttonPanel);
         addLabels();
+        addImage();
         frame.revalidate();
         frame.repaint();
+    }
+
+    private void addImage() {
+        Image img = Images.getSlideImage(slide);
+        int height = center.getPreferredSize().height;
+        int width = (int) ((float) img.getWidth(this)/img.getHeight(this) * height);
+        img = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        if (img == null) return;
+        JLabel imageLabel = new JLabel(new ImageIcon(img));
+        imageLabel.setPreferredSize(center.getPreferredSize());
+        imageLabel.setBorder(new LineBorder(Color.red));
+        imageLabel.setAlignmentX(0.5f);
+        center.add(imageLabel);
     }
 
     private void addLabels() {
@@ -151,8 +170,6 @@ public class RulesMenu extends JPanel {
         title.setAlignmentY(0.5f);
         title.setVisible(true);
         north.add(title);
-
-        System.out.println(title);
 
         for (String str : lines[slide]) {
             JLabel line = new JLabel(str);
@@ -171,7 +188,9 @@ public class RulesMenu extends JPanel {
                     "you will place on the board to reinforce your army.",
                     "Then you will attack your enemies, if you want.",
                     "After you are done with combat, you will get one chance to relocate some of your units."},
-            {},
+            {"1 - Player panel, which provides settings such as username and color.",
+            "2 - Remove player buttons (they are here to regulate the number of players.",
+            "3 - Add player, Start game and Back buttons (their usages are obvious too)."},
             {       "1 - Top panel which shows current player and turn phase.",
                     "2 - Side panel which is used to give your orders.",
                     "3 - World map where territories are represented by colored rectangles.",

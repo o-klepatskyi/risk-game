@@ -9,7 +9,6 @@ public class SoundPlayer {
     private static Clip currentClip;
 
     public static Clip play(AudioInputStream audioInputStream) {
-        pause(currentClip);
         Clip clip = null;
         try {
             clip = AudioSystem.getClip();
@@ -24,11 +23,7 @@ public class SoundPlayer {
         }
         return clip;
     }
-
-    public static void pause(Clip clip) {
-        if(clip != null)
-            clip.stop();
-    }
+    
 
     public static void optionChosenSound() {
         currentClip = SoundPlayer.play(getInputStream("sounds/territory_chosen.wav"));

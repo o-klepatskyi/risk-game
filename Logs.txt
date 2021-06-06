@@ -1,23 +1,10 @@
 Game started
-Northwest Territory reinforced (7)
+Northwest Territory reinforced (9)
 Player 1 vs Player 2
-Northwest Territory vs Alaska
+Northwest Territory vs Alberta
 Attacker wins!
-Northwest Territory(1)Alaska(7)
+Northwest Territory(1) Alberta(5)
 Player 1 vs Player 2
-Alaska vs Alberta
+Alberta vs Alaska
 Attacker wins!
-Alaska(1)Alberta(2)
-Player 1 vs Player 2
-Alberta vs Western United States
-Defender wins!
-Alberta(1)Western United States(1)
-Player 2 turn
-Player 2 receives bonus: (6)
-Brazil reinforced (6)
-Player 2 vs Player 1
-Brazil vs Venezuela
-Attacker wins!
-Brazil(1)Venezuela(7)
-Player 1 turn
-Player 1 receives bonus: (7)
+Alberta(1) Alaska(4)

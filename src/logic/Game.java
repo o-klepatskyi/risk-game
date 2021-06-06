@@ -95,6 +95,9 @@ public class Game {
         gameMap = new GameMap(this);
         gameMap.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
         gameWindow = new GameWindow(this);
+
+        Log.initLog();
+        Log.write("Game started");
     }
 
     public boolean isCurrentPlayerActive() {
@@ -196,12 +199,17 @@ public class Game {
 
         int[] troopsLeft = dice_rolls(attackTroops, defendTroops);
 
+        Log.write(src.getOwner().getName() + " vs " + dst.getOwner().getName());
+        Log.write(srcTerritory.getName() + " vs " + dstTerritory.getName());
         if(attackerWins(troopsLeft)) {
             srcTerritory.setTroops(1);
             dstTerritory.setTroops(troopsLeft[0]);
             dstTerritory.setOwner(srcTerritory.getOwner());
             gameMap.drawField();
             gameMap.explosionEffect(dstTerritory.getCoordinates());
+            Log.write("Attacker wins!");
+            Log.write(srcTerritory.getName() + "(" + srcTerritory.getTroops() +  ") "
+                    + dstTerritory.getName() + "(" + dstTerritory.getTroops() + ")");
             return true;
         }
         else {
@@ -209,6 +217,9 @@ public class Game {
             dstTerritory.setTroops(troopsLeft[1]);
             gameMap.drawField();
             gameMap.explosionEffect(dstTerritory.getCoordinates());
+            Log.write("Defender wins!");
+            Log.write(srcTerritory.getName() + "(" + srcTerritory.getTroops() +  ")"
+                    + dstTerritory.getName() + "(" + dstTerritory.getTroops() + ")");
             return false;
         }
     }
@@ -250,6 +261,8 @@ public class Game {
             throw new WrongTerritoriesPairException("These territories are not connected!");
         }
         gameMap.drawField();
+        Log.write(srcTerritory.getOwner().getName() + " fortifies territory");
+        Log.write(srcTerritory.getName() + " -> " + dstTerritory.getName() + "(" + String.valueOf(numberOfTroops) + ")");
     }
 
     public void reinforce(int numberOfTroops) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
@@ -271,6 +284,7 @@ public class Game {
         srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
         currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
         gameMap.drawField();
+        Log.write(srcTerritory.getName() + " reinforced (" + numberOfTroops + ")");
     }
 
     private Territory findTerritory(Territory territory) {
@@ -330,6 +344,7 @@ public class Game {
             index = 0;
 
         currentPlayer = players.get(index);
+        Log.write(currentPlayer.getName() + " turn");
         setBonus();
 
         reinforcePhase();
@@ -360,6 +375,7 @@ public class Game {
         if(territories.containsAll(africa)) {
             currentPlayer.setBonus(currentPlayer.getBonus() + 3);
         }
+        Log.write(currentPlayer.getName() + " receives bonus: " + "(" + currentPlayer.getBonus() + ")");
 
     }
 

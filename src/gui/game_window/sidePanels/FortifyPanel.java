@@ -122,6 +122,9 @@ public class FortifyPanel extends SidePanel {
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
                 gameWindow.nextPhase();
+                if (gameWindow.game.isMultiplayer) {
+                    gameWindow.game.manager.sendMessage(new Message(MessageType.END_REINFORCE));
+                }
             }
         });
         add(skipButton);

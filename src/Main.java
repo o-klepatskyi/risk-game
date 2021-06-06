@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         openMainMenu();
-        SoundPlayer.menuBackgroundMusic();
+        //SoundPlayer.menuBackgroundMusic();
     }
 
     private static void openMainMenu() {

@@ -57,7 +57,6 @@ public class PlayerMenu extends JPanel {
     }
 
     private void updatePanels() {
-        System.out.println("update panels: " + getPlayers());
         if (!isMultiplayer && playerPanels.size() == 0) {
             for (int i = 0; i < MIN_PLAYER_NUMBER; i++) {
                 addPlayerPanel();

@@ -69,4 +69,14 @@ public class Territory implements Serializable {
         if (t == null) return null;
         return new Territory(t.getName(), t.getTroops(), t.getOwner(), t.getCoordinates());
     }
+
+    @Override
+    public String toString() {
+        return "Territory{" +
+                "troops=" + troops +
+                ", owner=" + owner +
+                ", name='" + name + '\'' +
+                ", coordinates=" + coordinates +
+                '}';
+    }
 }

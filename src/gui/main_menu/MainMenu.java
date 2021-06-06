@@ -1,5 +1,6 @@
 package gui.main_menu;
 
+import com.sun.tools.javac.Main;
 import gui.multiplayer_menu.MultiplayerMenu;
 import gui.player_menu.PlayerMenu;
 import gui.rules_menu.RulesMenu;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 public class MainMenu extends JPanel {
     private final JPanel panel;
     private final JFrame frame;
-    private JButton play, load, multiplayer, rules;
+    private JButton play, multiplayer, rules, exit;
     private GridBagConstraints gbc;
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
 
@@ -55,14 +56,14 @@ public class MainMenu extends JPanel {
         play.setForeground(Color.WHITE);
         play.setText("Play");
 
-        load.setForeground(Color.WHITE);
-        load.setText("Load Game");
-
         multiplayer.setForeground(Color.WHITE);
         multiplayer.setText("Multiplayer");
 
         rules.setForeground(Color.WHITE);
         rules.setText("Rules");
+
+        exit.setForeground(Color.WHITE);
+        exit.setText("Exit");
     }
 
     private void highlightOption(int option) {
@@ -74,19 +75,21 @@ public class MainMenu extends JPanel {
                 SoundPlayer.optionChosenSound();
                 break;
             case 2:
-                load.setForeground(Color.YELLOW);
-                load.setText("< Load Game >");
-                SoundPlayer.optionChosenSound();
-                break;
-            case 3:
                 multiplayer.setForeground(Color.YELLOW);
                 multiplayer.setText("< Multiplayer >");
                 SoundPlayer.optionChosenSound();
                 break;
-            case 4:
+            case 3:
                 rules.setForeground(Color.YELLOW);
                 rules.setText("< Rules >");
                 SoundPlayer.optionChosenSound();
+                break;
+
+            case 4:
+                exit.setForeground(Color.YELLOW);
+                exit.setText("< Exit >");
+                SoundPlayer.optionChosenSound();
+                break;
         }
     }
 
@@ -107,21 +110,6 @@ public class MainMenu extends JPanel {
         });
         buttons.add(play);
 
-        load = new JButton("Load");
-        load.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                SoundPlayer.buttonClickedSound();
-                // TODO
-            }
-
-            public void mouseEntered(MouseEvent e) {
-                SoundPlayer.optionChosenSound();
-                menuOptionChosen = 2;
-                highlightOption(menuOptionChosen);
-            }
-        });
-        buttons.add(load);
-
         multiplayer = new JButton("Multiplayer");
         multiplayer.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -131,7 +119,7 @@ public class MainMenu extends JPanel {
 
             public void mouseEntered(MouseEvent e) {
                 SoundPlayer.optionChosenSound();
-                menuOptionChosen = 3;
+                menuOptionChosen = 2;
                 highlightOption(menuOptionChosen);
             }
         });
@@ -146,11 +134,26 @@ public class MainMenu extends JPanel {
 
             public void mouseEntered(MouseEvent e) {
                 SoundPlayer.optionChosenSound();
-                menuOptionChosen = 4;
+                menuOptionChosen = 3;
                 highlightOption(menuOptionChosen);
             }
         });
         buttons.add(rules);
+
+        exit = new JButton("Exit");
+        exit.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                SoundPlayer.buttonClickedSound();
+                System.exit(0);
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
+                menuOptionChosen = 4;
+                highlightOption(menuOptionChosen);
+            }
+        });
+        buttons.add(exit);
 
         for (JButton button: buttons) {
             button.setFont(LABEL_FONT);
@@ -192,11 +195,11 @@ public class MainMenu extends JPanel {
                             break;
                         case 3:
                             SoundPlayer.buttonClickedSound();
+                            openRulesMenu();
                             break;
-                            // TODO
                         case 4:
                             SoundPlayer.buttonClickedSound();
-                            openRulesMenu();
+                            System.exit(0);
                             break;
                     }
                 }
@@ -211,7 +214,7 @@ public class MainMenu extends JPanel {
         frame.add(new PlayerMenu(frame));
         frame.pack();
     }
-    
+
     private void openMultiplayerMenu() {
         panel.setVisible(false);
         frame.remove(panel);

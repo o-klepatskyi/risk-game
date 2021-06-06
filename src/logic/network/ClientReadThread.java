@@ -76,14 +76,14 @@ public class ClientReadThread extends Thread {
     }
 
     private void mainCycle() {
-        while (true) {
-            try {
+        try {
+            while (true) {
                 System.out.println(client.username + " is waiting for message...");
                 Message response = (Message) objectInputStream.readObject();
                 System.out.println(client.username + " received: " + response);
-                
+
                 MessageType type = response.type;
-                
+
                 if (type == PLAYERS) {
                     client.manager.updatePlayerMenu(response.players);
                 }
@@ -102,19 +102,20 @@ public class ClientReadThread extends Thread {
                     client.manager.game.getGameWindow().nextPhase();
                 }
                 if (type == ATTACK) {
-                    client.manager.game.attack(response.src, response.dst);
+                    //client.manager.game.attack(response.dst, response.gameGraph);
+                    //client.manager.game.attack(response.src, response.dst);
+                    client.manager.game.attack(response.srcName, response.srcTroops, response.srcOwner, response.dstName, response.dstTroops, response.dstOwner);
                 }
                 if (type == FORTIFY) {
                     client.manager.game.getGameWindow().fortify(response.src, response.dst, response.troops);
                 }
-            } catch (SocketException ex) {
-                System.err.println("Socket closed.");
-                break;
             }
-            catch (IOException | ClassNotFoundException | IllegalNumberOfAttackTroopsException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException | DstNotStatedException ex) {
-                System.out.println("Error reading from server: " + ex.getMessage());
-                ex.printStackTrace();
-            }
+        } catch (SocketException ex) {
+            System.err.println("Socket closed.");
+        }
+        catch (IOException | ClassNotFoundException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException | DstNotStatedException ex) {
+            System.out.println("Error reading from server: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

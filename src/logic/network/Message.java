@@ -1,9 +1,6 @@
 package logic.network;
 
-import logic.Game;
-import logic.Graph;
-import logic.Player;
-import logic.Territory;
+import logic.*;
 
 import java.io.Serializable;
 import java.security.InvalidParameterException;
@@ -16,7 +13,7 @@ public class Message implements Serializable {
     public String username;
     public Collection<Player> players;
     public Graph gameGraph;
-    public Territory src, dst;
+    public Territory src, dst, newSrc, newDst;
     public int troops;
 
     public Message(MessageType type, String username) {
@@ -48,11 +45,11 @@ public class Message implements Serializable {
         this.gameGraph = gameGraph;
     }
 
-    public Message(MessageType type, Territory src, int troops) {
-        if (type != REINFORCE) throw new InvalidParameterException("Message type exception");
+    public Message(MessageType type, Territory dst, Graph gameGraph) {
+        if (type != ATTACK) throw new InvalidParameterException("Message type exception");
         this.type = type;
-        this.src = src;
-        this.troops = troops;
+        this.dst = dst;
+        this.gameGraph = gameGraph;
     }
 
     public Message(MessageType type, Territory src, Territory dst) {
@@ -60,6 +57,39 @@ public class Message implements Serializable {
         this.type = type;
         this.src = src;
         this.dst = dst;
+    }
+
+    public Message(MessageType type, String srcName, int srcTroops, Player srcOwner, String dstName, int dstTroops, Player dstOwner) {
+        if (type != ATTACK) throw new InvalidParameterException("Message type exception");
+        this.type = type;
+        this.srcName = srcName;
+        this.srcTroops = srcTroops;
+        this.srcOwner = srcOwner;
+        this.dstName = dstName;
+        this.dstTroops = dstTroops;
+        this.dstOwner = dstOwner;
+    }
+
+    public String srcName, dstName;
+    public int srcTroops;
+    public int dstTroops;
+    public Player srcOwner;
+    public Player dstOwner;
+
+    public Message(MessageType type, Territory src, int troops) {
+        if (type != REINFORCE) throw new InvalidParameterException("Message type exception");
+        this.type = type;
+        this.src = src;
+        this.troops = troops;
+    }
+
+    public Message(MessageType type, Territory src, Territory dst, Territory newSrc, Territory newDst) {
+        if (type != ATTACK) throw new InvalidParameterException("Message type exception");
+        this.type = type;
+        this.src = src;
+        this.dst = dst;
+        this.newSrc = newSrc;
+        this.newDst = newDst;
     }
 
     public Message(MessageType type, Territory src, Territory dst, int troops) {
@@ -82,13 +112,19 @@ public class Message implements Serializable {
             str += ", game= " + gameGraph;
         }
         if (src != null) {
-            str += ", src= " + src;
+            str += ", \nsrc= " + src;
         }
         if (dst != null) {
-            str += ", dst= " + dst;
+            str += ", \ndst= " + dst;
         }
         if (troops != 0) {
             str += ", troops= " + troops;
+        }
+        if (newSrc != null) {
+            str += ", \nnewSrc= " + newSrc;
+        }
+        if (newDst != null) {
+            str += ", \nnewDst= " + newDst;
         }
         str += "]";
         return str;

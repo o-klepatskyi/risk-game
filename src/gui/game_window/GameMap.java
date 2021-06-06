@@ -12,6 +12,8 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 // todo: attacking with one troop
+// todo: connection while game is active
+// todo: removing player when he is offline while playing
 public class GameMap extends JPanel {
     private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
     private final int BORDER_MARGIN = 5;
@@ -164,6 +166,7 @@ public class GameMap extends JPanel {
         for(JButton button : buttons){
             button.addMouseListener(new MouseListener() {
                 public void mouseClicked(MouseEvent e) {
+                    System.out.println("Button clicked:\n" + game.findTerritoryInGraph(button.getName()));
                     if(!buttonClicked && button.getBackground().equals(game.getCurrentPlayer().getColor())) {
                         resetButtons();
                         highlightButton(button, "src");

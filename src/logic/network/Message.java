@@ -1,9 +1,6 @@
 package logic.network;
 
-import logic.Game;
-import logic.Graph;
-import logic.Player;
-import logic.Territory;
+import logic.*;
 
 import java.io.Serializable;
 import java.security.InvalidParameterException;
@@ -54,6 +51,30 @@ public class Message implements Serializable {
         this.dst = dst;
         this.gameGraph = gameGraph;
     }
+
+    public Message(MessageType type, Territory src, Territory dst) {
+        if (type != ATTACK) throw new InvalidParameterException("Message type exception");
+        this.type = type;
+        this.src = src;
+        this.dst = dst;
+    }
+
+    public Message(MessageType type, String srcName, int srcTroops, Player srcOwner, String dstName, int dstTroops, Player dstOwner) {
+        if (type != ATTACK) throw new InvalidParameterException("Message type exception");
+        this.type = type;
+        this.srcName = srcName;
+        this.srcTroops = srcTroops;
+        this.srcOwner = srcOwner;
+        this.dstName = dstName;
+        this.dstTroops = dstTroops;
+        this.dstOwner = dstOwner;
+    }
+
+    public String srcName, dstName;
+    public int srcTroops;
+    public int dstTroops;
+    public Player srcOwner;
+    public Player dstOwner;
 
     public Message(MessageType type, Territory src, int troops) {
         if (type != REINFORCE) throw new InvalidParameterException("Message type exception");

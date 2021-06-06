@@ -147,8 +147,6 @@ public class ServerMenu extends JPanel {
         MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.SERVER);
         PlayerMenu pm = new PlayerMenu(frame, multiplayerManager);
 
-        System.out.println("ServerMenu.openPlayerMenu: " + pm.getPlayers());
-
         multiplayerManager.setPlayerMenu(pm);
         multiplayerManager.startServer(portNumber, username, frame);
 

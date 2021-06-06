@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 
 import static gui.game_window.GameWindow.HEIGHT;
 import static gui.game_window.GameWindow.WIDTH;
-
+// todo bug with menu when name is occupied
 public class Game {
     private final ArrayList<Player> players;
     private final int numberOfPlayers;
@@ -214,9 +214,35 @@ public class Game {
         gameMap.explosionEffect(dstTerritory.getCoordinates());
     }
 
-    public void attack(Territory dst, Graph graph) {
-        System.out.println(gameGraph == graph);
-        gameGraph = graph;
+//    public void attack(Territory dst, Graph graph) {
+//        System.out.println(gameGraph.equals(graph));
+//        gameGraph = graph;
+//        gameMap.drawField();
+//        gameMap.explosionEffect(dst.getCoordinates());
+//    }
+
+    public void attack(Territory src, Territory dst) {
+        Territory thisSrc = findTerritoryInGraph(src.getName());
+        Territory thisDst = findTerritoryInGraph(dst.getName());
+
+        thisSrc.setTroops(src.getTroops());
+        thisSrc.setOwner(src.getOwner());
+        thisDst.setTroops(dst.getTroops());
+        thisDst.setOwner(dst.getOwner());
+
+        gameMap.drawField();
+        gameMap.explosionEffect(thisDst.getCoordinates());
+    }
+
+    public void attack(String srcName, int srcTroops, Player srcOwner, String dstName, int dstTroops, Player dstOwner) {
+        Territory src = findTerritoryInGraph(srcName);
+        Territory dst = findTerritoryInGraph(dstName);
+
+        src.setTroops(srcTroops);
+        src.setOwner(srcOwner);
+        dst.setTroops(dstTroops);
+        dst.setOwner(dstOwner);
+
         gameMap.drawField();
         gameMap.explosionEffect(dst.getCoordinates());
     }
@@ -451,6 +477,14 @@ public class Game {
 
     public static Territory findTerritory(String name) {
         for(Territory territory : territories) {
+            if(territory.getName().equals(name))
+                return territory;
+        }
+        return null;
+    }
+
+    public Territory findTerritoryInGraph(String name) {
+        for(Territory territory : gameGraph.getTerritories()) {
             if(territory.getName().equals(name))
                 return territory;
         }

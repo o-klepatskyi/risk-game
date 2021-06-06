@@ -187,7 +187,7 @@ public class Game {
 
         int[] troopsLeft = dice_rolls(attackTroops, defendTroops);
 
-        Log.write(src.getOwner().getName() + " vs " + dst.getOwner().getName());
+        Log.write(srcTerritory.getOwner().getName() + " vs " + dstTerritory.getOwner().getName());
         Log.write(srcTerritory.getName() + " vs " + dstTerritory.getName());
         if(attackerWins(troopsLeft)) {
             srcTerritory.setTroops(1);

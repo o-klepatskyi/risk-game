@@ -1,15 +1,174 @@
 Game started
-Argentina reinforced (7)
+Alberta reinforced (7)
 Player 1 vs Player 2
-Argentina vs Peru
+Alberta vs Northwest Territory
 Attacker wins!
-Argentina(1) Peru(7)
+Alberta(1) Northwest Territory(9)
 Player 1 vs Player 2
-Peru vs Venezuela
-Attacker wins!
-Peru(1) Venezuela(6)
+Eastern Australia vs Western Australia
+Defender wins!
+Eastern Australia(1)Western Australia(2)
+Player 1 vs Player 2
+Indonesia vs New Guinea
+Defender wins!
+Indonesia(1)New Guinea(3)
+Player 1 vs Player 2
+Kamchatka vs Yakutsk
+Defender wins!
+Kamchatka(1)Yakutsk(2)
+Player 1 vs Player 2
+Ukraine vs Scandinavia
+Defender wins!
+Ukraine(1)Scandinavia(2)
+Player 1 vs Player 2
+Iceland vs Scandinavia
+Defender wins!
+Iceland(1)Scandinavia(2)
+Player 1 fortifies territory
+Northwest Territory -> Western United States(8)
 Player 2 turn
 Player 2 receives bonus: (6)
-Eastern United States reinforced (6)
+Central America reinforced (6)
 Player 1 turn
-Player 1 receives bonus: (9)
+Player 1 receives bonus: (7)
+Western United States reinforced (7)
+Player 1 vs Player 2
+Western United States vs Central America
+Attacker wins!
+Western United States(1) Central America(9)
+Player 1 vs Player 2
+Central America vs Eastern United States
+Attacker wins!
+Central America(1) Eastern United States(8)
+Player 1 vs Player 2
+Eastern United States vs Quebec
+Attacker wins!
+Eastern United States(1) Quebec(7)
+Player 1 vs Player 2
+Quebec vs Greenland
+Attacker wins!
+Quebec(1) Greenland(5)
+Player 1 fortifies territory
+Greenland -> Peru(4)
+Player 2 turn
+Player 2 receives bonus: (5)
+Madagascar reinforced (5)
+Player 1 turn
+Player 1 receives bonus: (13)
+Peru reinforced (13)
+Player 1 vs Player 2
+Peru vs Argentina
+Attacker wins!
+Peru(1) Argentina(14)
+Player 1 vs Player 2
+Argentina vs Brazil
+Attacker wins!
+Argentina(1) Brazil(12)
+Player 1 vs Player 2
+Brazil vs North Africa
+Attacker wins!
+Brazil(1) North Africa(10)
+Player 1 vs Player 2
+North Africa vs East Africa
+Attacker wins!
+North Africa(1) East Africa(9)
+Player 1 vs Player 2
+East Africa vs Congo
+Attacker wins!
+East Africa(1) Congo(7)
+Player 1 vs Player 2
+Congo vs South Africa
+Attacker wins!
+Congo(1) South Africa(5)
+Player 1 vs Player 2
+South Africa vs Madagascar
+Defender wins!
+South Africa(1)Madagascar(6)
+Player 1 fortifies territory
+Great Britain -> Siberia(1)
+Player 2 turn
+Player 2 receives bonus: (3)
+Madagascar reinforced (3)
+Player 1 turn
+Player 1 receives bonus: (17)
+Siberia reinforced (17)
+Player 1 vs Player 2
+Siberia vs Yakutsk
+Attacker wins!
+Siberia(1) Yakutsk(16)
+Player 1 vs Player 2
+Yakutsk vs Irkutsk
+Attacker wins!
+Yakutsk(1) Irkutsk(14)
+Player 1 fortifies territory
+Irkutsk -> South Africa(13)
+Player 2 turn
+Player 2 receives bonus: (3)
+Scandinavia reinforced (3)
+Player 1 turn
+Player 1 receives bonus: (18)
+Iceland reinforced (18)
+Player 1 vs Player 2
+Iceland vs Scandinavia
+Attacker wins!
+Iceland(1) Scandinavia(12)
+Player 1 vs Player 2
+South Africa vs Madagascar
+Attacker wins!
+South Africa(1) Madagascar(8)
+Player 1 fortifies territory
+Scandinavia -> Middle East(11)
+Player 2 turn
+Player 2 receives bonus: (3)
+India reinforced (3)
+Player 1 turn
+Player 1 receives bonus: (27)
+Middle East reinforced (27)
+Player 1 vs Player 2
+Middle East vs India
+Attacker wins!
+Middle East(1) India(37)
+Player 1 vs Player 2
+India vs Afghanistan
+Attacker wins!
+India(1) Afghanistan(28)
+Player 1 vs Player 2
+Afghanistan vs Ural
+Attacker wins!
+Afghanistan(1) Ural(27)
+Player 1 vs Player 2
+Ural vs China
+Attacker wins!
+Ural(1) China(26)
+Player 2 turn
+Player 2 receives bonus: (3)
+New Guinea reinforced (3)
+Player 1 turn
+Player 1 receives bonus: (35)
+Siam reinforced (35)
+Player 1 fortifies territory
+Siam -> Indonesia(35)
+Player 2 turn
+Player 2 receives bonus: (3)
+New Guinea reinforced (3)
+Player 1 turn
+Player 1 receives bonus: (35)
+Eastern Australia reinforced (35)
+Player 1 vs Player 2
+Eastern Australia vs Western Australia
+Attacker wins!
+Eastern Australia(1) Western Australia(33)
+Player 1 fortifies territory
+Western Australia -> Eastern Australia(32)
+Player 2 turn
+Player 2 receives bonus: (3)
+New Guinea reinforced (3)
+Player 1 turn
+Player 1 receives bonus: (35)
+Eastern Australia reinforced (35)
+Player 1 vs Player 2
+Eastern Australia vs New Guinea
+Attacker wins!
+Eastern Australia(1) New Guinea(57)
+GAME OVER!!!
+Player 1 IS A WINNER

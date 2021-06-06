@@ -1,6 +1,5 @@
 package gui.main_menu;
 
-import com.sun.tools.javac.Main;
 import gui.multiplayer_menu.MultiplayerMenu;
 import gui.player_menu.PlayerMenu;
 import gui.rules_menu.RulesMenu;

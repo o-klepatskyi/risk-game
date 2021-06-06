@@ -4,11 +4,15 @@ import gui.game_over_window.GameOverWindow;
 import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
 import gui.rules_menu.RulesMenu;
+import logic.network.Message;
+import logic.network.MessageType;
 import logic.network.MultiplayerManager;
+import logic.network.NetworkMode;
 import util.exceptions.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -213,25 +217,25 @@ public class Game {
         }
     }
 
-    public void attack(Territory src, Territory dst, Territory newSrc, Territory newDst) throws IllegalNumberOfAttackTroopsException, SrcNotStatedException, DstNotStatedException {
-        Territory srcTerritory = findTerritory(src);
-        Territory dstTerritory = findTerritory(dst);
-        if(srcTerritory == null || dstTerritory == null || newSrc == null || newDst == null) {
-            throw new IllegalArgumentException("Null territories in attack");
-        }
-//        Territory newSrcTerritory = Territory.getIdentical(newSrc);
-//        Territory newDstTerritory = Territory.getIdentical(newDst);
+//    public void attack(Territory src, Territory dst, Territory newSrc, Territory newDst) throws IllegalNumberOfAttackTroopsException, SrcNotStatedException, DstNotStatedException {
+//        Territory srcTerritory = findTerritory(src);
+//        Territory dstTerritory = findTerritory(dst);
+//        if(srcTerritory == null || dstTerritory == null || newSrc == null || newDst == null) {
+//            throw new IllegalArgumentException("Null territories in attack");
+//        }
+////        Territory newSrcTerritory = Territory.getIdentical(newSrc);
+////        Territory newDstTerritory = Territory.getIdentical(newDst);
+////
+////        srcTerritory = newSrcTerritory;
+////        dstTerritory = newDstTerritory;
+//        srcTerritory.setTroops(newSrc.getTroops());
+//        srcTerritory.setOwner(newSrc.getOwner());
+//        dstTerritory.setTroops(newDst.getTroops());
+//        dstTerritory.setOwner(newDst.getOwner());
 //
-//        srcTerritory = newSrcTerritory;
-//        dstTerritory = newDstTerritory;
-        srcTerritory.setTroops(newSrc.getTroops());
-        srcTerritory.setOwner(newSrc.getOwner());
-        dstTerritory.setTroops(newDst.getTroops());
-        dstTerritory.setOwner(newDst.getOwner());
-
-        gameMap.drawField();
-        gameMap.explosionEffect(dstTerritory.getCoordinates());
-    }
+//        gameMap.drawField();
+//        gameMap.explosionEffect(dstTerritory.getCoordinates());
+//    }
 
 //    public void attack(Territory dst, Graph graph) {
 //        System.out.println(gameGraph.equals(graph));
@@ -240,18 +244,18 @@ public class Game {
 //        gameMap.explosionEffect(dst.getCoordinates());
 //    }
 
-    public void attack(Territory src, Territory dst) {
-        Territory thisSrc = findTerritoryInGraph(src.getName());
-        Territory thisDst = findTerritoryInGraph(dst.getName());
-
-        thisSrc.setTroops(src.getTroops());
-        thisSrc.setOwner(src.getOwner());
-        thisDst.setTroops(dst.getTroops());
-        thisDst.setOwner(dst.getOwner());
-
-        gameMap.drawField();
-        gameMap.explosionEffect(thisDst.getCoordinates());
-    }
+//    public void attack(Territory src, Territory dst) {
+//        Territory thisSrc = findTerritoryInGraph(src.getName());
+//        Territory thisDst = findTerritoryInGraph(dst.getName());
+//
+//        thisSrc.setTroops(src.getTroops());
+//        thisSrc.setOwner(src.getOwner());
+//        thisDst.setTroops(dst.getTroops());
+//        thisDst.setOwner(dst.getOwner());
+//
+//        gameMap.drawField();
+//        gameMap.explosionEffect(thisDst.getCoordinates());
+//    }
 
     public void attack(String srcName, int srcTroops, Player srcOwner, String dstName, int dstTroops, Player dstOwner) {
         Territory src = findTerritoryInGraph(srcName);
@@ -264,6 +268,7 @@ public class Game {
 
         gameMap.drawField();
         gameMap.explosionEffect(dst.getCoordinates());
+        checkForGameOver();
     }
 
     public void fortify(int numberOfTroops) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException {
@@ -385,7 +390,6 @@ public class Game {
         if(index == players.size())
             index = 0;
 
-        checkForGameOver();
         currentPlayer = players.get(index);
         checkForGameOver();
         Log.write(currentPlayer.getName() + " turn");
@@ -401,9 +405,18 @@ public class Game {
             Log.write(currentPlayer.getName() + " IS A WINNER");
             JFrame frame = gameWindow.getFrame();
             gameWindow.setVisible(false);
-            frame.remove(gameWindow);
+            frame.removeAll();
             frame.add(new GameOverWindow(frame, currentPlayer));
+            frame.revalidate();
+            frame.repaint();
             frame.pack();
+            if (isMultiplayer && manager.networkMode == NetworkMode.SERVER) {
+                try {
+                    manager.server.broadcast(new Message(MessageType.CONNECTION_CLOSED_BY_ADMIN));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

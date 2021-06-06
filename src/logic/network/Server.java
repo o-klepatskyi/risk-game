@@ -55,7 +55,7 @@ public class Server {
         }
     }
 
-    void broadcast(Message message) throws IOException {
+    public void broadcast(Message message) throws IOException {
         broadcast(message, null);
     }
 

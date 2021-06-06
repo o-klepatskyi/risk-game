@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 // todo add setKeyListener method to manipulate with mouse
+// todo add loading panel
 public class ServerMenu extends JPanel {
 
     private HintTextField portField, nameField;
@@ -145,8 +146,6 @@ public class ServerMenu extends JPanel {
     private void openPlayerMenu() {
         MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.SERVER);
         PlayerMenu pm = new PlayerMenu(frame, multiplayerManager);
-
-        System.out.println("ServerMenu.openPlayerMenu: " + pm.getPlayers());
 
         multiplayerManager.setPlayerMenu(pm);
         multiplayerManager.startServer(portNumber, username, frame);

@@ -17,5 +17,6 @@ public enum MessageType {
     ATTACK,
     FORTIFY,
     END_ATTACK,
-    END_REINFORCE
+    END_REINFORCE,
+    END_FORTIFY
 }

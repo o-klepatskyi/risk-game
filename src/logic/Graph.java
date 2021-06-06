@@ -108,4 +108,18 @@ public class Graph implements Serializable {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Graph graph = (Graph) o;
+
+        return map != null ? map.equals(graph.map) : graph.map == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return map != null ? map.hashCode() : 0;
+    }
 }

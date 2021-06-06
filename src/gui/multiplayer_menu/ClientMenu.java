@@ -161,7 +161,7 @@ public class ClientMenu extends JPanel {
         } catch (Exception e) {
             return false;
         }
-        if (username.length() == 0 || ipAddress.length() == 0) {
+        if (username.length() == 0 || ipAddress.length() == 0 || portNumber < 1 || portNumber >= 0xFFFF) {
             return false;
         }
         return true;

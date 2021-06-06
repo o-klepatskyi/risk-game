@@ -90,8 +90,6 @@ public class Client {
             manager.frame.remove(manager.playerMenu);
         }
         manager.frame.add(new MainMenu(manager.frame));
-        manager.frame.revalidate();
-        manager.frame.repaint();
         manager.frame.pack();
     }
 }

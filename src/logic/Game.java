@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 
 import static gui.game_window.GameWindow.HEIGHT;
 import static gui.game_window.GameWindow.WIDTH;
-
+// todo bug with menu when name is occupied
 public class Game {
     private final ArrayList<Player> players;
     private final int numberOfPlayers;
@@ -47,7 +47,7 @@ public class Game {
             australia = new ArrayList<>();
 
     private GameWindow gameWindow;
-    private final Graph gameGraph;
+    private Graph gameGraph;
 
     private Player currentPlayer;
     private GameOption gameOption;
@@ -179,19 +179,6 @@ public class Game {
         if(!gameGraph.hasEdge(srcTerritory, dstTerritory))
             throw new WrongTerritoriesPairException("These territories are not adjacent!");
 
-        return attack(srcTerritory, dstTerritory);
-    }
-
-    public boolean attack(Territory src, Territory dst) throws IllegalNumberOfAttackTroopsException, SrcNotStatedException, DstNotStatedException {
-        Territory srcTerritory = findTerritory(src);
-        Territory dstTerritory = findTerritory(dst);
-
-        if(srcTerritory == null)
-            throw new SrcNotStatedException("Source territory is invalid!");
-
-        if(dstTerritory == null)
-            throw new DstNotStatedException("Destination territory is invalid!");
-
         int attackTroops = srcTerritory.getTroops();
         int defendTroops = dstTerritory.getTroops();
 
@@ -224,6 +211,59 @@ public class Game {
                     + dstTerritory.getName() + "(" + dstTerritory.getTroops() + ")");
             return false;
         }
+    }
+
+    public void attack(Territory src, Territory dst, Territory newSrc, Territory newDst) throws IllegalNumberOfAttackTroopsException, SrcNotStatedException, DstNotStatedException {
+        Territory srcTerritory = findTerritory(src);
+        Territory dstTerritory = findTerritory(dst);
+        if(srcTerritory == null || dstTerritory == null || newSrc == null || newDst == null) {
+            throw new IllegalArgumentException("Null territories in attack");
+        }
+//        Territory newSrcTerritory = Territory.getIdentical(newSrc);
+//        Territory newDstTerritory = Territory.getIdentical(newDst);
+//
+//        srcTerritory = newSrcTerritory;
+//        dstTerritory = newDstTerritory;
+        srcTerritory.setTroops(newSrc.getTroops());
+        srcTerritory.setOwner(newSrc.getOwner());
+        dstTerritory.setTroops(newDst.getTroops());
+        dstTerritory.setOwner(newDst.getOwner());
+
+        gameMap.drawField();
+        gameMap.explosionEffect(dstTerritory.getCoordinates());
+    }
+
+//    public void attack(Territory dst, Graph graph) {
+//        System.out.println(gameGraph.equals(graph));
+//        gameGraph = graph;
+//        gameMap.drawField();
+//        gameMap.explosionEffect(dst.getCoordinates());
+//    }
+
+    public void attack(Territory src, Territory dst) {
+        Territory thisSrc = findTerritoryInGraph(src.getName());
+        Territory thisDst = findTerritoryInGraph(dst.getName());
+
+        thisSrc.setTroops(src.getTroops());
+        thisSrc.setOwner(src.getOwner());
+        thisDst.setTroops(dst.getTroops());
+        thisDst.setOwner(dst.getOwner());
+
+        gameMap.drawField();
+        gameMap.explosionEffect(thisDst.getCoordinates());
+    }
+
+    public void attack(String srcName, int srcTroops, Player srcOwner, String dstName, int dstTroops, Player dstOwner) {
+        Territory src = findTerritoryInGraph(srcName);
+        Territory dst = findTerritoryInGraph(dstName);
+
+        src.setTroops(srcTroops);
+        src.setOwner(srcOwner);
+        dst.setTroops(dstTroops);
+        dst.setOwner(dstOwner);
+
+        gameMap.drawField();
+        gameMap.explosionEffect(dst.getCoordinates());
     }
 
     public void fortify(int numberOfTroops) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException {
@@ -490,8 +530,16 @@ public class Game {
         gameGraph.addEdge(findTerritory("Ukraine"), findTerritory("Ural"));
     }
 
-    private static Territory findTerritory(String name) {
+    public static Territory findTerritory(String name) {
         for(Territory territory : territories) {
+            if(territory.getName().equals(name))
+                return territory;
+        }
+        return null;
+    }
+
+    public Territory findTerritoryInGraph(String name) {
+        for(Territory territory : gameGraph.getTerritories()) {
             if(territory.getName().equals(name))
                 return territory;
         }

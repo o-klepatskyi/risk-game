@@ -2,7 +2,6 @@ import gui.main_menu.MainMenu;
 import gui.player_menu.PlayerMenu;
 import logic.Game;
 import logic.Player;
-import util.res.Fonts;
 import util.res.SoundPlayer;
 
 import javax.swing.*;
@@ -11,16 +10,17 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        //Fonts.initFonts();
         openMainMenu();
         SoundPlayer.menuBackgroundMusic();
     }
 
     private static void openMainMenu() {
         JFrame frame = new JFrame();
-        frame.add(new MainMenu(frame));
+        JPanel menu = new MainMenu(frame);
+        frame.add(menu);
         frame.pack();
         frame.setVisible(true);
+        menu.setFocusable(true);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
@@ -34,7 +34,7 @@ public class Main {
         players.add(p1);
         players.add(p2);
         //players.add(p3);
-        Game game = new Game(players); // todo
+        Game game = new Game(players);
         frame.add(game.getGameWindow());
         frame.pack();
         frame.setVisible(true);

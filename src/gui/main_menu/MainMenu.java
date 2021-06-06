@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
+// todo: Call menu.setFocusable(true) AFTER calling frame.pack()
 public class MainMenu extends JPanel {
     private final JPanel panel;
     private final JFrame frame;
@@ -35,7 +35,6 @@ public class MainMenu extends JPanel {
     }
 
     private void initWindow() {
-        setFocusable(true);
         this.setPreferredSize(new Dimension(SIZE, SIZE));
         setLayout(new GridBagLayout());
 
@@ -197,8 +196,8 @@ public class MainMenu extends JPanel {
                             // TODO
                         case 4:
                             SoundPlayer.buttonClickedSound();
+                            openRulesMenu();
                             break;
-                            // TODO
                     }
                 }
 

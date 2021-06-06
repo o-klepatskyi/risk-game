@@ -20,7 +20,6 @@ public abstract class Images {
         String path = "";
         switch (slide) {
             case 0:
-            case 3:
                 path = "images/main-menu-logo.jpg";
                 break;
             default:

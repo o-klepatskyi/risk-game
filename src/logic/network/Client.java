@@ -86,6 +86,7 @@ public class Client {
     }
 
     public void openMainMenu() {
+        System.out.println("open main menu");
         if (manager.frame.isAncestorOf(manager.playerMenu)) {
             manager.frame.remove(manager.playerMenu);
         }

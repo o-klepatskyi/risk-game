@@ -32,26 +32,28 @@ public class ClientReadThread extends Thread {
         } catch (IOException | ClassNotFoundException exception) {
             exception.printStackTrace();
             showConnectionErrorMessage();
-            client.openMainMenu();
             client.close();
             return;
         }
+
         if (first_response == null || first_response.type == NAME_ERROR) {
             showDuplicateNameError();
-            client.openMainMenu();
             client.close();
-        } else if (first_response.type == INVALID_NAME) {
-            showInvalidNameError();
-            client.openMainMenu();
-            client.close();
-        } else if (first_response.type != OK) {
-            showConnectionErrorMessage();
-            client.openMainMenu();
-            client.close();
-        } else {
-            client.openPlayerMenu();
-            mainCycle();
+            return;
         }
+        if (first_response.type == INVALID_NAME) {
+            showInvalidNameError();
+            client.close();
+            return;
+        }
+        if (first_response.type != OK) {
+            showConnectionErrorMessage();
+            client.close();
+            return;
+        }
+        client.openPlayerMenu();
+        mainCycle();
+
     }
 
     private void showInvalidNameError() {
@@ -102,8 +104,6 @@ public class ClientReadThread extends Thread {
                     client.manager.game.getGameWindow().nextPhase();
                 }
                 if (type == ATTACK) {
-                    //client.manager.game.attack(response.dst, response.gameGraph);
-                    //client.manager.game.attack(response.src, response.dst);
                     client.manager.game.attack(response.srcName, response.srcTroops, response.srcOwner, response.dstName, response.dstTroops, response.dstOwner);
                 }
                 if (type == FORTIFY) {

@@ -1,30 +1,6 @@
 Game started
-Peru reinforced (7)
+Alaska reinforced (7)
 Player 1 vs Player 2
-Peru vs Brazil
+Alaska vs Northwest Territory
 Attacker wins!
-Peru(1) Brazil(6)
-Player 1 vs Player 2
-Brazil vs North Africa
-Attacker wins!
-Brazil(1) North Africa(5)
-Player 1 vs Player 2
-North Africa vs East Africa
-Attacker wins!
-North Africa(1) East Africa(4)
-Player 2 turn
-Player 2 receives bonus: (6)
-Eastern United States reinforced (6)
-Player 1 turn
-Player 1 receives bonus: (10)
-Ontario reinforced (10)
-Player 2 turn
-Player 2 receives bonus: (6)
-Eastern United States reinforced (6)
-Player 1 turn
-Player 1 receives bonus: (10)
-Ontario reinforced (10)
-Player 1 vs Player 2
-Ontario vs Eastern United States
-Attacker wins!
-Ontario(1) Eastern United States(13)
+Alaska(1) Northwest Territory(9)

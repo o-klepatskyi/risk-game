@@ -183,7 +183,8 @@ public class RulesMenu extends JPanel {
     private String[][] lines = new String[][] {
             {       "Welcome to Risk - the Ultimate Battle!",
                     "It is the game of 2 to 6 generals, represented by each player.",
-                    "Your task will be to eliminate all other players and to stay the last on the global map."},
+                    "Your task will be to eliminate all other players and to stay the last on the global map.",
+            "Game is developed by Makarov Ivan and Klepatskyi Oleh. 2021, Kyiv"},
             {       "At the start of each one of your turns, you will receive additional units, which",
                     "you will place on the board to reinforce your army.",
                     "Then you will attack your enemies, if you want.",

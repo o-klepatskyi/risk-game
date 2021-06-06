@@ -242,6 +242,7 @@ public class PlayerMenu extends JPanel {
             Game game = new Game(getPlayers());
             frame.remove(this);
             frame.add(game.getGameWindow());
+            game.getGameWindow().setFrame(frame);
             frame.pack();
         }
     }

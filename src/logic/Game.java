@@ -1,10 +1,13 @@
 package logic;
 
+import gui.game_over_window.GameOverWindow;
 import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
+import gui.rules_menu.RulesMenu;
 import logic.network.MultiplayerManager;
 import util.exceptions.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -208,6 +211,7 @@ public class Game {
             Log.write("Attacker wins!");
             Log.write(srcTerritory.getName() + "(" + srcTerritory.getTroops() +  ") "
                     + dstTerritory.getName() + "(" + dstTerritory.getTroops() + ")");
+            checkForGameOver();
             return true;
         }
         else {
@@ -341,11 +345,26 @@ public class Game {
         if(index == players.size())
             index = 0;
 
+        checkForGameOver();
         currentPlayer = players.get(index);
+        checkForGameOver();
         Log.write(currentPlayer.getName() + " turn");
         setBonus();
 
         reinforcePhase();
+    }
+
+    private void checkForGameOver() {
+        removeDeadPlayers();
+        if(players.size() == 1) {
+            Log.write("GAME OVER!!!");
+            Log.write(currentPlayer.getName() + " IS A WINNER");
+            JFrame frame = gameWindow.getFrame();
+            gameWindow.setVisible(false);
+            frame.remove(gameWindow);
+            frame.add(new GameOverWindow(frame, currentPlayer));
+            frame.pack();
+        }
     }
 
     private void setBonus() {

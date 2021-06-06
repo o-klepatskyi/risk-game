@@ -20,6 +20,7 @@ public class GameWindow extends JPanel {
     public final Game game;
     private GameMap gameMap;
     private GridBagConstraints gbc = new GridBagConstraints();
+    private JFrame frame;
 
     public GameWindow(Game game) {
         this.game = game;
@@ -128,5 +129,13 @@ public class GameWindow extends JPanel {
     public void fortify(Territory src, Territory dst, int troopsToTransfer) throws WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException, DstNotStatedException, SrcNotStatedException {
         game.fortify(src, dst, troopsToTransfer);
         nextPhase();
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 }

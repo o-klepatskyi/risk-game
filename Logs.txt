@@ -1,10 +1,128 @@
 Game started
-Northwest Territory reinforced (9)
+Northwest Territory reinforced (7)
 Player 1 vs Player 2
-Northwest Territory vs Alberta
+Northwest Territory vs Greenland
 Attacker wins!
-Northwest Territory(1) Alberta(5)
+Northwest Territory(1) Greenland(9)
 Player 1 vs Player 2
-Alberta vs Alaska
+Greenland vs Quebec
 Attacker wins!
-Alberta(1) Alaska(4)
+Greenland(1) Quebec(8)
+Player 1 vs Player 2
+Ontario vs Western United States
+Defender wins!
+Ontario(1)Western United States(1)
+Player 1 vs Player 2
+Eastern United States vs Western United States
+Defender wins!
+Eastern United States(1)Western United States(1)
+Player 1 vs Player 2
+Central America vs Western United States
+Defender wins!
+Central America(1)Western United States(1)
+Player 2 turn
+Player 2 receives bonus: (6)
+Peru reinforced (6)
+Player 1 turn
+Player 1 receives bonus: (7)
+Alberta reinforced (7)
+Player 1 vs Player 2
+Alberta vs Western United States
+Attacker wins!
+Alberta(1) Western United States(7)
+Player 1 fortifies territory
+Quebec -> Great Britain(7)
+Player 2 turn
+Player 2 receives bonus: (6)
+Peru reinforced (6)
+Player 1 turn
+Player 1 receives bonus: (13)
+Great Britain reinforced (13)
+Player 1 vs Player 2
+Great Britain vs Western Europe
+Attacker wins!
+Great Britain(1) Western Europe(19)
+Player 1 vs Player 2
+Western Europe vs Northern Europe
+Attacker wins!
+Western Europe(1) Northern Europe(18)
+Player 1 vs Player 2
+Northern Europe vs Ukraine
+Attacker wins!
+Northern Europe(1) Ukraine(14)
+Player 1 vs Player 2
+Ukraine vs Middle East
+Attacker wins!
+Ukraine(1) Middle East(13)
+Player 1 vs Player 2
+Middle East vs India
+Attacker wins!
+Middle East(1) India(11)
+Player 1 vs Player 2
+India vs Afghanistan
+Attacker wins!
+India(1) Afghanistan(10)
+Player 1 vs Player 2
+Afghanistan vs Ural
+Attacker wins!
+Afghanistan(1) Ural(8)
+Player 1 vs Player 2
+Ural vs Siberia
+Attacker wins!
+Ural(1) Siberia(3)
+Player 1 vs Player 2
+Yakutsk vs Irkutsk
+Attacker wins!
+Yakutsk(1) Irkutsk(3)
+Player 1 vs Player 2
+Irkutsk vs Mongolia
+Attacker wins!
+Irkutsk(1) Mongolia(2)
+Player 2 turn
+Player 2 receives bonus: (3)
+Peru reinforced (3)
+Player 1 turn
+Player 1 receives bonus: (28)
+Central America reinforced (28)
+Player 1 vs Player 2
+Central America vs Venezuela
+Attacker wins!
+Central America(1) Venezuela(28)
+Player 1 vs Player 2
+Venezuela vs Peru
+Attacker wins!
+Venezuela(1) Peru(17)
+Player 1 vs Player 2
+Peru vs Brazil
+Attacker wins!
+Peru(1) Brazil(15)
+Player 1 fortifies territory
+Brazil -> Indonesia(14)
+Player 2 turn
+Player 2 receives bonus: (3)
+Congo reinforced (3)
+Player 1 turn
+Player 1 receives bonus: (31)
+North Africa reinforced (31)
+Player 1 vs Player 2
+North Africa vs Congo
+Attacker wins!
+North Africa(1) Congo(25)
+Player 1 vs Player 2
+Congo vs South Africa
+Attacker wins!
+Congo(1) South Africa(23)
+Player 1 vs Player 2
+Indonesia vs New Guinea
+Attacker wins!
+Indonesia(1) New Guinea(16)
+Player 1 vs Player 2
+New Guinea vs Eastern Australia
+Attacker wins!
+New Guinea(1) Eastern Australia(11)
+Player 1 vs Player 2
+Eastern Australia vs Western Australia
+Attacker wins!
+Eastern Australia(1) Western Australia(7)
+GAME OVER!!!
+Player 1 IS A WINNER

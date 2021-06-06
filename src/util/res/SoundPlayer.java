@@ -23,7 +23,11 @@ public class SoundPlayer {
         }
         return clip;
     }
-    
+
+    public static void gameOverSound() {
+        currentClip = SoundPlayer.play(getInputStream("sounds/game_over.wav"));
+        currentClip.start();
+    }
 
     public static void optionChosenSound() {
         currentClip = SoundPlayer.play(getInputStream("sounds/territory_chosen.wav"));

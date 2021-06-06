@@ -192,11 +192,11 @@ public class MainMenu extends JPanel {
                             break;
                         case 2:
                             SoundPlayer.buttonClickedSound();
-                            openRulesMenu();
+                            openMultiplayerMenu();
                             break;
                         case 3:
                             SoundPlayer.buttonClickedSound();
-                            openMultiplayerMenu();
+                            openRulesMenu();
                             break;
                         case 4:
                             SoundPlayer.buttonClickedSound();

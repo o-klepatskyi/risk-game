@@ -24,7 +24,7 @@ public class UserThread extends Thread {
 
             Message userNameMsg = (Message) objectInputStream.readObject();
 
-            if (userNameMsg.type != USERNAME) {
+            if (userNameMsg == null || userNameMsg.type != USERNAME) {
                 sendMessage(new Message(CLOSE_CONNECTION_BY_CLIENT));
             } else if (userNameMsg.username.equals(MultiplayerManager.BOT_NAME)) {
                 sendMessage(new Message(INVALID_NAME));
@@ -33,10 +33,11 @@ public class UserThread extends Thread {
             } else if (server.getUserNames().size() == 6) {
                 sendMessage(new Message(MAX_PLAYERS_ERROR));
             } else {
-                server.addUserName(userNameMsg.username);
                 this.username = userNameMsg.username;
                 sendMessage(new Message(OK));
-                printUsers();
+
+                updateUsers(username);
+
                 Message clientMessage;
 
                 do {
@@ -76,11 +77,9 @@ public class UserThread extends Thread {
         System.out.println("User '" + username + "' left server.");
     }
 
-    /**
-     * Sends a list of online users to the newly connected user.
-     */
-    void printUsers() throws Exception {
-        objOutputStream.writeObject(getUsersMessage());
+    private void updateUsers(String username) throws IOException {
+        server.addUserName(username);
+        server.broadcast(getUsersMessage());
     }
 
     public Message getUsersMessage() {

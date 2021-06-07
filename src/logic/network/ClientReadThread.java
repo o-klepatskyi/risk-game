@@ -53,7 +53,6 @@ public class ClientReadThread extends Thread {
         }
         client.openPlayerMenu();
         mainCycle();
-
     }
 
     private void showInvalidNameError() {

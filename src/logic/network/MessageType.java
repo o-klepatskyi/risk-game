@@ -23,5 +23,5 @@ public enum MessageType {
     GAME_OVER,
     USER_LEFT,
     CONNECTION_ERROR,
-    SERVER_CLOSED_ERROR
+    SERVER_CLOSED_ERROR,
 }

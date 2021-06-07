@@ -52,6 +52,7 @@ public final class MultiplayerManager {
     }
 
     void addPlayer(String username) {
+        System.out.println("Manager adding player " + username + "...");
         playerMenu.addPlayer(username);
     }
 

@@ -98,10 +98,16 @@ public class Server {
     }
 
     public void sendMessage(Message message, String username) throws IOException {
+        UserThread thread = getThreadByName(username);
+        if (thread != null) thread.sendMessage(message);
+    }
+
+    public UserThread getThreadByName(String username) {
         for (UserThread userThread : userThreads) {
             if (userThread.username.equals(username)) {
-                userThread.sendMessage(message);
+                return userThread;
             }
         }
+        return null;
     }
 }

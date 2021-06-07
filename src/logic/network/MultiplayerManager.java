@@ -8,6 +8,7 @@ import logic.Player;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.Socket;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
 import static logic.network.NetworkMode.*;
@@ -29,8 +30,7 @@ public final class MultiplayerManager {
 
     public void startServer(int portNumber, String userName, JFrame frame) {
         if (networkMode != SERVER) {
-            System.err.println("Wrong network mode."); // todo exceptions
-            return;
+            throw new InvalidParameterException("Wrong network mode");
         }
         server = new Server(portNumber, this);
         new Thread(() -> server.execute()).start();

@@ -45,20 +45,6 @@ public class Message implements Serializable {
         this.gameGraph = gameGraph;
     }
 
-    public Message(MessageType type, Territory dst, Graph gameGraph) {
-        if (type != ATTACK) throw new InvalidParameterException("Message type exception");
-        this.type = type;
-        this.dst = dst;
-        this.gameGraph = gameGraph;
-    }
-
-    public Message(MessageType type, Territory src, Territory dst) {
-        if (type != ATTACK) throw new InvalidParameterException("Message type exception");
-        this.type = type;
-        this.src = src;
-        this.dst = dst;
-    }
-
     public Message(MessageType type, String srcName, int srcTroops, Player srcOwner, String dstName, int dstTroops, Player dstOwner) {
         if (type != ATTACK) throw new InvalidParameterException("Message type exception");
         this.type = type;
@@ -81,15 +67,6 @@ public class Message implements Serializable {
         this.type = type;
         this.src = src;
         this.troops = troops;
-    }
-
-    public Message(MessageType type, Territory src, Territory dst, Territory newSrc, Territory newDst) {
-        if (type != ATTACK) throw new InvalidParameterException("Message type exception");
-        this.type = type;
-        this.src = src;
-        this.dst = dst;
-        this.newSrc = newSrc;
-        this.newDst = newDst;
     }
 
     public Message(MessageType type, Territory src, Territory dst, int troops) {

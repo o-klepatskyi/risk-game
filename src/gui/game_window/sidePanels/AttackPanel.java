@@ -105,10 +105,6 @@ public class AttackPanel extends SidePanel {
                 if (gameWindow.game.isMultiplayer) {
                     Territory newSrc = gameWindow.game.findTerritoryInGraph(src.getName()),
                             newDst = gameWindow.game.findTerritoryInGraph(dst.getName());
-//                    System.out.println("srcs: " + src.equals(newSrc));
-//                    System.out.println("dsts: " + dst.equals(newDst));
-                    //gameWindow.game.manager.sendMessage(new Message(MessageType.ATTACK, src,dst, newSrc, newDst));
-                    //gameWindow.game.manager.sendMessage(new Message(MessageType.ATTACK, dst, gameWindow.game.getGameGraph()));
 
                     gameWindow.game.manager.sendMessage(new Message(MessageType.ATTACK,
                             newSrc.getName(),

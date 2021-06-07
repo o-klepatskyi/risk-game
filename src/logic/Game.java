@@ -93,12 +93,11 @@ public class Game {
     }
 
     private void start() {
+        gameMap = new GameMap(this);
+        gameWindow = new GameWindow(this);
+
         initContinents();
         pickFirstPlayer();
-
-        gameMap = new GameMap(this);
-        gameMap.setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
-        gameWindow = new GameWindow(this);
 
         Log.initLog();
         Log.write("Game started");
@@ -361,6 +360,7 @@ public class Game {
         setBonus();
 
         reinforcePhase();
+        gameWindow.updatePhase();
     }
 
     private boolean checkIfPlayerOnline() {
@@ -380,29 +380,26 @@ public class Game {
 
     private void checkForGameOver() {
         removeDeadPlayers();
-        if(players.size() == 1 || (isMultiplayer && manager.networkMode == NetworkMode.SERVER && manager.server.userNames.size() == 1)) {
-            if (isMultiplayer && manager.networkMode == NetworkMode.SERVER && manager.server.userNames.size() == 1) {
-                JOptionPane.showMessageDialog(null,
-                        "You are the only player left on the server.",
-                        "No players connected.",
-                        JOptionPane.ERROR_MESSAGE);
-            }
+        if(players.size() == 1) {
             Log.write("GAME OVER!!!");
             Log.write(currentPlayer.getName() + " IS A WINNER");
 
-
-            if (isMultiplayer) {
-                if (manager.networkMode == NetworkMode.SERVER) {
-                    try {
-                        manager.server.broadcast(new Message(MessageType.GAME_OVER));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                openGameOverMenu();
-            }
+            openGameOverMenu();
         }
+        else if (isMultiplayer && manager.networkMode == NetworkMode.SERVER) {
+            if (!anyBotsLeft() && manager.server.userNames.size() != players.size())
+            JOptionPane.showMessageDialog(null,
+                    "You are the only player left on the server.",
+                    "No players connected.",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private boolean anyBotsLeft() {
+        for (Player p : players) {
+            if (p.isBot()) return true;
+        }
+        return false;
     }
 
     public void openGameOverMenu() {

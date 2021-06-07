@@ -53,8 +53,6 @@ public class GameWindow extends JPanel {
         gbc.gridx = 1;
         gameMap = game.getGameMap();
         this.add(gameMap, gbc);
-
-        updatePhase();
     }
 
     public void updatePhase() {

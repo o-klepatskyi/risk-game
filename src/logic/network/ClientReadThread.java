@@ -109,6 +109,16 @@ public class ClientReadThread extends Thread {
                 if (type == FORTIFY) {
                     client.manager.game.getGameWindow().fortify(response.src, response.dst, response.troops);
                 }
+                if(type == SKIP_MOVE) {
+                    JOptionPane.showMessageDialog(null,
+                            "Player " + client.manager.game.getCurrentPlayer().getName() + " has lost connection. Skipping his move.",
+                            "Player disconnected.",
+                            JOptionPane.ERROR_MESSAGE);
+                    client.manager.game.nextPlayerTurn();
+                }
+                if (type == GAME_OVER) {
+                    client.manager.openGameOverMenu();
+                }
             }
         } catch (SocketException ex) {
             System.err.println("Socket closed.");

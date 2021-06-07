@@ -11,7 +11,7 @@ public class Server {
     public boolean isClosed = false;
     public final int port;
     MultiplayerManager manager;
-    private final Set<String> userNames = new HashSet<>();
+    public final Set<String> userNames = new HashSet<>();
     private final Set<UserThread> userThreads = new HashSet<>();
 
     public Server(int port, MultiplayerManager manager) {

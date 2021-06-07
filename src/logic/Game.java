@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 
 import static gui.game_window.GameWindow.HEIGHT;
 import static gui.game_window.GameWindow.WIDTH;
-// todo bug with menu when name is occupied
+
 public class Game {
     private final ArrayList<Player> players;
     private final int numberOfPlayers;
@@ -350,6 +350,20 @@ public class Game {
             index = 0;
 
         currentPlayer = players.get(index);
+
+        if (currentPlayer.isBot()) {
+            nextPlayerTurn(); // todo: bot integration
+            return;
+        }
+        if (isMultiplayer && manager.networkMode == NetworkMode.SERVER && !manager.server.userNames.contains(currentPlayer.getName())) {
+            try {
+                manager.server.broadcast(new Message(MessageType.SKIP_MOVE));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
         checkForGameOver();
         Log.write(currentPlayer.getName() + " turn");
         setBonus();
@@ -359,24 +373,37 @@ public class Game {
 
     private void checkForGameOver() {
         removeDeadPlayers();
-        if(players.size() == 1) {
+        if(players.size() == 1 || (isMultiplayer && manager.networkMode == NetworkMode.SERVER && manager.server.userNames.size() == 1)) {
+            if (isMultiplayer && manager.networkMode == NetworkMode.SERVER && manager.server.userNames.size() == 1) {
+                JOptionPane.showMessageDialog(null,
+                        "You are the only player left on the server.",
+                        "No players connected.",
+                        JOptionPane.ERROR_MESSAGE);
+            }
             Log.write("GAME OVER!!!");
             Log.write(currentPlayer.getName() + " IS A WINNER");
-            JFrame frame = gameWindow.getFrame();
-            gameWindow.setVisible(false);
-            frame.removeAll();
-            frame.add(new GameOverWindow(frame, currentPlayer));
-            frame.revalidate();
-            frame.repaint();
-            frame.pack();
-            if (isMultiplayer && manager.networkMode == NetworkMode.SERVER) {
-                try {
-                    manager.server.broadcast(new Message(MessageType.CONNECTION_CLOSED_BY_ADMIN));
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+
+            if (isMultiplayer) {
+                if (manager.networkMode == NetworkMode.SERVER) {
+                    try {
+                        manager.server.broadcast(new Message(MessageType.GAME_OVER));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+            } else {
+                openGameOverMenu();
             }
         }
+    }
+
+    public void openGameOverMenu() {
+        JFrame frame = gameWindow.getFrame();
+        gameWindow.setVisible(false);
+        frame.remove(gameWindow);
+        frame.add(new GameOverWindow(frame, currentPlayer));
+        frame.pack();
     }
 
     private void setBonus() {

@@ -18,5 +18,7 @@ public enum MessageType {
     FORTIFY,
     END_ATTACK,
     END_REINFORCE,
-    END_FORTIFY
+    END_FORTIFY,
+    SKIP_MOVE,
+    GAME_OVER
 }

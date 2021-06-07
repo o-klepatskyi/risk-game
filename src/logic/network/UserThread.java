@@ -67,7 +67,8 @@ public class UserThread extends Thread {
             }
         } catch (Exception ex) {
             System.err.println("Error in UserThread: " + ex.getMessage());
-            ex.printStackTrace();
+            //ex.printStackTrace();
+            server.removeUser(username, this);
         }
     }
 
@@ -86,7 +87,7 @@ public class UserThread extends Thread {
      * Sends a message to the client.
      */
     void sendMessage(Message message) throws IOException {
-        System.out.println(username + " sends: " + message);
+        System.out.println(username + " thread sends: " + message);
         objOutputStream.writeObject(message);
     }
 }

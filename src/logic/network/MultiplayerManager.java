@@ -104,8 +104,13 @@ public final class MultiplayerManager {
     public void startGame(Graph gameGraph) {
         game = new Game(playerMenu.getPlayers(), gameGraph, this);
         frame.remove(playerMenu);
+        game.getGameWindow().setFrame(frame);
         frame.add(game.getGameWindow());
         frame.pack();
         playerMenu = null;
+    }
+
+    public void openGameOverMenu() {
+        game.openGameOverMenu();
     }
 }

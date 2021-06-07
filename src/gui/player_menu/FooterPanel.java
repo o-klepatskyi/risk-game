@@ -2,6 +2,7 @@ package gui.player_menu;
 
 import gui.main_menu.MainMenu;
 import util.res.Fonts;
+import util.res.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,8 +64,14 @@ class FooterPanel extends JPanel {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         if (addPlayerButton.isEnabled()) {
+                            SoundPlayer.buttonClickedSound();
                             parent.addPlayer();
                         }
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        SoundPlayer.optionChosenSound();
                     }
                 });
             }
@@ -85,8 +92,14 @@ class FooterPanel extends JPanel {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         if (startButton.isEnabled()) {
+                            SoundPlayer.buttonClickedSound();
                             parent.startGame();
                         }
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        SoundPlayer.optionChosenSound();
                     }
                 });
             }
@@ -101,7 +114,13 @@ class FooterPanel extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                SoundPlayer.buttonClickedSound();
                 closeAction();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
             }
         });
         return backButton;

@@ -25,7 +25,7 @@ public class UserThread extends Thread {
             Message userNameMsg = (Message) objectInputStream.readObject();
 
             if (userNameMsg.type != USERNAME) {
-                sendMessage(new Message(CLOSE_CONNECTION));
+                sendMessage(new Message(CLOSE_CONNECTION_BY_CLIENT));
             } else if (userNameMsg.username.equals(MultiplayerManager.BOT_NAME)) {
                 sendMessage(new Message(INVALID_NAME));
             } else if(server.hasUser(userNameMsg.username)) {
@@ -58,18 +58,22 @@ public class UserThread extends Thread {
                         type == FORTIFY) {
                         server.broadcast(clientMessage, this);
                     }
-                } while (clientMessage.type != CLOSE_CONNECTION);
+                } while (clientMessage.type != CLOSE_CONNECTION_BY_CLIENT);
 
-
-                server.removeUser(username, this);
-                socket.close();
-                System.out.println("User '" + username + "' left server.");
             }
         } catch (Exception ex) {
             System.err.println("Error in UserThread: " + ex.getMessage());
             //ex.printStackTrace();
             server.removeUser(username, this);
         }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            System.out.println("Couldn't close the socket in thread " + username);
+            //e.printStackTrace();
+        }
+        server.removeUser(username, this);
+        System.out.println("User '" + username + "' left server.");
     }
 
     /**

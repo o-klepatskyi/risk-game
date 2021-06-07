@@ -32,23 +32,23 @@ public class ClientReadThread extends Thread {
         } catch (IOException | ClassNotFoundException exception) {
             exception.printStackTrace();
             showConnectionErrorMessage();
-            client.close();
+            client.close(CONNECTION_ERROR);
             return;
         }
 
         if (first_response == null || first_response.type == NAME_ERROR) {
             showDuplicateNameError();
-            client.close();
+            client.close(NAME_ERROR);
             return;
         }
         if (first_response.type == INVALID_NAME) {
             showInvalidNameError();
-            client.close();
+            client.close(INVALID_NAME);
             return;
         }
         if (first_response.type != OK) {
             showConnectionErrorMessage();
-            client.close();
+            client.close(CONNECTION_ERROR);
             return;
         }
         client.openPlayerMenu();
@@ -93,8 +93,8 @@ public class ClientReadThread extends Thread {
                     client.manager.startGame(response.gameGraph);
                 }
                 if (type == CONNECTION_CLOSED_BY_ADMIN) {
-                    client.sendMessage(new Message(CLOSE_CONNECTION));
-                    client.close();
+                    client.sendMessage(new Message(CLOSE_CONNECTION_BY_CLIENT));
+                    client.close(CONNECTION_CLOSED_BY_ADMIN);
                     break;
                 }
                 if (type == REINFORCE) {
@@ -110,18 +110,23 @@ public class ClientReadThread extends Thread {
                     client.manager.game.getGameWindow().fortify(response.src, response.dst, response.troops);
                 }
                 if(type == SKIP_MOVE) {
+                    client.manager.game.nextPlayerTurn();
                     JOptionPane.showMessageDialog(null,
                             "Player " + client.manager.game.getCurrentPlayer().getName() + " has lost connection. Skipping his move.",
                             "Player disconnected.",
                             JOptionPane.ERROR_MESSAGE);
-                    client.manager.game.nextPlayerTurn();
                 }
                 if (type == GAME_OVER) {
                     client.manager.openGameOverMenu();
                 }
+                if (type == USER_LEFT) {
+                    client.manager.skipDisconnectedUserMove(response.username);
+                }
             }
         } catch (SocketException ex) {
             System.err.println("Socket closed.");
+            client.close(SERVER_CLOSED_ERROR);
+
         }
         catch (IOException | ClassNotFoundException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException | DstNotStatedException ex) {
             System.out.println("Error reading from server: " + ex.getMessage());

@@ -1,7 +1,7 @@
 package logic.network;
 
 public enum MessageType {
-    CLOSE_CONNECTION,
+    CLOSE_CONNECTION_BY_CLIENT,
     NAME_ERROR,
     OK,
     USERNAME,
@@ -20,5 +20,8 @@ public enum MessageType {
     END_REINFORCE,
     END_FORTIFY,
     SKIP_MOVE,
-    GAME_OVER
+    GAME_OVER,
+    USER_LEFT,
+    CONNECTION_ERROR,
+    SERVER_CLOSED_ERROR
 }

@@ -66,13 +66,13 @@ public class Client {
         }
     }
 
-    public void close() {
+    public void close(MessageType cause) {
         try {
             socket.close();
             openMainMenu();
             JOptionPane.showMessageDialog(null,
-                    "Connection closed",
-                    "Lost connection",JOptionPane.ERROR_MESSAGE);
+                    "Connection closed: " + cause,
+                    "Lost connection with server",JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {
             System.err.println("Error writing to server: " + ex.getMessage());
         }
@@ -86,11 +86,9 @@ public class Client {
     }
 
     public void openMainMenu() {
-        System.out.println("open main menu");
-        if (manager.frame.isAncestorOf(manager.playerMenu)) {
-            manager.frame.remove(manager.playerMenu);
-        }
+        manager.frame.getContentPane().removeAll();
         manager.frame.add(new MainMenu(manager.frame));
+        manager.frame.getContentPane().repaint();
         manager.frame.pack();
     }
 }

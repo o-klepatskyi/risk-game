@@ -43,7 +43,6 @@ public class SoundPlayer {
 
     public static void buttonClickedSound() {
         currentClip = SoundPlayer.play(getInputStream("sounds/button_clicked.wav"));
-        System.out.println(currentClip + " " + muted);
         if(currentClip != null)
             currentClip.start();
     }

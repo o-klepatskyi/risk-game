@@ -350,25 +350,32 @@ public class Game {
             index = 0;
 
         currentPlayer = players.get(index);
-
         if (currentPlayer.isBot()) {
             nextPlayerTurn(); // todo: bot integration
             return;
         }
-        if (isMultiplayer && manager.networkMode == NetworkMode.SERVER && !manager.server.userNames.contains(currentPlayer.getName())) {
+        if (!checkIfPlayerOnline()) return;
+        checkForGameOver();
+
+        Log.write(currentPlayer.getName() + " turn");
+        setBonus();
+
+        reinforcePhase();
+    }
+
+    private boolean checkIfPlayerOnline() {
+        if (    isMultiplayer &&
+                manager.networkMode == NetworkMode.SERVER &&
+                !currentPlayer.isBot() &&
+                !manager.server.userNames.contains(currentPlayer.getName())) {
             try {
                 manager.server.broadcast(new Message(MessageType.SKIP_MOVE));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return;
+            return false;
         }
-
-        checkForGameOver();
-        Log.write(currentPlayer.getName() + " turn");
-        setBonus();
-
-        reinforcePhase();
+        return true;
     }
 
     private void checkForGameOver() {
@@ -404,6 +411,7 @@ public class Game {
         frame.remove(gameWindow);
         frame.add(new GameOverWindow(frame, currentPlayer));
         frame.pack();
+        if (isMultiplayer) manager.closeServer();
     }
 
     private void setBonus() {

@@ -47,7 +47,7 @@ public class Server {
     /**
      * Delivers a message from one user to others (broadcasting)
      */
-    void broadcast(Message message, UserThread excludeUser) throws IOException {
+    public void broadcast(Message message, UserThread excludeUser) throws IOException {
         for (UserThread userThread : userThreads) {
             if (userThread != excludeUser) {
                 userThread.sendMessage(message);

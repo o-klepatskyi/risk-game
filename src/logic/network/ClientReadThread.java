@@ -21,7 +21,6 @@ public class ClientReadThread extends Thread {
             objectInputStream = new ObjectInputStream(input);
         } catch (IOException ex) {
             System.err.println("Error getting client input stream: " + ex.getMessage());
-            //ex.printStackTrace();
         }
     }
 
@@ -99,7 +98,7 @@ public class ClientReadThread extends Thread {
                 if (type == REINFORCE) {
                     client.manager.game.reinforce(response.troops, response.src);
                 }
-                if (type == END_REINFORCE || response.type == END_ATTACK) {
+                if (type == END_REINFORCE || response.type == END_ATTACK || response.type == END_FORTIFY) {
                     client.manager.game.getGameWindow().nextPhase();
                 }
                 if (type == ATTACK) {
@@ -109,9 +108,10 @@ public class ClientReadThread extends Thread {
                     client.manager.game.getGameWindow().fortify(response.src, response.dst, response.troops);
                 }
                 if(type == SKIP_MOVE) {
+                    String username = client.manager.game.getCurrentPlayer().getName();
                     client.manager.game.nextPlayerTurn();
                     JOptionPane.showMessageDialog(null,
-                            "Player " + client.manager.game.getCurrentPlayer().getName() + " has lost connection. Skipping his move.",
+                            "Player " + username + " has lost connection. Skipping his move.",
                             "Player disconnected.",
                             JOptionPane.ERROR_MESSAGE);
                 }

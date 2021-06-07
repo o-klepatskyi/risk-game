@@ -34,7 +34,6 @@ public class GameMap extends JPanel {
         this.game = game;
         panel = this;
         buttons = new ArrayList<>();
-        //drawField();
 
         panel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -54,7 +53,7 @@ public class GameMap extends JPanel {
      * Call this method after any changes applied to map(attack, fortify, reinforcement)
      * Updates map
      */
-    public void drawField(){
+    public synchronized void drawField(){
         clearField();
         buttons.clear();
 
@@ -92,10 +91,6 @@ public class GameMap extends JPanel {
             game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
         }
 
-//        if (game.getGameWindow() != null && game.isMultiplayer) {
-//            game.getGameWindow().repaint();
-//            game.getGameWindow().revalidate();
-//        }
         revalidate();
         repaint();
     }
@@ -170,7 +165,6 @@ public class GameMap extends JPanel {
         for(JButton button : buttons){
             button.addMouseListener(new MouseListener() {
                 public void mouseClicked(MouseEvent e) {
-                    System.out.println("Button clicked:\n" + game.findTerritoryInGraph(button.getName()));
                     if(!buttonClicked && button.getBackground().equals(game.getCurrentPlayer().getColor())) {
                         resetButtons();
                         highlightButton(button, "src");

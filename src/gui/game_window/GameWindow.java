@@ -56,6 +56,7 @@ public class GameWindow extends JPanel {
     }
 
     public void updatePhase() {
+        System.out.println("UPDATING WINDOW");
         GameOption gameOption = game.getGameOption();
         updateSidePanel(gameOption);
         gameFlow.updatePhase(game.getCurrentPlayer(), gameOption);

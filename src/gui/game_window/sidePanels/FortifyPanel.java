@@ -121,10 +121,12 @@ public class FortifyPanel extends SidePanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
-                gameWindow.nextPhase();
+
                 if (gameWindow.game.isMultiplayer) {
-                    gameWindow.game.manager.sendMessage(new Message(MessageType.END_REINFORCE));
+                    gameWindow.game.manager.sendMessage(new Message(MessageType.END_FORTIFY));
                 }
+
+                gameWindow.nextPhase(); // todo: the same here
             }
         });
         add(skipButton);
@@ -135,11 +137,11 @@ public class FortifyPanel extends SidePanel {
         try {
             int troopsToTransfer = (int) troopsToTransferSpinner.getValue();
             Territory src = Territory.getIdentical(this.src), dst = Territory.getIdentical(this.dst);
-            gameWindow.fortify(troopsToTransfer);
 
             if (gameWindow.game.isMultiplayer) {
                 gameWindow.game.manager.sendMessage(new Message(MessageType.FORTIFY, src,dst, troopsToTransfer));
             }
+            gameWindow.fortify(troopsToTransfer); // todo: test this and if needed put before sending package
         } catch (DstNotStatedException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException e) {
             e.printStackTrace();
         }

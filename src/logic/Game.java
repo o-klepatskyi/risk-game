@@ -88,7 +88,7 @@ public class Game {
         initializeTerritories();
         Graph gameGraph = new Graph();
         createGraphFromTerritories(gameGraph);
-        distributeTerritories(gameGraph, numberOfPlayers, players);
+        distributeTerritories(numberOfPlayers, players);
         return gameGraph;
     }
 
@@ -341,6 +341,7 @@ public class Game {
      * removes dead player and gives turn to next player
      */
     public void nextPlayerTurn() {
+        System.out.println("Old player: " + currentPlayer);
         removeDeadPlayers();
 
         int index = players.indexOf(currentPlayer);
@@ -349,11 +350,15 @@ public class Game {
             index = 0;
 
         currentPlayer = players.get(index);
+
+        System.out.println("Current player: " + currentPlayer);
         if (currentPlayer.isBot()) {
             nextPlayerTurn(); // todo: bot integration
             return;
         }
+
         if (!checkIfPlayerOnline()) return;
+        System.out.println("Current player is online OR you are not the server.");
         checkForGameOver();
 
         Log.write(currentPlayer.getName() + " turn");
@@ -366,13 +371,19 @@ public class Game {
     private boolean checkIfPlayerOnline() {
         if (    isMultiplayer &&
                 manager.networkMode == NetworkMode.SERVER &&
-                !currentPlayer.isBot() &&
+                !currentPlayer.isBot() && // todo: check if this is necessary
                 !manager.server.userNames.contains(currentPlayer.getName())) {
             try {
-                manager.server.broadcast(new Message(MessageType.SKIP_MOVE));
+                manager.server.broadcast(new Message(MessageType.SKIP_MOVE), manager.server.getThreadByName(manager.client.username));
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            String username = currentPlayer.getName();
+            nextPlayerTurn();
+            JOptionPane.showMessageDialog(null,
+                    "Player " + username  + " has lost connection. Skipping his move.",
+                    "Player disconnected.",
+                    JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -387,7 +398,7 @@ public class Game {
             openGameOverMenu();
         }
         else if (isMultiplayer && manager.networkMode == NetworkMode.SERVER) {
-            if (!anyBotsLeft() && manager.server.userNames.size() != players.size())
+            if (!anyBotsLeft() && manager.server.userNames.size() == 1)
             JOptionPane.showMessageDialog(null,
                     "You are the only player left on the server.",
                     "No players connected.",
@@ -417,7 +428,7 @@ public class Game {
         currentPlayer.setBonus(bonus);
         continents = new ArrayList<>();
         continents.add("From territories - " + bonus);
-        // check for continents bonus
+
         ArrayList<Territory> territories = gameGraph.getTerritories(currentPlayer);
         if(territories.containsAll(southAmerica)) {
             currentPlayer.setBonus(currentPlayer.getBonus() + 2);
@@ -559,7 +570,7 @@ public class Game {
     }
 
 
-    private static void distributeTerritories(Graph gameGraph, int numberOfPlayers, ArrayList<Player> players) {
+    private static void distributeTerritories(int numberOfPlayers, ArrayList<Player> players) {
         int territoriesLeft = numberOfTerritories;
         for(int i = 0; i < numberOfPlayers; i++) {
             int playerTerritoriesNumber = numberOfTerritories / numberOfPlayers;
@@ -611,7 +622,6 @@ public class Game {
         Random rand = new Random();
         return t.get(rand.nextInt(t.size()));
     }
-
 
     private void removeDeadPlayers() {
         players.removeIf(this::playerIsDead);

@@ -56,14 +56,15 @@ public class UserThread extends Thread {
                         type == END_REINFORCE ||
                         type == END_ATTACK ||
                         type == ATTACK ||
-                        type == FORTIFY) {
+                        type == FORTIFY ||
+                        type == END_FORTIFY) {
                         server.broadcast(clientMessage, this);
                     }
                 } while (clientMessage.type != CLOSE_CONNECTION_BY_CLIENT);
 
             }
         } catch (Exception ex) {
-            System.err.println("Error in UserThread: " + ex.getMessage());
+            System.err.println("Error in UserThread " + username + ": " + ex.getMessage());
             //ex.printStackTrace();
             server.removeUser(username, this);
         }

@@ -124,10 +124,12 @@ public class ClientReadThread extends Thread {
             }
         } catch (SocketException ex) {
             System.err.println("Socket closed.");
-            client.close(SERVER_CLOSED_ERROR);
-
-        }
-        catch (IOException | ClassNotFoundException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException | DstNotStatedException ex) {
+            if (!client.isClosed) {
+                client.close(SERVER_CLOSED_ERROR);
+            }
+        } catch(EOFException ex) {
+            System.err.println(ex.getMessage());
+        } catch (IOException | ClassNotFoundException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException | DstNotStatedException ex) {
             System.out.println("Error reading from server: " + ex.getMessage());
             ex.printStackTrace();
         }

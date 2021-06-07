@@ -25,7 +25,7 @@ public class UserThread extends Thread {
             Message userNameMsg = (Message) objectInputStream.readObject();
 
             if (userNameMsg == null || userNameMsg.type != USERNAME) {
-                sendMessage(new Message(CLOSE_CONNECTION_BY_CLIENT));
+                sendMessage(new Message(CONNECTION_CLOSED_BY_ADMIN));
             } else if (userNameMsg.username.equals(MultiplayerManager.BOT_NAME)) {
                 sendMessage(new Message(INVALID_NAME));
             } else if(server.hasUser(userNameMsg.username)) {

@@ -18,6 +18,8 @@ public class Client {
     private Socket socket;
     final MultiplayerManager manager;
 
+    boolean isClosed = false;
+
     public Client(String hostname, int port, String userName, final MultiplayerManager manager) {
         this.hostname = hostname;
         this.port = port;
@@ -68,6 +70,7 @@ public class Client {
 
     public void close(MessageType cause) {
         try {
+            isClosed = true;
             socket.close();
             openMainMenu();
             JOptionPane.showMessageDialog(null,

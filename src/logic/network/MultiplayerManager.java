@@ -83,10 +83,11 @@ public final class MultiplayerManager {
     public static final String BOT_NAME = "Bot";
 
     public void closeClient() {
-        sendMessage(new Message(CLOSE_CONNECTION_BY_CLIENT));
-        client.close(CLOSE_CONNECTION_BY_CLIENT);
         if (networkMode == SERVER) {
             closeServer();
+        } else {
+            sendMessage(new Message(CLOSE_CONNECTION_BY_CLIENT));
+            client.close(CLOSE_CONNECTION_BY_CLIENT);
         }
     }
 

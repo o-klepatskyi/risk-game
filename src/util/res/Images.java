@@ -1,6 +1,6 @@
 package util.res;
 
-import logic.maps.MapNames;
+import logic.maps.MapType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,8 +30,8 @@ public abstract class Images {
         return new ImageIcon(Images.class.getResource(path)).getImage();
     }
 
-    public static Image getMapImage(MapNames name) {
-        if (name == MapNames.WORLD_MAP) {
+    public static Image getMapImage(MapType name) {
+        if (name == MapType.WORLD_MAP) {
             return MAP_EARTH;
         }
         return null;

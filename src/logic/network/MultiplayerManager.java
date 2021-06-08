@@ -2,8 +2,8 @@ package logic.network;
 
 import gui.player_menu.PlayerMenu;
 import logic.Game;
-import logic.Graph;
 import logic.Player;
+import logic.maps.MapType;
 import logic.maps.WorldMap;
 
 import javax.swing.*;
@@ -94,7 +94,7 @@ public final class MultiplayerManager {
 
     public void initGame() {
         players = new ArrayList<>(getPlayers());
-        logic.maps.Map map = new WorldMap(); // todo: replace with getting it from PlayerMenu
+        logic.maps.Map map = playerMenu.getSelectedMap();
         map.initGraph(players);
         try {
             server.broadcast(new Message(START_GAME, map));

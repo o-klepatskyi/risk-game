@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class WorldMap extends Map {
 
     public WorldMap() {
-        name = MapNames.WORLD_MAP.name;
+        type = MapType.WORLD_MAP;
 
         String[] namesOfTerritories = new String[] {
                 "Afghanistan", "Alaska", "Alberta", "Argentina", "Brazil", "Central America",

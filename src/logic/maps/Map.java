@@ -11,7 +11,7 @@ public abstract class Map implements Serializable {
     protected int numberOfTerritories;
     protected ArrayList<Continent> continents;
     protected Graph gameGraph = new Graph();
-    protected String name;
+    protected MapType type;
 
     public Graph initGraph(ArrayList<Player> players) {
         if (players.size() < 2) throw new IllegalArgumentException();
@@ -91,6 +91,6 @@ public abstract class Map implements Serializable {
     }
 
     public String getName() {
-        return name;
+        return type.name;
     }
 }

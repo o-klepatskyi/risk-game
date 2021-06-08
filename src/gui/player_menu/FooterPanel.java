@@ -1,6 +1,7 @@
 package gui.player_menu;
 
 import gui.main_menu.MainMenu;
+import logic.maps.MapType;
 import util.res.Fonts;
 import util.res.SoundPlayer;
 
@@ -17,6 +18,7 @@ class FooterPanel extends JPanel {
 
     private JButton addPlayerButton;
     private JButton startButton;
+    private JComboBox<MapType> comboBox;
     private final PlayerMenu parent;
     private JFrame frame;
     private JPanel menu = this;
@@ -32,6 +34,10 @@ class FooterPanel extends JPanel {
         this.parent = parent;
         this.frame = frame;
 
+        JLabel mapLabel = new JLabel("Map: ");
+        mapLabel.setFont(Fonts.LABEL_FONT.deriveFont(20f));
+        add(mapLabel);
+        add(getMapComboBox());
         add(getAddPlayerButton());
         add(getStartButton());
         add(getBackButton());
@@ -39,11 +45,22 @@ class FooterPanel extends JPanel {
         setVisible(true);
     }
 
+    public JComboBox getMapComboBox() {
+        if (comboBox == null) {
+            comboBox = new JComboBox<>(MapType.values());
+            comboBox.setFont(Fonts.BUTTON_FONT.deriveFont(18f));
+            comboBox.setPreferredSize(new Dimension(WIDTH/5+10, HEIGHT-10));
+            comboBox.setEnabled(true);
+            comboBox.setEditable(false);
+        }
+        return comboBox;
+    }
+
     public JButton getAddPlayerButton() {
         if (addPlayerButton == null) {
             addPlayerButton = new JButton("Add player");
-            addPlayerButton.setPreferredSize(new Dimension(WIDTH/4, HEIGHT-10));
-            addPlayerButton.setFont(BUTTON_FONT);
+            addPlayerButton.setPreferredSize(new Dimension(WIDTH/5+10, HEIGHT-10));
+            addPlayerButton.setFont(BUTTON_FONT.deriveFont(18f));
             if (parent.isMultiplayer) {
                 addPlayerButton.setText("Add bot");
                 if (parent.isServer) {
@@ -82,8 +99,8 @@ class FooterPanel extends JPanel {
     public JButton getStartButton() {
         if (startButton == null) {
             startButton = new JButton("Start game");
-            startButton.setPreferredSize(new Dimension(WIDTH/4, HEIGHT-10));
-            startButton.setFont(BUTTON_FONT);
+            startButton.setPreferredSize(new Dimension(WIDTH/5+10, HEIGHT-10));
+            startButton.setFont(BUTTON_FONT.deriveFont(18f));
             startButton.setEnabled(false);
             if (parent.isMultiplayer && !parent.isServer) {
                 startButton.setToolTipText("Only room owner can start the game");
@@ -109,8 +126,8 @@ class FooterPanel extends JPanel {
 
     private JButton getBackButton() {
         JButton backButton = new JButton("Back");
-        backButton.setPreferredSize(new Dimension(WIDTH/4, HEIGHT-10));
-        backButton.setFont(BUTTON_FONT);
+        backButton.setPreferredSize(new Dimension(WIDTH/5+10, HEIGHT-10));
+        backButton.setFont(BUTTON_FONT.deriveFont(18f));
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

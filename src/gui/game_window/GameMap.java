@@ -11,9 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import static gui.game_window.GameWindow.HEIGHT;
-import static gui.game_window.GameWindow.WIDTH;
-
 // todo: attacking with one troop
 // todo: connection while game is active
 // todo: removing player when he is offline while playing
@@ -30,7 +27,7 @@ public class GameMap extends JPanel {
 
     public GameMap(Game game) {
         this.setLayout(null);
-        setPreferredSize(new Dimension((int) (WIDTH*0.75), (int) (HEIGHT*0.9)));
+        setPreferredSize(new Dimension((int) (GameWindow.WIDTH*0.75), (int) (GameWindow.HEIGHT*0.9)));
         this.game = game;
         panel = this;
         buttons = new ArrayList<>();

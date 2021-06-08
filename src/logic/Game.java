@@ -624,7 +624,25 @@ public class Game {
     }
 
     private void removeDeadPlayers() {
-        players.removeIf(this::playerIsDead);
+        for (Player p : players) {
+            if (playerIsDead(p)) {
+                players.remove(p);
+                if (isMultiplayer && manager.client.username.equals(p.getName())) {
+                    showEliminatedMessage();
+                }
+            }
+        }
+    }
+
+    private void showEliminatedMessage() {
+        Object[] possibleValues = { "Stay in game", "Leave"};
+        Object selectedValue = JOptionPane.showInputDialog(null,
+                "You have been eliminated from game. Stay here?", "Game over",
+                JOptionPane.INFORMATION_MESSAGE, null,
+                possibleValues, possibleValues[0]);
+        if (selectedValue.equals(possibleValues[1])) {
+            manager.closeClient();
+        }
     }
 
     private boolean playerIsDead(Player player) {

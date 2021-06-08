@@ -3,7 +3,7 @@ package logic.maps;
 import java.io.Serializable;
 
 public enum MapType implements Serializable {
-    WORLD_MAP("World"),
+    EARTH("Earth"),
     TEST("Test");
 
     public final String name;
@@ -23,10 +23,11 @@ public enum MapType implements Serializable {
     }
 
     public static Map getMap(MapType type) {
-        if (type == WORLD_MAP) {
-            return new WorldMap();
+        switch(type) {
+            case EARTH: return new WorldMap();
+            case TEST: return new TestMap();
+            default: return null;
         }
-        return null;
     }
 
     @Override

@@ -389,7 +389,7 @@ public class Game {
     private void setBonus() {
         int bonus = gameGraph.getTerritories(currentPlayer).size() / 3;
         bonus = Math.max(bonus, 3);
-        currentPlayer.setBonus(bonus);
+
         continentLabels = new ArrayList<>();
         continentLabels.add("From territories - " + bonus);
 
@@ -398,9 +398,10 @@ public class Game {
         for (Continent continent : map.getContinents()) {
             if (territories.containsAll(continent.getTerritories())) {
                 continentLabels.add(continent.name + " - " + continent.bonus);
+                bonus += continent.bonus;
             }
         }
-
+        currentPlayer.setBonus(bonus);
         Log.write(currentPlayer.getName() + " receives bonus: " + "(" + currentPlayer.getBonus() + ")");
     }
 
@@ -439,7 +440,6 @@ public class Game {
     }
 
     private boolean playerIsDead(Player player) {
-//        System.out.println(gameGraph.getTerritories());
         for(Territory territory : gameGraph.getTerritories()) {
             if(territory.getOwner().equals(player))
                 return false;

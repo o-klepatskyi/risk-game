@@ -31,9 +31,10 @@ public abstract class Images {
     }
 
     public static Image getMapImage(MapType name) {
-        if (name == MapType.WORLD_MAP) {
-            return MAP_EARTH;
+        switch (name) {
+            case EARTH: return MAP_EARTH;
+            case TEST: return GAME_MAP_BG;
+            default: return null;
         }
-        return null;
     }
 }

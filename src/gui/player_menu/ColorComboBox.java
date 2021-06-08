@@ -8,6 +8,7 @@ import logic.network.MultiplayerManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
 class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
@@ -16,7 +17,7 @@ class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
     private final ColorModel colorModel;
     private MultiplayerManager manager;
 
-    ColorComboBox(final ColorModel colorModel, Color color, MultiplayerManager manager) throws Exception {
+    ColorComboBox(final ColorModel colorModel, Color color, MultiplayerManager manager) {
         this.colorModel = colorModel;
         this.manager = manager;
         setSize(SIZE, SIZE);
@@ -28,7 +29,7 @@ class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
         if (playerColor != null && colorModel.getAvailableColors().contains(color)) {
             oldSelectedColor = playerColor;
             colorModel.chooseColor(playerColor);
-        } else throw new Exception("Color is invalid");
+        } else throw new InvalidParameterException("Color is invalid");
 
         addActionListener(this);
     }

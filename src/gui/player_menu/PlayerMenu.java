@@ -47,7 +47,7 @@ public class PlayerMenu extends JPanel {
         colorModel = new ColorModel();
 
         this.frame = frame;
-        fp = new FooterPanel(this, frame);
+        fp = new FooterPanel(this, frame, multiplayerManager);
         Dimension size = new Dimension(WIDTH, HEIGHT);
         setPreferredSize(size);
         setMinimumSize(size);
@@ -263,6 +263,15 @@ public class PlayerMenu extends JPanel {
     }
 
     public Map getSelectedMap() {
-        return MapType.getMap((MapType) fp.getMapComboBox().getSelectedItem());
+        return MapType.getMap((getSelectedMapType()));
+    }
+
+    public MapType getSelectedMapType() {
+        return (MapType) fp.getMapComboBox().getSelectedItem();
+    }
+
+    public void changeMap(MapType mapType) {
+        fp.getMapComboBox().setSelectedItem(mapType);
+        updatePanels();
     }
 }

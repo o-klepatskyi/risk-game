@@ -125,4 +125,14 @@ public final class MultiplayerManager {
             game.nextPlayerTurn();
         }
     }
+
+    public void changeMap(MapType mapType) {
+        if (playerMenu != null) {
+            playerMenu.changeMap(mapType);
+        }
+    }
+
+    public MapType getCurrentMapInComboBox() {
+        return playerMenu.getSelectedMapType();
+    }
 }

@@ -37,6 +37,7 @@ public class UserThread extends Thread {
                 sendMessage(new Message(OK));
 
                 updateUsers(username);
+                sendMessage(new Message(MAP_CHANGED, server.manager.getCurrentMapInComboBox()));
 
                 Message clientMessage;
 
@@ -57,7 +58,8 @@ public class UserThread extends Thread {
                         type == END_ATTACK ||
                         type == ATTACK ||
                         type == FORTIFY ||
-                        type == END_FORTIFY) {
+                        type == END_FORTIFY ||
+                        type == MAP_CHANGED) {
                         server.broadcast(clientMessage, this);
                     }
                 } while (clientMessage.type != CLOSE_CONNECTION_BY_CLIENT);

@@ -24,4 +24,5 @@ public enum MessageType {
     PLAYER_LEFT_IN_GAME,
     CONNECTION_ERROR,
     SERVER_CLOSED_ERROR,
+    MAP_CHANGED
 }

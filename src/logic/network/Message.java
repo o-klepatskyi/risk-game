@@ -1,6 +1,7 @@
 package logic.network;
 
 import logic.*;
+import logic.maps.MapType;
 
 import java.io.Serializable;
 import java.security.InvalidParameterException;
@@ -76,6 +77,14 @@ public class Message implements Serializable {
         this.dst = dst;
         this.troops = troops;
     }
+
+    public Message(MessageType type, MapType mapType) {
+        if (type != MAP_CHANGED) throw new InvalidParameterException("Message type exception");
+        this.type = type;
+        this.mapType = mapType;
+    }
+    
+    public MapType mapType;
 
     public String toString() {
         String str = "Message[type= " + type;

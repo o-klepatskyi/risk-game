@@ -125,6 +125,9 @@ public class ClientReadThread extends Thread {
                             "Player disconnected.",
                             JOptionPane.ERROR_MESSAGE);
                 }
+                if (type == MAP_CHANGED) {
+                    client.manager.changeMap(response.mapType);
+                }
             }
         } catch (SocketException ex) {
             System.err.println("Socket closed.");

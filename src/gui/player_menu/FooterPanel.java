@@ -2,6 +2,7 @@ package gui.player_menu;
 
 import gui.main_menu.MainMenu;
 import logic.maps.MapType;
+import logic.network.MultiplayerManager;
 import util.res.Fonts;
 import util.res.SoundPlayer;
 
@@ -23,7 +24,7 @@ class FooterPanel extends JPanel {
     private JFrame frame;
     private JPanel menu = this;
 
-    FooterPanel(PlayerMenu parent, JFrame frame) {
+    FooterPanel(PlayerMenu parent, JFrame frame, MultiplayerManager manager) {
         setSize(WIDTH, HEIGHT);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setMaximumSize(new Dimension(WIDTH, HEIGHT));
@@ -37,7 +38,9 @@ class FooterPanel extends JPanel {
         JLabel mapLabel = new JLabel("Map: ");
         mapLabel.setFont(Fonts.LABEL_FONT.deriveFont(20f));
         add(mapLabel);
-        add(getMapComboBox());
+        comboBox = new MapComboBox(manager);
+        comboBox.setPreferredSize(new Dimension(WIDTH/5+10, HEIGHT-10));
+        add(comboBox);
         add(getAddPlayerButton());
         add(getStartButton());
         add(getBackButton());
@@ -46,13 +49,6 @@ class FooterPanel extends JPanel {
     }
 
     public JComboBox getMapComboBox() {
-        if (comboBox == null) {
-            comboBox = new JComboBox<>(MapType.values());
-            comboBox.setFont(Fonts.BUTTON_FONT.deriveFont(18f));
-            comboBox.setPreferredSize(new Dimension(WIDTH/5+10, HEIGHT-10));
-            comboBox.setEnabled(true);
-            comboBox.setEditable(false);
-        }
         return comboBox;
     }
 

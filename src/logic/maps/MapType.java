@@ -1,6 +1,8 @@
 package logic.maps;
 
-public enum MapType {
+import java.io.Serializable;
+
+public enum MapType implements Serializable {
     WORLD_MAP("World"),
     TEST("Test");
 

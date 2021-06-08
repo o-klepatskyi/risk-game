@@ -118,6 +118,7 @@ public final class MultiplayerManager {
 
     public void skipDisconnectedUserMove(String username) {
         if (game.getCurrentPlayer().getName().equals(username)) {
+            System.out.println("it is " + username +"'s move. Skipping it.");
             game.nextPlayerTurn();
         }
     }

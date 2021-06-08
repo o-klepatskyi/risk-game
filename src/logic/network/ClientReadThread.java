@@ -118,8 +118,12 @@ public class ClientReadThread extends Thread {
                 if (type == GAME_OVER) {
                     client.manager.openGameOverMenu();
                 }
-                if (type == USER_LEFT) {
+                if (type == PLAYER_LEFT_IN_GAME) {
                     client.manager.skipDisconnectedUserMove(response.username);
+                    JOptionPane.showMessageDialog(null,
+                            "Player " + response.username + " has lost connection.",
+                            "Player disconnected.",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         } catch (SocketException ex) {

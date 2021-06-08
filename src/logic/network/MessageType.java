@@ -21,7 +21,7 @@ public enum MessageType {
     END_FORTIFY,
     SKIP_MOVE,
     GAME_OVER,
-    USER_LEFT,
+    PLAYER_LEFT_IN_GAME,
     CONNECTION_ERROR,
     SERVER_CLOSED_ERROR,
 }

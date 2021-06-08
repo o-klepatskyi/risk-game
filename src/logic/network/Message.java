@@ -17,7 +17,7 @@ public class Message implements Serializable {
     public int troops;
 
     public Message(MessageType type, String username) {
-        if (!(type == USERNAME || type == CONNECTION_CLOSED_BY_ADMIN || type == USER_LEFT)) {
+        if (!(type == USERNAME || type == CONNECTION_CLOSED_BY_ADMIN || type == PLAYER_LEFT_IN_GAME)) {
             throw new InvalidParameterException("Message type exception");
         }
         this.type = type;

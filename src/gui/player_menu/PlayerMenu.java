@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import logic.Game;
 import logic.Player;
+import logic.maps.WorldMap;
 import logic.network.*;
 import util.res.Images;
 
@@ -238,7 +239,7 @@ public class PlayerMenu extends JPanel {
         if (isMultiplayer) {
             multiplayerManager.initGame();
         } else {
-            Game game = new Game(getPlayers());
+            Game game = new Game(getPlayers(), new WorldMap()); // todo: replace it with choosing in menu
             frame.remove(this);
             frame.add(game.getGameWindow());
             game.getGameWindow().setFrame(frame);

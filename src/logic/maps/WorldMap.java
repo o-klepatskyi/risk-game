@@ -2,7 +2,6 @@ package logic.maps;
 
 import logic.Continent;
 import logic.Coordinates;
-import util.res.Images;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +9,8 @@ import java.util.Arrays;
 public class WorldMap extends Map {
 
     public WorldMap() {
+        name = MapNames.WORLD_MAP.name;
+
         String[] namesOfTerritories = new String[] {
                 "Afghanistan", "Alaska", "Alberta", "Argentina", "Brazil", "Central America",
                 "China", "Congo", "East Africa", "Eastern Australia", "Eastern United States", "Egypt",
@@ -33,8 +34,6 @@ public class WorldMap extends Map {
         initializeTerritories(namesOfTerritories, coordinates);
         createGraphFromTerritories();
         initContinents();
-
-        image = Images.MAP_EARTH;
     }
 
     @Override

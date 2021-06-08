@@ -1,5 +1,7 @@
 package util.res;
 
+import logic.maps.MapNames;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -26,5 +28,12 @@ public abstract class Images {
                 path = "images/slide" + slide + ".jpg";
         }
         return new ImageIcon(Images.class.getResource(path)).getImage();
+    }
+
+    public static Image getMapImage(MapNames name) {
+        if (name == MapNames.WORLD_MAP) {
+            return MAP_EARTH;
+        }
+        return null;
     }
 }

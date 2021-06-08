@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Graph implements Serializable {
 
-    private HashMap<Territory, List<Territory>> map = new HashMap<>();
+    private final HashMap<Territory, List<Territory>> map = new HashMap<>();
 
     public void addVertex(Territory s) {
         map.put(s, new ArrayList<>());

@@ -4,6 +4,7 @@ import gui.player_menu.PlayerMenu;
 import logic.Game;
 import logic.Graph;
 import logic.Player;
+import logic.maps.WorldMap;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -93,8 +94,10 @@ public final class MultiplayerManager {
 
     public void initGame() {
         players = new ArrayList<>(getPlayers());
+        logic.maps.Map map = new WorldMap(); // todo: replace with getting it from PlayerMenu
+        map.initGraph(players);
         try {
-            server.broadcast(new Message(START_GAME, Game.getStartGraph(players.size(), players)));
+            server.broadcast(new Message(START_GAME, map));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,8 +106,8 @@ public final class MultiplayerManager {
     /**
      * client-only
      */
-    public void startGame(Graph gameGraph) {
-        game = new Game(playerMenu.getPlayers(), gameGraph, this);
+    public void startGame(logic.maps.Map map) {
+        game = new Game(playerMenu.getPlayers(), map, this);
         frame.remove(playerMenu);
         game.getGameWindow().setFrame(frame);
         frame.add(game.getGameWindow());

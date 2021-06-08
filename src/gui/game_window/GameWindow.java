@@ -88,7 +88,7 @@ public class GameWindow extends JPanel {
     }
 
     private SidePanel createReinforcementsPanel() {
-        ReinforcementsPanel reinf = new ReinforcementsPanel(this, game.getCurrentPlayer().getBonus(), game.continents);
+        ReinforcementsPanel reinf = new ReinforcementsPanel(this, game.getCurrentPlayer().getBonus(), game.getContinentsLabels());
         return reinf;
     }
 

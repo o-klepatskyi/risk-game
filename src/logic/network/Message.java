@@ -12,9 +12,9 @@ public class Message implements Serializable {
 
     public String username;
     public Collection<Player> players;
-    public Graph gameGraph;
-    public Territory src, dst, newSrc, newDst;
+    public Territory src, dst;
     public int troops;
+    public logic.maps.Map map;
 
     public Message(MessageType type, String username) {
         if (!(type == USERNAME || type == CONNECTION_CLOSED_BY_ADMIN || type == PLAYER_LEFT_IN_GAME)) {
@@ -39,10 +39,10 @@ public class Message implements Serializable {
         this.players = players;
     }
 
-    public Message(MessageType type, Graph gameGraph) {
+    public Message(MessageType type, logic.maps.Map map) {
         if (type != START_GAME) throw new InvalidParameterException("Message type exception");
         this.type = type;
-        this.gameGraph = gameGraph;
+        this.map = map;
     }
 
     public Message(MessageType type, String srcName, int srcTroops, Player srcOwner, String dstName, int dstTroops, Player dstOwner) {
@@ -85,8 +85,8 @@ public class Message implements Serializable {
         if (players != null) {
             str += ", players= " + players;
         }
-        if (gameGraph != null) {
-            str += ", game= " + gameGraph;
+        if (map != null) {
+            str += ", map= " + map;
         }
         if (src != null) {
             str += ", \nsrc= " + src;
@@ -96,12 +96,6 @@ public class Message implements Serializable {
         }
         if (troops != 0) {
             str += ", troops= " + troops;
-        }
-        if (newSrc != null) {
-            str += ", \nnewSrc= " + newSrc;
-        }
-        if (newDst != null) {
-            str += ", \nnewDst= " + newDst;
         }
         str += "]";
         return str;

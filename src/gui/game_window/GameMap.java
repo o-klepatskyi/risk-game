@@ -1,6 +1,7 @@
 package gui.game_window;
 
 import logic.*;
+import logic.maps.MapNames;
 import util.res.Images;
 import util.res.SoundPlayer;
 
@@ -148,7 +149,7 @@ public class GameMap extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(Images.GAME_MAP_BG, 0, 0,getWidth(),getHeight(), this);
-        g.drawImage(Images.MAP_EARTH, 0, 0, this.getWidth(), this.getHeight(), this);
+        g.drawImage(Images.getMapImage(MapNames.getByName(game.map.getName())), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
     private void clearField() {

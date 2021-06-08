@@ -88,7 +88,7 @@ public class ClientReadThread extends Thread {
                     client.manager.updatePlayerMenu(response.players);
                 }
                 if (type == START_GAME) {
-                    client.manager.startGame(response.gameGraph);
+                    client.manager.startGame(response.map);
                 }
                 if (type == CONNECTION_CLOSED_BY_ADMIN) {
                     client.sendMessage(new Message(CLOSE_CONNECTION_BY_CLIENT));

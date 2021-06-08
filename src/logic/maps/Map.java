@@ -2,7 +2,6 @@ package logic.maps;
 
 import logic.*;
 
-import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
@@ -12,7 +11,7 @@ public abstract class Map implements Serializable {
     protected int numberOfTerritories;
     protected ArrayList<Continent> continents;
     protected Graph gameGraph = new Graph();
-    protected Image image;
+    protected String name;
 
     public Graph initGraph(ArrayList<Player> players) {
         if (players.size() < 2) throw new IllegalArgumentException();
@@ -91,7 +90,7 @@ public abstract class Map implements Serializable {
         return continents;
     }
 
-    public Image getImage() {
-        return image;
+    public String getName() {
+        return name;
     }
 }

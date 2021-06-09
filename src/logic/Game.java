@@ -3,6 +3,9 @@ package logic;
 import gui.game_over_window.GameOverWindow;
 import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
+import logic.bot.Bot;
+import logic.bot.BotMove;
+import logic.bot.BotMoveType;
 import logic.network.Message;
 import logic.network.MessageType;
 import logic.network.MultiplayerManager;
@@ -14,23 +17,23 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import logic.maps.Map;
 
 public class Game {
     private final ArrayList<Player> players;
 
-    private GameWindow gameWindow;
-    private Graph gameGraph;
+    private final GameWindow gameWindow;
+    private final GameMap gameMap;
+    private final Graph gameGraph;
+    private final Map map;
 
     private Player currentPlayer;
     private GamePhase gamePhase;
-    private GameMap gameMap;
 
     public final boolean isMultiplayer;
     public final MultiplayerManager manager;
 
-    public final logic.maps.Map map;
-
-    public Game(Collection<Player> players, logic.maps.Map map) {
+    public Game(Collection<Player> players, Map map) {
         if (players.size() < 2) throw new IllegalArgumentException();
         this.manager = null;
         isMultiplayer = false;
@@ -38,25 +41,27 @@ public class Game {
         this.map = map;
 
         gameGraph = map.initGraph(this.players);
-        start();
+
+        gameMap = new GameMap(this);
+        gameWindow = new GameWindow(this);
     }
 
     /**
      * FOR MULTIPLAYER
      */
-    public Game(Collection<Player> players, logic.maps.Map map, MultiplayerManager manager) {
+    public Game(Collection<Player> players, Map map, MultiplayerManager manager) {
         if (players.size() < 2) throw new IllegalArgumentException();
         this.manager = manager;
         isMultiplayer = true;
         this.players = new ArrayList<>(players);
         this.map = map;
         gameGraph = map.getGameGraph();
-        start();
+
+        gameMap = new GameMap(this);
+        gameWindow = new GameWindow(this);
     }
 
     private void start() {
-        gameMap = new GameMap(this);
-        gameWindow = new GameWindow(this);
 
         pickFirstPlayer();
 
@@ -65,7 +70,7 @@ public class Game {
     }
 
     public boolean isCurrentPlayerActive() {
-        return getCurrentPlayer().getName().equals(manager.client.username);
+        return getCurrentPlayer().getName().equals(manager.client.username) && !getCurrentPlayer().isBot();
     }
 
     public boolean removePlayer(Player p) {
@@ -228,7 +233,7 @@ public class Game {
         }
         gameMap.drawField();
         Log.write(srcTerritory.getOwner().getName() + " fortifies territory");
-        Log.write(srcTerritory.getName() + " -> " + dstTerritory.getName() + "(" + String.valueOf(numberOfTroops) + ")");
+        Log.write(srcTerritory.getName() + " -> " + dstTerritory.getName() + "(" + numberOfTroops + ")");
     }
 
     public void reinforce(int numberOfTroops) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
@@ -275,12 +280,18 @@ public class Game {
     }
 
     /**
-     * must be applied after nextPlayerTurn() call
-     *
-     * so why not just include it in that method????
+     * must be applied in nextPlayerTurn() method
      */
     private void reinforcePhase() {
         gamePhase = GamePhase.REINFORCEMENT;
+        System.out.println(currentPlayer);
+        if (currentPlayer.isBot()) {
+            BotMoveType type = botMove();
+
+            while (type != null && type != BotMoveType.END_REINFORCEMENT) { // multiple attacks can occur
+                type = botMove();
+            }
+        }
     }
 
     /**
@@ -288,6 +299,13 @@ public class Game {
      */
     private void attackPhase() {
         gamePhase = GamePhase.ATTACK;
+        if (currentPlayer.isBot()) {
+            BotMoveType type = botMove();
+
+            while (type != null && type != BotMoveType.END_ATTACK) { // multiple attacks can occur
+                type = botMove();
+            }
+        }
     }
 
     /**
@@ -295,6 +313,38 @@ public class Game {
      */
     private void fortifyPhase() {
         gamePhase = GamePhase.FORTIFY;
+        if (currentPlayer.isBot()) {
+            botMove();
+        }
+    }
+
+    private BotMoveType botMove() {
+        BotMove botMove = Bot.makeMove(gamePhase, gameGraph, currentPlayer);
+        System.out.println(botMove);
+        if (botMove != null) {
+            try {
+                switch (botMove.type) {
+                    case REINFORCEMENT:
+                        reinforce(botMove.troops, botMove.territory);
+                        break;
+                    case ATTACK:
+                        // todo: bot
+                        break;
+                    case END_REINFORCEMENT:
+                    case END_ATTACK:
+                    case END_FORTIFY:
+                        nextPhase();
+                        break;
+                    case FORTIFY:
+                        // todo
+                        break;
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return botMove == null ? null : botMove.type;
     }
 
     /**
@@ -310,12 +360,6 @@ public class Game {
             index = 0;
 
         currentPlayer = players.get(index);
-
-//        System.out.println("Current player: " + currentPlayer);
-        if (currentPlayer.isBot()) {
-            nextPlayerTurn(); // todo: bot integration
-            return;
-        }
 
         if (!checkIfPlayerOnline()) return;
         System.out.println("Current player is online OR you are not the server.");
@@ -337,7 +381,7 @@ public class Game {
                 manager.server.broadcast(new Message(MessageType.SKIP_MOVE), manager.server.getThreadByName(manager.client.username));
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            } // todo replace with bot move
             String username = currentPlayer.getName();
             nextPlayerTurn();
             JOptionPane.showMessageDialog(null,
@@ -357,13 +401,6 @@ public class Game {
 
             openGameOverMenu();
         }
-    }
-
-    private boolean anyBotsLeft() {
-        for (Player p : players) {
-            if (p.isBot()) return true;
-        }
-        return false;
     }
 
     public void openGameOverMenu() {

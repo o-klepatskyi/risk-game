@@ -1,11 +1,13 @@
 package logic.network;
 
 import logic.*;
+import logic.maps.Map;
 import logic.maps.MapType;
 
 import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.Collection;
+
 import static logic.network.MessageType.*;
 
 public class Message implements Serializable {
@@ -15,7 +17,8 @@ public class Message implements Serializable {
     public Collection<Player> players;
     public Territory src, dst;
     public int troops;
-    public logic.maps.Map map;
+    public Map map;
+    public MapType mapType;
 
     public Message(MessageType type, String username) {
         if (!(type == USERNAME || type == CONNECTION_CLOSED_BY_ADMIN || type == PLAYER_LEFT_IN_GAME)) {
@@ -83,8 +86,6 @@ public class Message implements Serializable {
         this.type = type;
         this.mapType = mapType;
     }
-    
-    public MapType mapType;
 
     public String toString() {
         String str = "Message[type= " + type;
@@ -96,6 +97,9 @@ public class Message implements Serializable {
         }
         if (map != null) {
             str += ", map= " + map;
+        }
+        if (mapType != null) {
+            str += ", mapType=" + mapType;
         }
         if (src != null) {
             str += ", \nsrc= " + src;

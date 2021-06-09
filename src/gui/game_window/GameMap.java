@@ -13,8 +13,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 // todo: attacking with one troop
-// todo: connection while game is active
-// todo: removing player when he is offline while playing
 public class GameMap extends JPanel {
     private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
     private final int BORDER_MARGIN = 5;
@@ -35,7 +33,7 @@ public class GameMap extends JPanel {
 
         panel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if(!game.getGameOption().equals(GamePhase.REINFORCEMENT)) {
+                if(!game.getGameOption().equals(GamePhase.REINFORCEMENT) && !game.getCurrentPlayer().isBot()) {
                     resetButtons();
                     updateTerritories();
                 }
@@ -80,7 +78,9 @@ public class GameMap extends JPanel {
                 addListeners();
             }
         } else {
-            addListeners();
+            if (!game.getCurrentPlayer().isBot()) {
+                addListeners();
+            }
         }
 
         if(game.getGameOption().equals(GamePhase.REINFORCEMENT))

@@ -9,7 +9,6 @@ import logic.Game;
 import logic.Player;
 import logic.maps.Map;
 import logic.maps.MapType;
-import logic.maps.WorldMap;
 import logic.network.*;
 import util.res.Images;
 
@@ -89,7 +88,7 @@ public class PlayerMenu extends JPanel {
 
             if (isMultiplayer) {
                 if (isServer && panel.getBotCheckBox().isSelected()) {
-                    // todo bot integration
+
                 } else if (!multiplayerManager.client.username.equals(panel.getPlayerNameField().getText())) {
                     panel.getColorComboBox().setEnabled(false);
                 }

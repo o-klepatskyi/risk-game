@@ -66,6 +66,7 @@ public class Player implements Serializable {
                 "name='" + name + '\'' +
                 ", color=" + color +
                 ", isBot=" + isBot +
+                ", bonus=" + bonus +
                 '}';
     }
 }

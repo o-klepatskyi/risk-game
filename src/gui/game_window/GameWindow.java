@@ -64,7 +64,7 @@ public class GameWindow extends JPanel {
 
     private void updateSidePanel(GamePhase gamePhase) {
         remove(sidePanel);
-        if (game.isMultiplayer && !game.isCurrentPlayerActive()) {
+        if ((game.isMultiplayer && !game.isCurrentPlayerActive()) || game.getCurrentPlayer().isBot()) {
             sidePanel = new SidePanel(this);
         } else {
             remove(sidePanel);

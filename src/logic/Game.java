@@ -266,6 +266,10 @@ public class Game {
 
         Log.write(srcTerritory.getName() + " reinforced (" + numberOfTroops + ")");
 
+        if (gameWindow.game.isMultiplayer) {
+            gameWindow.game.manager.sendMessage(new Message(MessageType.REINFORCE, src, numberOfTroops));
+        }
+
         if (currentPlayer.getBonus() == 0) {
             gameWindow.game.nextPhase();
             if (gameWindow.game.isMultiplayer) {
@@ -343,7 +347,6 @@ public class Game {
                     case ATTACK:
                         // todo: bot
                         break;
-                    case END_REINFORCEMENT:
                     case END_ATTACK:
                     case END_FORTIFY:
                         nextPhase();
@@ -364,7 +367,6 @@ public class Game {
      * removes dead player and gives turn to next player
      */
     public void nextPlayerTurn() {
-//        System.out.println("Old player: " + currentPlayer);
         removeDeadPlayers();
 
         int index = players.indexOf(currentPlayer);

@@ -10,17 +10,16 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-
-public class Bot {
+public abstract class Bot {
 
     private static Game game;
 
     public static void makeMove() {
         if (!game.getCurrentPlayer().isBot()) return;
+        if (game.manager == null) return;
         Player player = game.getCurrentPlayer();
         Graph gameGraph = game.getGameGraph();
         GamePhase phase = game.getGamePhase();
-        System.out.println("i'm here!");
         BotMove move = null;
         if (player == null || gameGraph == null)
             throw new InvalidParameterException("null values");
@@ -54,10 +53,7 @@ public class Bot {
     }
 
     private static Territory getRandomTerritory(Graph gameGraph, Player player) {
-        List<Territory> playerTerritories = gameGraph
-                .getTerritories().stream()
-                .filter(x -> x.getOwner().equals(player))
-                .collect(Collectors.toList());
+        List<Territory> playerTerritories = gameGraph.getTerritories(player);
         return playerTerritories.get(new Random().nextInt(playerTerritories.size()));
     }
 

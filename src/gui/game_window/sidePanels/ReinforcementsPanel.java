@@ -2,8 +2,6 @@ package gui.game_window.sidePanels;
 
 import gui.game_window.GameWindow;
 import logic.Territory;
-import logic.network.Message;
-import logic.network.MessageType;
 import util.res.Fonts;
 import util.res.SoundPlayer;
 import util.exceptions.IllegalNumberOfReinforceTroopsException;
@@ -17,18 +15,21 @@ import java.util.ArrayList;
 
 public class ReinforcementsPanel extends SidePanel {
 
-    private ValueJLabel reinforcementsGot, reinforcementsLeft, fromTerritories;
+    private ValueJLabel reinforcementsGot, reinforcementsLeft;
     private JLabel fromContinentsControlled, territoryChosen, territory;
 
     private JSpinner troopsLeftSpinner;
     private JButton deployTroopsButton;
 
-    private int playerBonus, troopsLeft;
+    private static int playerBonus;
+    private static int troopsLeft;
     private ArrayList<String> labelsBonuses;
 
     public ReinforcementsPanel(GameWindow gameWindow, int bonus, ArrayList<String> labels) {
         super(gameWindow);
-        playerBonus = bonus;
+        if (troopsLeft == 0) {
+            playerBonus = bonus;
+        }
         troopsLeft = bonus;
         this.labelsBonuses = labels;
         initLabels();
@@ -70,7 +71,6 @@ public class ReinforcementsPanel extends SidePanel {
     private void initButtons() {
         JPanel bottomPanel = new JPanel();
         bottomPanel.setOpaque(false);
-        System.out.println("Troops left: " + troopsLeft);
         troopsLeftSpinner = new JSpinner(new SpinnerNumberModel(troopsLeft, 1, troopsLeft, 1));
         ((JSpinner.DefaultEditor) troopsLeftSpinner.getEditor()).getTextField().setEditable(false);
         Dimension troopsSpinnerSize = new Dimension(LABEL_WIDTH/5, LABEL_HEIGHT);
@@ -88,6 +88,11 @@ public class ReinforcementsPanel extends SidePanel {
                     SoundPlayer.buttonClickedSound();
                     reinforce();
                 }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
             }
         });
         bottomPanel.add(troopsLeftSpinner);
@@ -112,15 +117,7 @@ public class ReinforcementsPanel extends SidePanel {
         int reinforcedTroops = (int) troopsLeftSpinner.getValue();
 
         try {
-            Territory src = Territory.getIdentical(this.src);
             gameWindow.game.reinforce(reinforcedTroops);
-
-            if (gameWindow.game.isMultiplayer) {
-                gameWindow.game.manager.sendMessage(new Message(MessageType.REINFORCE, src, reinforcedTroops));
-            }
-
-            troopsLeft -= reinforcedTroops;
-
         } catch (SrcNotStatedException | IllegalNumberOfReinforceTroopsException e) {
             e.printStackTrace();
         }

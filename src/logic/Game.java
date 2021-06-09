@@ -13,6 +13,7 @@ import logic.network.NetworkMode;
 import util.exceptions.*;
 
 import javax.swing.*;
+import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -32,11 +33,13 @@ public class Game {
     public final MultiplayerManager manager;
 
     private boolean isStarted = false;
+    private boolean isServer;
 
     public Game(Collection<Player> players, Map map) {
         if (players.size() < 2) throw new IllegalArgumentException();
         this.manager = null;
         isMultiplayer = false;
+        isServer = false;
         this.players = new ArrayList<>(players);
         this.map = map;
 
@@ -53,6 +56,7 @@ public class Game {
         if (players.size() < 2) throw new IllegalArgumentException();
         this.manager = manager;
         isMultiplayer = true;
+        isServer = manager.networkMode == NetworkMode.SERVER;
         this.players = new ArrayList<>(players);
         this.map = map;
         gameGraph = map.getGameGraph();
@@ -64,7 +68,7 @@ public class Game {
     public void start() {
         if (!isStarted) {
             isStarted = true;
-            if (isMultiplayer) Bot.setGame(this);
+            Bot.setGame(this);
 
             pickFirstPlayer(); // starting point of the game
 
@@ -73,75 +77,33 @@ public class Game {
         }
     }
 
-    public boolean isCurrentPlayerActive() {
-        return getCurrentPlayer().getName().equals(manager.client.username) && !getCurrentPlayer().isBot();
-    }
-
-    public boolean removePlayer(Player p) {
-        return players.remove(p);
-    }
-
-    public Collection<Player> getPlayers() {
-        return players;
-    }
-
-    public GameWindow getGameWindow() {
-        return gameWindow;
-    }
-
-    public GameMap getGameMap() {
-        return gameMap;
-    }
-
-    public Graph getGameGraph() {
-        return gameGraph;
-    }
-
-    public GamePhase getGameOption() {
-        return gamePhase;
-    }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    /**
-     * @return probability of a battle between GameMap src and dst territories
-     */
-    public int calculateProbability() throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException {
-        Territory srcTerritory = gameMap.getSrcTerritory();
-        Territory dstTerritory = gameMap.getDstTerritory();
+    public void reinforce(int numberOfTroops, Territory src) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
+        Territory srcTerritory = findTerritory(src);
 
         if(srcTerritory == null)
-            throw new SrcNotStatedException("Source territory was not stated!");
+            throw new SrcNotStatedException("Source territory is invalid!");
 
-        if(dstTerritory == null)
-            throw new DstNotStatedException("Destination territory was not stated!");
+        if(numberOfTroops > currentPlayer.getBonus())
+            throw new IllegalNumberOfReinforceTroopsException("Number of troops for reinforcement exceeds bonus!");
 
-        if(!gameGraph.hasEdge(srcTerritory, dstTerritory))
-            throw new WrongTerritoriesPairException("These territories are not adjacent");
+        if (isMultiplayer && isCurrentPlayerActive())
+            manager.sendMessage(new Message(MessageType.REINFORCE, srcTerritory, numberOfTroops));
 
-        int attackTroops = srcTerritory.getTroops();
-        int defendTroops = dstTerritory.getTroops();
+        srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
+        currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
 
-        int attackerWinsCount = 0;
-        final double COUNT_OF_DICE_ROLLS = 10000;
-        for(int i = 0; i < COUNT_OF_DICE_ROLLS; i++) {
-            if(attackerWins(dice_rolls(attackTroops, defendTroops)))
-                attackerWinsCount++;
+        Log.write(srcTerritory.getName() + " reinforced (" + numberOfTroops + ")");
+
+        if (currentPlayer.getBonus() == 0) {
+            gameWindow.game.nextPhase();
+        } else {
+            gameWindow.update();
+            if (currentPlayer.isBot() || (isServer && !isCurrentPlayerOnline())) Bot.makeMove();
         }
-        double probability = attackerWinsCount / COUNT_OF_DICE_ROLLS;
-        probability *= 100;
-        return (int) Math.round(probability);
     }
 
-    /**
-     * @return true if attacker wins, else - false
-     */
-    public boolean attack() throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfAttackTroopsException {
-        Territory srcTerritory = gameMap.getSrcTerritory();
-        Territory dstTerritory = gameMap.getDstTerritory();
-
+    public void attack(Territory srcTerritory, Territory dstTerritory) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfAttackTroopsException {
+        Territory src = Territory.getIdentical(srcTerritory), dst = Territory.getIdentical(dstTerritory);
         if(srcTerritory == null)
             throw new SrcNotStatedException("Source territory was not stated!");
 
@@ -161,6 +123,7 @@ public class Game {
 
         Log.write(srcTerritory.getOwner().getName() + " vs " + dstTerritory.getOwner().getName());
         Log.write(srcTerritory.getName() + " vs " + dstTerritory.getName());
+
         if(attackerWins(troopsLeft)) {
             srcTerritory.setTroops(1);
             dstTerritory.setTroops(troopsLeft[0]);
@@ -171,7 +134,6 @@ public class Game {
             Log.write(srcTerritory.getName() + "(" + srcTerritory.getTroops() +  ") "
                     + dstTerritory.getName() + "(" + dstTerritory.getTroops() + ")");
             checkForGameOver();
-            return true;
         }
         else {
             srcTerritory.setTroops(1);
@@ -181,10 +143,23 @@ public class Game {
             Log.write("Defender wins!");
             Log.write(srcTerritory.getName() + "(" + srcTerritory.getTroops() +  ")"
                     + dstTerritory.getName() + "(" + dstTerritory.getTroops() + ")");
-            return false;
         }
-    }
 
+        if (gameWindow.game.isMultiplayer) {
+            Territory newSrc = gameWindow.game.findTerritoryInGraph(src.getName()),
+                    newDst = gameWindow.game.findTerritoryInGraph(dst.getName());
+
+            gameWindow.game.manager.sendMessage(new Message(MessageType.ATTACK,
+                    newSrc.getName(),
+                    newSrc.getTroops(),
+                    newSrc.getOwner(),
+                    newDst.getName(),
+                    newDst.getTroops(),
+                    newDst.getOwner()));
+        }
+
+        if (currentPlayer.isBot() || (isServer && !isCurrentPlayerOnline())) Bot.makeMove();
+    }
 
     /**
      * for client only
@@ -203,21 +178,9 @@ public class Game {
         checkForGameOver();
     }
 
-    public void fortify(int numberOfTroops) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException {
-        Territory srcTerritory = gameMap.getSrcTerritory();
-        Territory dstTerritory = gameMap.getDstTerritory();
-
-        if (isMultiplayer) {
-            manager.sendMessage(
-                    new Message(MessageType.FORTIFY,
-                    Territory.getIdentical(srcTerritory),
-                    Territory.getIdentical(dstTerritory),
-                            numberOfTroops));
-        }
-
-        fortify(srcTerritory, dstTerritory, numberOfTroops);
-    }
-
+    /**
+     * method for client
+     */
     public void fortify(Territory src, Territory dst, int numberOfTroops) throws IllegalNumberOfFortifyTroopsException, WrongTerritoriesPairException, SrcNotStatedException, DstNotStatedException {
         Territory srcTerritory = findTerritory(src);
         Territory dstTerritory = findTerritory(dst);
@@ -227,6 +190,14 @@ public class Game {
 
         if(dstTerritory == null)
             throw new DstNotStatedException("Destination territory is invalid!");
+
+        if (isMultiplayer) {
+            manager.sendMessage(
+                    new Message(MessageType.FORTIFY,
+                            Territory.getIdentical(srcTerritory),
+                            Territory.getIdentical(dstTerritory),
+                            numberOfTroops));
+        }
 
         ArrayList<Territory> connectedTerritories = gameGraph.getConnectedTerritories(srcTerritory);
         if(connectedTerritories.contains(dstTerritory)) {
@@ -248,45 +219,6 @@ public class Game {
         nextPhase();
     }
 
-    public void reinforce(int numberOfTroops) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
-        Territory srcTerritory = gameMap.getSrcTerritory();
-        if(srcTerritory == null)
-            throw new SrcNotStatedException("Source territory was not stated!");
-
-        if(numberOfTroops > currentPlayer.getBonus())
-            throw new IllegalNumberOfReinforceTroopsException("Number of troops for reinforcement exceeds bonus!");
-
-        manager.sendMessage(new Message(MessageType.REINFORCE, srcTerritory, numberOfTroops));
-
-        reinforce(numberOfTroops, srcTerritory);
-    }
-
-    public void reinforce(int numberOfTroops, Territory src) throws SrcNotStatedException {
-        Territory srcTerritory = findTerritory(src);
-
-        if(srcTerritory == null)
-            throw new SrcNotStatedException("Source territory is invalid!");
-
-        srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
-        currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
-
-        Log.write(srcTerritory.getName() + " reinforced (" + numberOfTroops + ")");
-
-        if (currentPlayer.getBonus() == 0) {
-            gameWindow.game.nextPhase();
-        } else {
-            gameWindow.update();
-            if (currentPlayer.isBot()) Bot.makeMove();
-        }
-    }
-
-    private Territory findTerritory(Territory territory) {
-        for (Territory t : gameGraph.getTerritories()) {
-            if (territory.equals(t)) return t;
-        }
-        return null;
-    }
-
     public void nextPhase() {
         switch (gamePhase) {
             case REINFORCEMENT -> attackPhase();
@@ -302,7 +234,7 @@ public class Game {
         gamePhase = GamePhase.REINFORCEMENT;
         gameWindow.update();
 
-        if (currentPlayer.isBot() || !isCurrentPlayerOnline()) {
+        if (currentPlayer.isBot() || (isServer && !isCurrentPlayerOnline())) {
             Bot.makeMove();
         }
     }
@@ -313,7 +245,7 @@ public class Game {
     private void attackPhase() {
         gamePhase = GamePhase.ATTACK;
         gameWindow.update();
-        if (currentPlayer.isBot()  || !isCurrentPlayerOnline()) {
+        if (currentPlayer.isBot() || (isServer && !isCurrentPlayerOnline())) {
             Bot.makeMove();
         }
     }
@@ -324,7 +256,7 @@ public class Game {
     private void fortifyPhase() {
         gamePhase = GamePhase.FORTIFY;
         gameWindow.update();
-        if (currentPlayer.isBot()  || !isCurrentPlayerOnline()) {
+        if (currentPlayer.isBot() || (isServer && !isCurrentPlayerOnline())) {
             Bot.makeMove();
         }
     }
@@ -335,24 +267,43 @@ public class Game {
             try {
                 switch (botMove.type) {
                     case REINFORCEMENT:
-                        reinforce(botMove.troops, botMove.territory);
+                        if (gamePhase != GamePhase.REINFORCEMENT) {
+                            throw new InvalidParameterException("Wrong type move " + botMove.type + " for game phase " + gamePhase);
+                        }
+                        reinforce(botMove.troops, botMove.src);
                         break;
                     case ATTACK:
-                        // todo: bot
+                        if (gamePhase != GamePhase.ATTACK) {
+                            throw new InvalidParameterException("Wrong type move " + botMove.type + " for game phase " + gamePhase);
+                        }
+                        attack(botMove.src, botMove.dst);
                         break;
                     case END_ATTACK:
+                        if (gamePhase != GamePhase.ATTACK) {
+                            throw new InvalidParameterException("Wrong type move " + botMove.type + " for game phase " + gamePhase);
+                        }
+                        nextPhase();
+                        break;
                     case END_FORTIFY:
+                        if (gamePhase != GamePhase.FORTIFY) {
+                            throw new InvalidParameterException("Wrong type move " + botMove.type + " for game phase " + gamePhase);
+                        }
                         nextPhase();
                         break;
                     case FORTIFY:
-                        // todo
+                        if (gamePhase != GamePhase.FORTIFY) {
+                            throw new InvalidParameterException("Wrong type move " + botMove.type + " for game phase " + gamePhase);
+                        }
+                        fortify(botMove.src, botMove.dst, botMove.troops);
                         break;
+                    default:
+                        throw new InvalidParameterException("Wrong type move " + botMove.type + " for game phase " + gamePhase);
                 }
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        } else throw new InvalidParameterException("null value");
     }
 
     /**
@@ -378,13 +329,13 @@ public class Game {
     }
 
     public boolean isCurrentPlayerOnline() {
-        if (    isMultiplayer &&
-                manager.networkMode == NetworkMode.SERVER &&
-                !currentPlayer.isBot() &&
-                !manager.server.userNames.contains(currentPlayer.getName())) {
-            return false;
-        }
-        return true;
+        if (!isMultiplayer)
+            throw new InvalidParameterException("Only for multiplayer");
+        if (manager.networkMode != NetworkMode.SERVER)
+            throw new InvalidParameterException("Called not from server");
+
+        return !currentPlayer.isBot() ||
+                manager.server.userNames.contains(currentPlayer.getName());
     }
 
     private void checkForGameOver() {
@@ -479,6 +430,36 @@ public class Game {
         return true;
     }
 
+    /**
+     * @return probability of a battle between GameMap src and dst territories
+     */
+    public int calculateProbability() throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException {
+        Territory srcTerritory = gameMap.getSrcTerritory();
+        Territory dstTerritory = gameMap.getDstTerritory();
+
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory was not stated!");
+
+        if(dstTerritory == null)
+            throw new DstNotStatedException("Destination territory was not stated!");
+
+        if(!gameGraph.hasEdge(srcTerritory, dstTerritory))
+            throw new WrongTerritoriesPairException("These territories are not adjacent");
+
+        int attackTroops = srcTerritory.getTroops();
+        int defendTroops = dstTerritory.getTroops();
+
+        int attackerWinsCount = 0;
+        final double COUNT_OF_DICE_ROLLS = 10000;
+        for(int i = 0; i < COUNT_OF_DICE_ROLLS; i++) {
+            if(attackerWins(dice_rolls(attackTroops, defendTroops)))
+                attackerWinsCount++;
+        }
+        double probability = attackerWinsCount / COUNT_OF_DICE_ROLLS;
+        probability *= 100;
+        return (int) Math.round(probability);
+    }
+
     private int[] dice_rolls(int attackTroops, int defendTroops) {
         attackTroops--;
         while (attackTroops > 0 && defendTroops > 0) {
@@ -547,11 +528,49 @@ public class Game {
         nextPlayerTurn();
     }
 
+    public boolean isCurrentPlayerActive() {
+        if (!isMultiplayer)
+            throw new InvalidParameterException("Only for multiplayer");
+
+        return getCurrentPlayer().getName().equals(manager.client.username) && !getCurrentPlayer().isBot();
+    }
+
+    private Territory findTerritory(Territory territory) {
+        for (Territory t : gameGraph.getTerritories()) {
+            if (territory.equals(t)) return t;
+        }
+        return null;
+    }
+
     public boolean isStarted() {
         return isStarted;
     }
 
     public GamePhase getGamePhase() {
         return gamePhase;
+    }
+
+    public boolean removePlayer(Player p) {
+        return players.remove(p);
+    }
+
+    public Collection<Player> getPlayers() {
+        return players;
+    }
+
+    public GameWindow getGameWindow() {
+        return gameWindow;
+    }
+
+    public GameMap getGameMap() {
+        return gameMap;
+    }
+
+    public Graph getGameGraph() {
+        return gameGraph;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 }

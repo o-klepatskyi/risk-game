@@ -56,7 +56,7 @@ public class GameWindow extends JPanel {
     }
 
     public void update() {
-        GamePhase gamePhase = game.getGameOption();
+        GamePhase gamePhase = game.getGamePhase();
         updateSidePanel(gamePhase);
         gameFlow.updatePhase(game.getCurrentPlayer(), gamePhase);
         gameMap.drawField();

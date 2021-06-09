@@ -116,7 +116,7 @@ public class ReinforcementsPanel extends SidePanel {
         int reinforcedTroops = (int) troopsLeftSpinner.getValue();
 
         try {
-            gameWindow.game.reinforce(reinforcedTroops);
+            gameWindow.game.reinforce(reinforcedTroops, src);
         } catch (SrcNotStatedException | IllegalNumberOfReinforceTroopsException e) {
             e.printStackTrace();
         }

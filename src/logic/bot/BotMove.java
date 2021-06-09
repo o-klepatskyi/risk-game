@@ -7,7 +7,7 @@ import static logic.bot.BotMoveType.*;
 public class BotMove {
 
     public final BotMoveType type;
-    public Territory territory;
+    public Territory src, dst;
     public int troops;
 
 
@@ -21,7 +21,24 @@ public class BotMove {
         if (type != REINFORCEMENT)
             throw new InvalidParameterException("Invalid bot move type");
         this.type = type;
-        territory = t;
+        src = t;
+        this.troops = troops;
+    }
+
+    BotMove(BotMoveType type, Territory src, Territory dst) {
+        if (type != ATTACK)
+            throw new InvalidParameterException("Invalid bot move type");
+        this.type = type;
+        this.src = src;
+        this.dst = dst;
+    }
+
+    BotMove(BotMoveType type, Territory src, Territory dst, int troops) {
+        if (type != FORTIFY)
+            throw new InvalidParameterException("Invalid bot move type");
+        this.type = type;
+        this.src = src;
+        this.dst = dst;
         this.troops = troops;
     }
 
@@ -29,7 +46,7 @@ public class BotMove {
     public String toString() {
         return "BotMove{" +
                 "type=" + type +
-                ", territory=" + territory +
+                ", territory=" + src +
                 ", troops=" + troops +
                 '}';
     }

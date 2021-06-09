@@ -150,7 +150,7 @@ public class FortifyPanel extends SidePanel {
         try {
             int troopsToTransfer = (int) troopsToTransferSpinner.getValue();
 
-            gameWindow.game.fortify(troopsToTransfer);
+            gameWindow.game.fortify(src, dst, troopsToTransfer);
         } catch (DstNotStatedException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException e) {
             e.printStackTrace();
         }

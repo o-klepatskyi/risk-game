@@ -125,7 +125,7 @@ public class ClientReadThread extends Thread {
             }
         } catch(EOFException ex) {
             System.err.println(ex.getMessage());
-        } catch (IOException | ClassNotFoundException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException | DstNotStatedException ex) {
+        } catch (IOException | ClassNotFoundException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException | DstNotStatedException | IllegalNumberOfReinforceTroopsException ex) {
             System.out.println("Error reading from server: " + ex.getMessage());
             ex.printStackTrace();
         }

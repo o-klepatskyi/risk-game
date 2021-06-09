@@ -33,7 +33,7 @@ public class GameMap extends JPanel {
 
         panel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if(!game.getGameOption().equals(GamePhase.REINFORCEMENT) && !game.getCurrentPlayer().isBot()) {
+                if(!game.getGamePhase().equals(GamePhase.REINFORCEMENT) && !game.getCurrentPlayer().isBot()) {
                     resetButtons();
                     updateTerritories();
                 }
@@ -86,7 +86,7 @@ public class GameMap extends JPanel {
                 }
             }
 
-            if(game.getGameOption().equals(GamePhase.REINFORCEMENT))
+            if(game.getGamePhase().equals(GamePhase.REINFORCEMENT))
                 showOptions(GamePhase.REINFORCEMENT);
             if (game.getGameWindow() != null) {
                 game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
@@ -170,7 +170,7 @@ public class GameMap extends JPanel {
                     if(!buttonClicked && button.getBackground().equals(game.getCurrentPlayer().getColor())) {
                         resetButtons();
                         highlightButton(button, "src");
-                        showOptions(game.getGameOption());
+                        showOptions(game.getGamePhase());
                         SoundPlayer.territoryClickedSound();
                     }
                     else {
@@ -179,16 +179,16 @@ public class GameMap extends JPanel {
                                 if(!button.equals(src)) {
                                     resetButtons();
                                     highlightButton(button, "src");
-                                    showOptions(game.getGameOption());
+                                    showOptions(game.getGamePhase());
                                     SoundPlayer.territoryClickedSound();
                                 } else
                                     resetButtons();
                             }
                         } else {
-                            if(game.getGameOption().equals(GamePhase.REINFORCEMENT)) {
+                            if(game.getGamePhase().equals(GamePhase.REINFORCEMENT)) {
                                 resetButtons();
                                 highlightButton(button, "src");
-                                showOptions(game.getGameOption());
+                                showOptions(game.getGamePhase());
                                 SoundPlayer.territoryClickedSound();
                             }
                             else {
@@ -226,7 +226,7 @@ public class GameMap extends JPanel {
                         if(button.getBackground() == game.getCurrentPlayer().getColor()) {
                             resetButtons();
                             button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
-                            showOptions(game.getGameOption());
+                            showOptions(game.getGamePhase());
                             SoundPlayer.territoryChosenSound();
                         }
                         else if(button.getForeground() == game.getCurrentPlayer().getColor()) {
@@ -237,7 +237,7 @@ public class GameMap extends JPanel {
                     else {
                         if(src != button) {
                             SoundPlayer.territoryChosenSound();
-                            if(game.getGameOption().equals(GamePhase.REINFORCEMENT))
+                            if(game.getGamePhase().equals(GamePhase.REINFORCEMENT))
                                 button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
                             else
                                 button.setBorder(BorderFactory.createLineBorder(Color.BLACK, BORDER_MARGIN));
@@ -246,7 +246,7 @@ public class GameMap extends JPanel {
                 }
 
                 public void mouseExited(MouseEvent e) {
-                    if(!buttonClicked && !game.getGameOption().equals(GamePhase.REINFORCEMENT))
+                    if(!buttonClicked && !game.getGamePhase().equals(GamePhase.REINFORCEMENT))
                         resetButtons();
                     else {
                         if(!button.equals(src) && !button.equals(dst))

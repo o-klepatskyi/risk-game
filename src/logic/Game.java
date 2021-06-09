@@ -262,7 +262,7 @@ public class Game {
         if(srcTerritory == null)
             throw new SrcNotStatedException("Source territory is invalid!");
 
-        if (gameWindow.game.isMultiplayer) {
+        if (gameWindow.game.isMultiplayer && currentPlayer.getName().equals(manager.client.username)) {
             gameWindow.game.manager.sendMessage(new Message(MessageType.REINFORCE, srcTerritory, numberOfTroops));
         }
 
@@ -271,11 +271,9 @@ public class Game {
 
         Log.write(srcTerritory.getName() + " reinforced (" + numberOfTroops + ")");
 
+
         if (currentPlayer.getBonus() == 0) {
             gameWindow.game.nextPhase();
-            if (gameWindow.game.isMultiplayer) {
-                gameWindow.game.manager.sendMessage(new Message(MessageType.END_REINFORCE));
-            }
         } else {
             gameWindow.update();
             if (currentPlayer.isBot()) Bot.makeMove();

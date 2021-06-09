@@ -149,11 +149,7 @@ public class FortifyPanel extends SidePanel {
     private void fortify() {
         try {
             int troopsToTransfer = (int) troopsToTransferSpinner.getValue();
-            Territory src = Territory.getIdentical(this.src), dst = Territory.getIdentical(this.dst);
 
-            if (gameWindow.game.isMultiplayer) {
-                gameWindow.game.manager.sendMessage(new Message(MessageType.FORTIFY, src,dst, troopsToTransfer));
-            }
             gameWindow.game.fortify(troopsToTransfer);
         } catch (DstNotStatedException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException e) {
             e.printStackTrace();

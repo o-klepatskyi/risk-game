@@ -214,6 +214,14 @@ public class Game {
         if(dstTerritory == null)
             throw new DstNotStatedException("Destination territory was not stated!");
 
+        if (isMultiplayer) {
+            manager.sendMessage(
+                    new Message(MessageType.FORTIFY,
+                    Territory.getIdentical(srcTerritory),
+                    Territory.getIdentical(dstTerritory),
+                            numberOfTroops));
+        }
+
         fortify(srcTerritory, dstTerritory, numberOfTroops);
     }
 
@@ -240,7 +248,8 @@ public class Game {
         else {
             throw new WrongTerritoriesPairException("These territories are not connected!");
         }
-        gameWindow.update();
+        nextPhase();
+
         Log.write(srcTerritory.getOwner().getName() + " fortifies territory");
         Log.write(srcTerritory.getName() + " -> " + dstTerritory.getName() + "(" + numberOfTroops + ")");
     }
@@ -253,6 +262,8 @@ public class Game {
         if(numberOfTroops > currentPlayer.getBonus())
             throw new IllegalNumberOfReinforceTroopsException("Number of troops for reinforcement exceeds bonus!");
 
+        manager.sendMessage(new Message(MessageType.REINFORCE, srcTerritory, numberOfTroops));
+
         reinforce(numberOfTroops, srcTerritory);
     }
 
@@ -262,15 +273,10 @@ public class Game {
         if(srcTerritory == null)
             throw new SrcNotStatedException("Source territory is invalid!");
 
-        if (gameWindow.game.isMultiplayer && currentPlayer.getName().equals(manager.client.username)) {
-            gameWindow.game.manager.sendMessage(new Message(MessageType.REINFORCE, srcTerritory, numberOfTroops));
-        }
-
         srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
         currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
 
         Log.write(srcTerritory.getName() + " reinforced (" + numberOfTroops + ")");
-
 
         if (currentPlayer.getBonus() == 0) {
             gameWindow.game.nextPhase();

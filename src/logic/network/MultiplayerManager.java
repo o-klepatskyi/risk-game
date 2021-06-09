@@ -3,8 +3,8 @@ package logic.network;
 import gui.player_menu.PlayerMenu;
 import logic.Game;
 import logic.Player;
+import logic.maps.Map;
 import logic.maps.MapType;
-import logic.maps.WorldMap;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -106,8 +106,9 @@ public final class MultiplayerManager {
     /**
      * client-only
      */
-    public void startGame(logic.maps.Map map) {
+    public void startGame(Map map) {
         game = new Game(playerMenu.getPlayers(), map, this);
+        game.start();
         frame.remove(playerMenu);
         game.getGameWindow().setFrame(frame);
         frame.add(game.getGameWindow());

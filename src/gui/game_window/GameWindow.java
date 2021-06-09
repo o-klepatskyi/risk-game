@@ -70,7 +70,7 @@ public class GameWindow extends JPanel {
             remove(sidePanel);
             switch (gamePhase) {
                 case REINFORCEMENT:
-                    sidePanel = createReinforcementsPanel();
+                    sidePanel = new ReinforcementsPanel(this);
                     break;
                 case ATTACK:
                     sidePanel = new AttackPanel(this);
@@ -85,11 +85,6 @@ public class GameWindow extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 1;
         add(sidePanel, gbc);
-    }
-
-    private SidePanel createReinforcementsPanel() {
-        ReinforcementsPanel reinf = new ReinforcementsPanel(this, game.getCurrentPlayer().getBonus(), game.getContinentsLabels());
-        return reinf;
     }
 
     public void updateChosenTerritories(Territory src, Territory dst) {

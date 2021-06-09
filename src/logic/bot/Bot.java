@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public abstract class Bot {
 

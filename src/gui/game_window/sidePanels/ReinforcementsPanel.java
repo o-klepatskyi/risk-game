@@ -14,34 +14,33 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class ReinforcementsPanel extends SidePanel {
-
-    private ValueJLabel reinforcementsGot, reinforcementsLeft;
-    private JLabel fromContinentsControlled, territoryChosen, territory;
+    private JLabel territory;
 
     private JSpinner troopsLeftSpinner;
     private JButton deployTroopsButton;
 
     private static int playerBonus;
     private static int troopsLeft;
-    private ArrayList<String> labelsBonuses;
+    private final ArrayList<String> labelsBonuses;
 
-    public ReinforcementsPanel(GameWindow gameWindow, int bonus, ArrayList<String> labels) {
+    public ReinforcementsPanel(GameWindow gameWindow) {
         super(gameWindow);
+        int bonus = gameWindow.game.getCurrentPlayer().getBonus();
         if (troopsLeft == 0) {
             playerBonus = bonus;
         }
         troopsLeft = bonus;
-        this.labelsBonuses = labels;
+        this.labelsBonuses = gameWindow.game.getContinentsLabels();
         initLabels();
         initButtons();
     }
 
     private void initLabels() {
-        reinforcementsGot = new ValueJLabel("Reinforcements got: ", playerBonus);
-        reinforcementsLeft = new ValueJLabel("Reinforcements Left: ", troopsLeft);
+        ValueJLabel reinforcementsGot = new ValueJLabel("Reinforcements got: ", playerBonus);
+        ValueJLabel reinforcementsLeft = new ValueJLabel("Reinforcements Left: ", troopsLeft);
 
-        fromContinentsControlled = new JLabel("From continents controlled: ");
-        territoryChosen = new JLabel("Territory chosen:");
+        JLabel fromContinentsControlled = new JLabel("From continents controlled: ");
+        JLabel territoryChosen = new JLabel("Territory chosen:");
         territory = new JLabel("<none>");
 
         ArrayList<JLabel> labels = new ArrayList<>();

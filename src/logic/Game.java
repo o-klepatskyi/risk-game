@@ -69,7 +69,7 @@ public class Game {
     public void start() {
         if (!isStarted) {
             isStarted = true;
-            Bot.setGame(this);
+            if (isMultiplayer) Bot.setGame(this);
 
             pickFirstPlayer(); // starting point of the game
 
@@ -258,17 +258,18 @@ public class Game {
 
     public void reinforce(int numberOfTroops, Territory src) throws SrcNotStatedException {
         Territory srcTerritory = findTerritory(src);
+
         if(srcTerritory == null)
             throw new SrcNotStatedException("Source territory is invalid!");
+
+        if (gameWindow.game.isMultiplayer) {
+            gameWindow.game.manager.sendMessage(new Message(MessageType.REINFORCE, srcTerritory, numberOfTroops));
+        }
 
         srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
         currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
 
         Log.write(srcTerritory.getName() + " reinforced (" + numberOfTroops + ")");
-
-        if (gameWindow.game.isMultiplayer) {
-            gameWindow.game.manager.sendMessage(new Message(MessageType.REINFORCE, src, numberOfTroops));
-        }
 
         if (currentPlayer.getBonus() == 0) {
             gameWindow.game.nextPhase();
@@ -390,13 +391,13 @@ public class Game {
     private boolean checkIfPlayerOnline() {
         if (    isMultiplayer &&
                 manager.networkMode == NetworkMode.SERVER &&
-                !currentPlayer.isBot() && // todo: check if this is necessary
+                !currentPlayer.isBot() &&
                 !manager.server.userNames.contains(currentPlayer.getName())) {
             try {
                 manager.server.broadcast(new Message(MessageType.SKIP_MOVE), manager.server.getThreadByName(manager.client.username));
             } catch (IOException e) {
                 e.printStackTrace();
-            } // todo replace with bot move
+            }
             String username = currentPlayer.getName();
             nextPlayerTurn();
             JOptionPane.showMessageDialog(null,

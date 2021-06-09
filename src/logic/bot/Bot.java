@@ -1,10 +1,10 @@
 package logic.bot;
 
-import logic.GamePhase;
-import logic.Graph;
-import logic.Player;
-import logic.Territory;
+import logic.*;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.Random;
@@ -13,28 +13,44 @@ import java.util.stream.Collectors;
 
 public class Bot {
 
-    public static BotMove makeMove(GamePhase moveType, Graph gameGraph, Player player) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private static Game game;
+
+    public static void makeMove() {
+        if (!game.getCurrentPlayer().isBot()) return;
+        Player player = game.getCurrentPlayer();
+        Graph gameGraph = game.getGameGraph();
+        GamePhase phase = game.getGamePhase();
+        System.out.println("i'm here!");
+        BotMove move = null;
         if (player == null || gameGraph == null)
             throw new InvalidParameterException("null values");
         if (!player.isBot())
             throw new InvalidParameterException("Player is not bot");
-        switch (moveType) {
+        if (game == null)
+            throw new InvalidParameterException("Game is not set");
+
+        switch (phase) {
             case REINFORCEMENT:
-                if (player.getBonus() == 0) {
-                    return new BotMove(BotMoveType.END_REINFORCEMENT);
+                if (player.getBonus() != 0) {
+                    move =  new BotMove(BotMoveType.REINFORCEMENT, getRandomTerritory(gameGraph,player), player.getBonus());
                 }
-                return new BotMove(BotMoveType.REINFORCEMENT, getRandomTerritory(gameGraph,player), player.getBonus());
+                break;
             case ATTACK:
-                return new BotMove(BotMoveType.END_ATTACK);
+                move = new BotMove(BotMoveType.END_ATTACK);
+                break;
             case FORTIFY:
-                return new BotMove(BotMoveType.END_FORTIFY);
+                move = new BotMove(BotMoveType.END_FORTIFY);
+                break;
         }
-        return null;
+        final BotMove botMove = move;
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.botMove(botMove);
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 
     private static Territory getRandomTerritory(Graph gameGraph, Player player) {
@@ -43,5 +59,9 @@ public class Bot {
                 .filter(x -> x.getOwner().equals(player))
                 .collect(Collectors.toList());
         return playerTerritories.get(new Random().nextInt(playerTerritories.size()));
+    }
+
+    public static void setGame(Game g) {
+        game = g;
     }
 }

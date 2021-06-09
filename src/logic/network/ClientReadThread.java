@@ -99,13 +99,13 @@ public class ClientReadThread extends Thread {
                     client.manager.game.reinforce(response.troops, response.src);
                 }
                 if (type == END_REINFORCE || response.type == END_ATTACK || response.type == END_FORTIFY) {
-                    client.manager.game.getGameWindow().nextPhase();
+                    client.manager.game.nextPhase();
                 }
                 if (type == ATTACK) {
                     client.manager.game.attack(response.srcName, response.srcTroops, response.srcOwner, response.dstName, response.dstTroops, response.dstOwner);
                 }
                 if (type == FORTIFY) {
-                    client.manager.game.getGameWindow().fortify(response.src, response.dst, response.troops);
+                    client.manager.game.fortify(response.src, response.dst, response.troops);
                 }
                 if(type == SKIP_MOVE) {
                     String username = client.manager.game.getCurrentPlayer().getName();

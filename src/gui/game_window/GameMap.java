@@ -39,6 +39,8 @@ public class GameMap extends JPanel {
                 }
             }
         });
+
+        drawField();
     }
 
     private void updateTerritories() {
@@ -73,20 +75,22 @@ public class GameMap extends JPanel {
             buttons.add(button);
 
         }
-        if (game.isMultiplayer) {
-            if (game.isCurrentPlayerActive()) {
-                addListeners();
+        if (game.isStarted()) {
+            if (game.isMultiplayer) {
+                if (game.isCurrentPlayerActive()) {
+                    addListeners();
+                }
+            } else {
+                if (!game.getCurrentPlayer().isBot()) {
+                    addListeners();
+                }
             }
-        } else {
-            if (!game.getCurrentPlayer().isBot()) {
-                addListeners();
-            }
-        }
 
-        if(game.getGameOption().equals(GamePhase.REINFORCEMENT))
-            showOptions(GamePhase.REINFORCEMENT);
-        if (game.getGameWindow() != null) {
-            game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
+            if(game.getGameOption().equals(GamePhase.REINFORCEMENT))
+                showOptions(GamePhase.REINFORCEMENT);
+            if (game.getGameWindow() != null) {
+                game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
+            }
         }
 
         revalidate();

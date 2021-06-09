@@ -1,6 +1,6 @@
-package gui.game_over_window;
+package gui.menus;
 
-import gui.main_menu.MainMenu;
+import gui.menus.main_menu.MainMenu;
 import logic.Player;
 import logic.network.MultiplayerManager;
 import util.res.Fonts;
@@ -15,7 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class GameOverWindow extends JPanel {
+public class GameOverMenu extends JPanel {
     private final JPanel panel;
     private final JFrame frame;
     private final Player player;
@@ -27,7 +27,7 @@ public class GameOverWindow extends JPanel {
     private int menuOptionChosen;
     private final MultiplayerManager manager;
 
-    public GameOverWindow(JFrame frame, Player player, MultiplayerManager manager) {
+    public GameOverMenu(JFrame frame, Player player, MultiplayerManager manager) {
         SoundPlayer.gameOverSound();
         this.frame = frame;
         this.player = player;

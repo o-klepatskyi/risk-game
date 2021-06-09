@@ -4,7 +4,6 @@ import gui.game_window.GameWindow;
 import logic.Territory;
 import logic.network.Message;
 import logic.network.MessageType;
-import logic.network.MultiplayerManager;
 import util.res.Fonts;
 import util.res.SoundPlayer;
 import util.exceptions.IllegalNumberOfReinforceTroopsException;
@@ -71,6 +70,7 @@ public class ReinforcementsPanel extends SidePanel {
     private void initButtons() {
         JPanel bottomPanel = new JPanel();
         bottomPanel.setOpaque(false);
+        System.out.println("Troops left: " + troopsLeft);
         troopsLeftSpinner = new JSpinner(new SpinnerNumberModel(troopsLeft, 1, troopsLeft, 1));
         ((JSpinner.DefaultEditor) troopsLeftSpinner.getEditor()).getTextField().setEditable(false);
         Dimension troopsSpinnerSize = new Dimension(LABEL_WIDTH/5, LABEL_HEIGHT);
@@ -113,22 +113,14 @@ public class ReinforcementsPanel extends SidePanel {
 
         try {
             Territory src = Territory.getIdentical(this.src);
-            gameWindow.reinforce(reinforcedTroops);
+            gameWindow.game.reinforce(reinforcedTroops);
+
             if (gameWindow.game.isMultiplayer) {
                 gameWindow.game.manager.sendMessage(new Message(MessageType.REINFORCE, src, reinforcedTroops));
             }
 
             troopsLeft -= reinforcedTroops;
-            if (troopsLeft == 0) {
-                gameWindow.nextPhase();
-                if (gameWindow.game.isMultiplayer) {
-                    gameWindow.game.manager.sendMessage(new Message(MessageType.END_REINFORCE));
-                }
-            } else {
-                troopsLeftSpinner.setModel(new SpinnerNumberModel(troopsLeft, 1, troopsLeft, 1));
-                reinforcementsLeft.setValue(troopsLeft);
-                deployTroopsButton.setEnabled(false);
-            }
+
         } catch (SrcNotStatedException | IllegalNumberOfReinforceTroopsException e) {
             e.printStackTrace();
         }

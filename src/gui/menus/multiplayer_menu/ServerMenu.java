@@ -1,6 +1,9 @@
-package gui.multiplayer_menu;
+package gui.menus.multiplayer_menu;
 
-import gui.main_menu.MainMenu;
+import gui.HintTextField;
+import gui.player_menu.PlayerMenu;
+import logic.network.MultiplayerManager;
+import logic.network.NetworkMode;
 import util.res.Fonts;
 import util.res.Images;
 import util.res.SoundPlayer;
@@ -10,12 +13,15 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-// todo add setKeyListener method to manipulate with mouse
-public class MultiplayerMenu extends JPanel {
 
+// todo add setKeyListener method to manipulate with mouse
+// todo add loading panel
+public class ServerMenu extends JPanel {
+
+    private HintTextField portField, nameField;
     private final JFrame frame;
     private final JPanel panel;
-    private JButton serverButton, clientButton, backButton;
+    private JButton enterButton, backButton;
     private GridBagConstraints gbc;
 
     private final int SIZE = 500;
@@ -23,15 +29,16 @@ public class MultiplayerMenu extends JPanel {
 
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
 
-    public MultiplayerMenu(JFrame frame) {
+    private String username;
+    private int portNumber;
+
+    ServerMenu(JFrame frame) {
         this.frame = frame;
         panel = this;
 
         initWindow();
+        initTextFields();
         initButtons();
-
-        //menuOptionChosen = 1;
-        //highlightOption(menuOptionChosen);
     }
 
     private void initWindow() {
@@ -45,41 +52,45 @@ public class MultiplayerMenu extends JPanel {
         gbc.insets = new Insets(85,0,-70,0);
     }
 
+    private void initTextFields() {
+        ArrayList<JTextField> fields = new ArrayList<>();
+        nameField = new HintTextField("Enter username", 20);
+        fields.add(nameField);
+        portField = new HintTextField("Enter port number", 20);
+        fields.add(portField);
+
+        for (JTextField field : fields) {
+            field.setPreferredSize(new Dimension(SIZE/2,35));
+            field.setFont(Fonts.BUTTON_FONT.deriveFont(20f));
+            add(field, gbc);
+        }
+    }
+
     private void initButtons() {
         ArrayList<JButton> buttons = new ArrayList<>();
-        serverButton = new JButton("Create room");
-        serverButton.addMouseListener(new MouseAdapter() {
+        enterButton = new JButton("Create room");
+        enterButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                openServerMenu();
                 SoundPlayer.buttonClickedSound();
+                if (!getServerInfo()) {
+                    JOptionPane.showMessageDialog(null,
+                            "Enter all the information carefully.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    openPlayerMenu();
+                }
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
                 SoundPlayer.optionChosenSound();
-                menuOptionChosen = 1;
+                menuOptionChosen = 3;
                 highlightOption(menuOptionChosen);
             }
         });
-        buttons.add(serverButton);
-
-        clientButton = new JButton("Connect");
-        clientButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                openClientMenu();
-                SoundPlayer.buttonClickedSound();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                SoundPlayer.optionChosenSound();
-                menuOptionChosen = 2;
-                highlightOption(menuOptionChosen);
-            }
-        });
-        buttons.add(clientButton);
+        buttons.add(enterButton);
 
         backButton = new JButton("Back");
         backButton.addMouseListener(new MouseAdapter() {
@@ -92,7 +103,7 @@ public class MultiplayerMenu extends JPanel {
             @Override
             public void mouseEntered(MouseEvent e) {
                 SoundPlayer.optionChosenSound();
-                menuOptionChosen = 3;
+                menuOptionChosen = 4;
                 highlightOption(menuOptionChosen);
             }
         });
@@ -111,17 +122,12 @@ public class MultiplayerMenu extends JPanel {
     private void highlightOption(int option) {
         resetButtons();
         switch (option) {
-            case 1:
-                serverButton.setForeground(Color.YELLOW);
-                serverButton.setText("< Create room >");
-                SoundPlayer.optionChosenSound();
-                break;
-            case 2:
-                clientButton.setForeground(Color.YELLOW);
-                clientButton.setText("< Connect >");
-                SoundPlayer.optionChosenSound();
-                break;
             case 3:
+                enterButton.setForeground(Color.YELLOW);
+                enterButton.setText("< Create room >");
+                SoundPlayer.optionChosenSound();
+                break;
+            case 4:
                 backButton.setForeground(Color.YELLOW);
                 backButton.setText("< Back >");
                 SoundPlayer.optionChosenSound();
@@ -130,40 +136,50 @@ public class MultiplayerMenu extends JPanel {
     }
 
     private void resetButtons() {
-        serverButton.setForeground(Color.WHITE);
-        serverButton.setText("Create room");
-
-        clientButton.setForeground(Color.WHITE);
-        clientButton.setText("Connect");
+        enterButton.setForeground(Color.WHITE);
+        enterButton.setText("Create room");
 
         backButton.setForeground(Color.WHITE);
         backButton.setText("Back");
     }
 
-    private void openServerMenu() {
+    private void openPlayerMenu() {
+        MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.SERVER);
+        PlayerMenu pm = new PlayerMenu(frame, multiplayerManager);
+
+        multiplayerManager.setPlayerMenu(pm);
+        multiplayerManager.startServer(portNumber, username, frame);
+
         setVisible(false);
         frame.remove(this);
-        frame.add(new ServerMenu(frame));
-        frame.pack();
     }
 
-    private void openClientMenu() {
-        frame.remove(this);
-        frame.add(new ClientMenu(frame));
-        frame.revalidate();
-        frame.repaint();
-        frame.pack();
+    private boolean getServerInfo() {
+        username = nameField.getText();
+        try {
+            portNumber = Integer.parseInt(portField.getText());
+            if (portNumber < 1 || portNumber >= 0xFFFF) {
+                throw new Exception("Wrong port number");
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+        if (username.length() == 0) {
+            return false;
+        }
+
+        return true;
     }
 
     private void back() {
         panel.setVisible(false);
         frame.remove(panel);
-        JPanel menu = new MainMenu(frame);
+        JPanel menu = new MultiplayerMenu(frame);
         frame.add(menu);
         frame.pack();
         menu.setFocusable(true);
     }
-
 
     @Override
     protected void paintComponent(Graphics g) {

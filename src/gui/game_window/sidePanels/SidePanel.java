@@ -1,6 +1,6 @@
 package gui.game_window.sidePanels;
 
-import gui.main_menu.MainMenu;
+import gui.menus.main_menu.MainMenu;
 import logic.Territory;
 import logic.network.MultiplayerManager;
 import logic.network.NetworkMode;

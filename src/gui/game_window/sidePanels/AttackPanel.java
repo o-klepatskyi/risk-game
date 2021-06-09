@@ -66,7 +66,15 @@ public class AttackPanel extends SidePanel {
         attackButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                attack();
+                if (attackButton.isEnabled()) {
+                    SoundPlayer.buttonClickedSound();
+                    attack();
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
             }
         });
         add(attackButton);
@@ -80,42 +88,44 @@ public class AttackPanel extends SidePanel {
         endAttack.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                SoundPlayer.buttonClickedSound();
                 endAttack();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
             }
         });
         add(endAttack);
     }
 
     private void endAttack() {
-        SoundPlayer.buttonClickedSound();
-        gameWindow.nextPhase();
+        gameWindow.game.nextPhase();
         if (gameWindow.game.isMultiplayer) {
             gameWindow.game.manager.sendMessage(new Message(MessageType.END_ATTACK));
         }
     }
 
     private void attack() {
-        if (attackButton.isEnabled()) {
-            SoundPlayer.buttonClickedSound();
-            try {
-                Territory src = Territory.getIdentical(this.src), dst = Territory.getIdentical(this.dst);
-                gameWindow.attack();
+        try {
+            Territory src = Territory.getIdentical(this.src), dst = Territory.getIdentical(this.dst);
+            gameWindow.game.attack();
 
-                if (gameWindow.game.isMultiplayer) {
-                    Territory newSrc = gameWindow.game.findTerritoryInGraph(src.getName()),
-                            newDst = gameWindow.game.findTerritoryInGraph(dst.getName());
+            if (gameWindow.game.isMultiplayer) {
+                Territory newSrc = gameWindow.game.findTerritoryInGraph(src.getName()),
+                        newDst = gameWindow.game.findTerritoryInGraph(dst.getName());
 
-                    gameWindow.game.manager.sendMessage(new Message(MessageType.ATTACK,
-                            newSrc.getName(),
-                            newSrc.getTroops(),
-                            newSrc.getOwner(),
-                            newDst.getName(),
-                            newDst.getTroops(),
-                            newDst.getOwner()));
-                }
-            } catch (DstNotStatedException | SrcNotStatedException | IllegalNumberOfAttackTroopsException | WrongTerritoriesPairException e) {
-                e.printStackTrace();
+                gameWindow.game.manager.sendMessage(new Message(MessageType.ATTACK,
+                        newSrc.getName(),
+                        newSrc.getTroops(),
+                        newSrc.getOwner(),
+                        newDst.getName(),
+                        newDst.getTroops(),
+                        newDst.getOwner()));
             }
+        } catch (DstNotStatedException | SrcNotStatedException | IllegalNumberOfAttackTroopsException | WrongTerritoriesPairException e) {
+            e.printStackTrace();
         }
     }
 

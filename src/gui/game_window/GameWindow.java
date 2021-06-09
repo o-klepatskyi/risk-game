@@ -55,7 +55,7 @@ public class GameWindow extends JPanel {
         this.add(gameMap, gbc);
     }
 
-    public void updatePhase() {
+    public void update() {
         GamePhase gamePhase = game.getGameOption();
         updateSidePanel(gamePhase);
         gameFlow.updatePhase(game.getCurrentPlayer(), gamePhase);
@@ -96,19 +96,6 @@ public class GameWindow extends JPanel {
         sidePanel.updateTerritories(src, dst);
     }
 
-    public void reinforce(int reinforcedTroops) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
-        game.reinforce(reinforcedTroops);
-    }
-
-    public void nextPhase() {
-        game.nextPhase();
-        updatePhase();
-    }
-
-    public void attack() throws DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfAttackTroopsException, SrcNotStatedException {
-        game.attack();
-    }
-
     public int calculateProbability() {
         try {
             return game.calculateProbability();
@@ -117,16 +104,6 @@ public class GameWindow extends JPanel {
             System.err.println(e.getMessage());
         }
         return 0;
-    }
-
-    public void fortify(int troopsToTransfer) throws DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException, SrcNotStatedException {
-        game.fortify(troopsToTransfer);
-        nextPhase();
-    }
-
-    public void fortify(Territory src, Territory dst, int troopsToTransfer) throws WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException, DstNotStatedException, SrcNotStatedException {
-        game.fortify(src, dst, troopsToTransfer);
-        nextPhase();
     }
 
     public void setFrame(JFrame frame) {

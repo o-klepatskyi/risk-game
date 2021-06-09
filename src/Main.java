@@ -1,4 +1,4 @@
-import gui.main_menu.MainMenu;
+import gui.menus.main_menu.MainMenu;
 import util.res.SoundPlayer;
 
 import javax.swing.*;

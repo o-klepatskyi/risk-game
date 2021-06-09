@@ -100,7 +100,15 @@ public class FortifyPanel extends SidePanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (fortifyButton.isEnabled()) {
+                    SoundPlayer.buttonClickedSound();
                     fortify();
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (fortifyButton.isEnabled()) {
+                    SoundPlayer.optionChosenSound();
                 }
             }
         });
@@ -119,19 +127,26 @@ public class FortifyPanel extends SidePanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
+                skipFortify();
+            }
 
-                if (gameWindow.game.isMultiplayer) {
-                    gameWindow.game.manager.sendMessage(new Message(MessageType.END_FORTIFY));
-                }
-
-                gameWindow.nextPhase(); // todo: the same here
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
             }
         });
         add(skipButton);
     }
 
+    private void skipFortify() {
+        if (gameWindow.game.isMultiplayer) {
+            gameWindow.game.manager.sendMessage(new Message(MessageType.END_FORTIFY));
+        }
+
+        gameWindow.game.nextPhase();
+    }
+
     private void fortify() {
-        SoundPlayer.buttonClickedSound();
         try {
             int troopsToTransfer = (int) troopsToTransferSpinner.getValue();
             Territory src = Territory.getIdentical(this.src), dst = Territory.getIdentical(this.dst);
@@ -139,7 +154,7 @@ public class FortifyPanel extends SidePanel {
             if (gameWindow.game.isMultiplayer) {
                 gameWindow.game.manager.sendMessage(new Message(MessageType.FORTIFY, src,dst, troopsToTransfer));
             }
-            gameWindow.fortify(troopsToTransfer); // todo: test this and if needed put before sending package
+            gameWindow.game.fortify(troopsToTransfer);
         } catch (DstNotStatedException | WrongTerritoriesPairException | IllegalNumberOfFortifyTroopsException | SrcNotStatedException e) {
             e.printStackTrace();
         }

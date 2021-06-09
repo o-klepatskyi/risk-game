@@ -1,8 +1,8 @@
-package gui.main_menu;
+package gui.menus.main_menu;
 
-import gui.multiplayer_menu.MultiplayerMenu;
+import gui.menus.multiplayer_menu.MultiplayerMenu;
 import gui.player_menu.PlayerMenu;
-import gui.rules_menu.RulesMenu;
+import gui.menus.RulesMenu;
 import util.res.Fonts;
 import util.res.Images;
 import util.res.SoundPlayer;

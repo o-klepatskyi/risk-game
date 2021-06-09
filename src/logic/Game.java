@@ -1,11 +1,12 @@
 package logic;
 
-import gui.game_over_window.GameOverWindow;
+import gui.menus.GameOverMenu;
 import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
 import logic.bot.Bot;
 import logic.bot.BotMove;
 import logic.bot.BotMoveType;
+import logic.maps.Map;
 import logic.network.Message;
 import logic.network.MessageType;
 import logic.network.MultiplayerManager;
@@ -13,25 +14,29 @@ import logic.network.NetworkMode;
 import util.exceptions.*;
 
 import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import logic.maps.Map;
 
 public class Game {
     private final ArrayList<Player> players;
 
-    private final GameWindow gameWindow;
-    private final GameMap gameMap;
-    private final Graph gameGraph;
-    private final Map map;
+    public final GameWindow gameWindow;
+    public final GameMap gameMap;
+    public final Graph gameGraph;
+    public final Map map;
 
     private Player currentPlayer;
     private GamePhase gamePhase;
 
     public final boolean isMultiplayer;
     public final MultiplayerManager manager;
+
+    private boolean isStarted = false;
 
     public Game(Collection<Player> players, Map map) {
         if (players.size() < 2) throw new IllegalArgumentException();
@@ -61,12 +66,16 @@ public class Game {
         gameWindow = new GameWindow(this);
     }
 
-    private void start() {
+    public void start() {
+        if (!isStarted) {
+            isStarted = true;
+            Bot.setGame(this);
 
-        pickFirstPlayer();
+            pickFirstPlayer(); // starting point of the game
 
-        Log.initLog();
-        Log.write("Game started");
+            Log.initLog();
+            Log.write("Game started");
+        }
     }
 
     public boolean isCurrentPlayerActive() {
@@ -231,7 +240,7 @@ public class Game {
         else {
             throw new WrongTerritoriesPairException("These territories are not connected!");
         }
-        gameMap.drawField();
+        gameWindow.update();
         Log.write(srcTerritory.getOwner().getName() + " fortifies territory");
         Log.write(srcTerritory.getName() + " -> " + dstTerritory.getName() + "(" + numberOfTroops + ")");
     }
@@ -254,8 +263,18 @@ public class Game {
 
         srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
         currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
-        gameMap.drawField();
+
         Log.write(srcTerritory.getName() + " reinforced (" + numberOfTroops + ")");
+
+        if (currentPlayer.getBonus() == 0) {
+            gameWindow.game.nextPhase();
+            if (gameWindow.game.isMultiplayer) {
+                gameWindow.game.manager.sendMessage(new Message(MessageType.END_REINFORCE));
+            }
+        } else {
+            gameWindow.update();
+            if (currentPlayer.isBot()) Bot.makeMove();
+        }
     }
 
     private Territory findTerritory(Territory territory) {
@@ -284,13 +303,10 @@ public class Game {
      */
     private void reinforcePhase() {
         gamePhase = GamePhase.REINFORCEMENT;
-        System.out.println(currentPlayer);
-        if (currentPlayer.isBot()) {
-            BotMoveType type = botMove();
+        gameWindow.update();
 
-            while (type != null && type != BotMoveType.END_REINFORCEMENT) { // multiple attacks can occur
-                type = botMove();
-            }
+        if (currentPlayer.isBot()) {
+            Bot.makeMove();
         }
     }
 
@@ -299,12 +315,9 @@ public class Game {
      */
     private void attackPhase() {
         gamePhase = GamePhase.ATTACK;
+        gameWindow.update();
         if (currentPlayer.isBot()) {
-            BotMoveType type = botMove();
-
-            while (type != null && type != BotMoveType.END_ATTACK) { // multiple attacks can occur
-                type = botMove();
-            }
+            Bot.makeMove();
         }
     }
 
@@ -313,13 +326,13 @@ public class Game {
      */
     private void fortifyPhase() {
         gamePhase = GamePhase.FORTIFY;
+        gameWindow.update();
         if (currentPlayer.isBot()) {
-            botMove();
+            Bot.makeMove();
         }
     }
 
-    private BotMoveType botMove() {
-        BotMove botMove = Bot.makeMove(gamePhase, gameGraph, currentPlayer);
+    public BotMoveType botMove(BotMove botMove) {
         System.out.println(botMove);
         if (botMove != null) {
             try {
@@ -368,8 +381,8 @@ public class Game {
         Log.write(currentPlayer.getName() + " turn");
         setBonus();
 
+        gameWindow.update();
         reinforcePhase();
-        gameWindow.updatePhase();
     }
 
     private boolean checkIfPlayerOnline() {
@@ -407,7 +420,7 @@ public class Game {
         JFrame frame = gameWindow.getFrame();
         gameWindow.setVisible(false);
         frame.remove(gameWindow);
-        frame.add(new GameOverWindow(frame, currentPlayer, manager));
+        frame.add(new GameOverMenu(frame, currentPlayer, manager));
         frame.pack();
     }
 
@@ -549,5 +562,13 @@ public class Game {
         gamePhase = GamePhase.REINFORCEMENT;
         currentPlayer = players.get(players.size()-1);
         nextPlayerTurn();
+    }
+
+    public boolean isStarted() {
+        return isStarted;
+    }
+
+    public GamePhase getGamePhase() {
+        return gamePhase;
     }
 }

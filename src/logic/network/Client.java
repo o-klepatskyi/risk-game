@@ -1,9 +1,8 @@
 package logic.network;
 
-import gui.main_menu.MainMenu;
+import gui.menus.main_menu.MainMenu;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -11,8 +10,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Client {
-    private String hostname;
-    private int port;
+    private final String hostname;
+    private final int port;
     public final String username;
     private ObjectOutputStream objectOutputStream;
     private Socket socket;

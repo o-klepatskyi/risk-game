@@ -1,4 +1,4 @@
-package gui.multiplayer_menu;
+package gui.menus.multiplayer_menu;
 
 import gui.HintTextField;
 import gui.player_menu.PlayerMenu;

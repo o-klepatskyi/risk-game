@@ -1,6 +1,6 @@
 package gui.player_menu;
 
-import gui.main_menu.MainMenu;
+import gui.menus.main_menu.MainMenu;
 import logic.maps.MapType;
 import logic.network.MultiplayerManager;
 import util.res.Fonts;

@@ -1,6 +1,6 @@
-package gui.rules_menu;
+package gui.menus;
 
-import gui.main_menu.MainMenu;
+import gui.menus.main_menu.MainMenu;
 import util.res.Fonts;
 import util.res.Images;
 import util.res.SoundPlayer;

@@ -5,7 +5,6 @@ import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
 import logic.bot.Bot;
 import logic.bot.BotMove;
-import logic.bot.BotMoveType;
 import logic.maps.Map;
 import logic.network.Message;
 import logic.network.MessageType;
@@ -14,10 +13,6 @@ import logic.network.NetworkMode;
 import util.exceptions.*;
 
 import javax.swing.*;
-import javax.swing.Timer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -190,6 +185,10 @@ public class Game {
         }
     }
 
+
+    /**
+     * for client only
+     */
     public void attack(String srcName, int srcTroops, Player srcOwner, String dstName, int dstTroops, Player dstOwner) {
         Territory src = findTerritoryInGraph(srcName);
         Territory dst = findTerritoryInGraph(dstName);
@@ -207,12 +206,6 @@ public class Game {
     public void fortify(int numberOfTroops) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfFortifyTroopsException {
         Territory srcTerritory = gameMap.getSrcTerritory();
         Territory dstTerritory = gameMap.getDstTerritory();
-
-        if(srcTerritory == null)
-            throw new SrcNotStatedException("Source territory was not stated!");
-
-        if(dstTerritory == null)
-            throw new DstNotStatedException("Destination territory was not stated!");
 
         if (isMultiplayer) {
             manager.sendMessage(
@@ -248,10 +241,11 @@ public class Game {
         else {
             throw new WrongTerritoriesPairException("These territories are not connected!");
         }
-        nextPhase();
 
         Log.write(srcTerritory.getOwner().getName() + " fortifies territory");
         Log.write(srcTerritory.getName() + " -> " + dstTerritory.getName() + "(" + numberOfTroops + ")");
+
+        nextPhase();
     }
 
     public void reinforce(int numberOfTroops) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
@@ -295,15 +289,9 @@ public class Game {
 
     public void nextPhase() {
         switch (gamePhase) {
-            case REINFORCEMENT:
-                attackPhase();
-                break;
-            case ATTACK:
-                fortifyPhase();
-                break;
-            case FORTIFY:
-                nextPlayerTurn();
-                break;
+            case REINFORCEMENT -> attackPhase();
+            case ATTACK -> fortifyPhase();
+            case FORTIFY -> nextPlayerTurn();
         }
     }
 
@@ -314,7 +302,7 @@ public class Game {
         gamePhase = GamePhase.REINFORCEMENT;
         gameWindow.update();
 
-        if (currentPlayer.isBot()) {
+        if (currentPlayer.isBot() || !isCurrentPlayerOnline()) {
             Bot.makeMove();
         }
     }
@@ -325,7 +313,7 @@ public class Game {
     private void attackPhase() {
         gamePhase = GamePhase.ATTACK;
         gameWindow.update();
-        if (currentPlayer.isBot()) {
+        if (currentPlayer.isBot()  || !isCurrentPlayerOnline()) {
             Bot.makeMove();
         }
     }
@@ -336,12 +324,12 @@ public class Game {
     private void fortifyPhase() {
         gamePhase = GamePhase.FORTIFY;
         gameWindow.update();
-        if (currentPlayer.isBot()) {
+        if (currentPlayer.isBot()  || !isCurrentPlayerOnline()) {
             Bot.makeMove();
         }
     }
 
-    public BotMoveType botMove(BotMove botMove) {
+    public void botMove(BotMove botMove) {
         System.out.println(botMove);
         if (botMove != null) {
             try {
@@ -365,7 +353,6 @@ public class Game {
                 e.printStackTrace();
             }
         }
-        return botMove == null ? null : botMove.type;
     }
 
     /**
@@ -381,8 +368,6 @@ public class Game {
 
         currentPlayer = players.get(index);
 
-        if (!checkIfPlayerOnline()) return;
-        System.out.println("Current player is online OR you are not the server.");
         checkForGameOver();
 
         Log.write(currentPlayer.getName() + " turn");
@@ -392,29 +377,20 @@ public class Game {
         reinforcePhase();
     }
 
-    private boolean checkIfPlayerOnline() {
+    public boolean isCurrentPlayerOnline() {
         if (    isMultiplayer &&
                 manager.networkMode == NetworkMode.SERVER &&
                 !currentPlayer.isBot() &&
                 !manager.server.userNames.contains(currentPlayer.getName())) {
-            try {
-                manager.server.broadcast(new Message(MessageType.SKIP_MOVE), manager.server.getThreadByName(manager.client.username));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String username = currentPlayer.getName();
-            nextPlayerTurn();
-            JOptionPane.showMessageDialog(null,
-                    "Player " + username  + " has lost connection. Skipping his move.",
-                    "Player disconnected.",
-                    JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
     }
 
     private void checkForGameOver() {
+        System.out.println(players);
         removeDeadPlayers();
+        System.out.println(players);
         if(players.size() == 1) {
             Log.write("GAME OVER!!!");
             Log.write(currentPlayer.getName() + " IS A WINNER");

@@ -107,19 +107,11 @@ public class ClientReadThread extends Thread {
                 if (type == FORTIFY) {
                     client.manager.game.fortify(response.src, response.dst, response.troops);
                 }
-                if(type == SKIP_MOVE) {
-                    String username = client.manager.game.getCurrentPlayer().getName();
-                    client.manager.game.nextPlayerTurn();
-                    JOptionPane.showMessageDialog(null,
-                            "Player " + username + " has lost connection. Skipping his move.",
-                            "Player disconnected.",
-                            JOptionPane.ERROR_MESSAGE);
-                }
                 if (type == PLAYER_LEFT_IN_GAME) {
                     client.manager.skipDisconnectedUserMove(response.username);
                     JOptionPane.showMessageDialog(null,
-                            "Player " + response.username + " has lost connection.",
-                            "Player disconnected.",
+                            "Player " + response.username + " has lost connection.\nNow bot is playing for him.",
+                            "Player " + response.username + " disconnected.",
                             JOptionPane.ERROR_MESSAGE);
                 }
                 if (type == MAP_CHANGED) {

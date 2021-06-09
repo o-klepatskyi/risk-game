@@ -1,6 +1,7 @@
 package logic.bot;
 
 import logic.*;
+import logic.network.NetworkMode;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -10,22 +11,24 @@ import java.util.List;
 import java.util.Random;
 
 public abstract class Bot {
-
     private static Game game;
 
     public static void makeMove() {
-        if (!game.getCurrentPlayer().isBot()) return;
-        if (game.manager == null) return;
+        if (game == null)
+            throw new InvalidParameterException("Game is not set");
+        if (game.isCurrentPlayerOnline()) {
+            throw new InvalidParameterException("Current player is neither bot nor offline");
+        }
+        if (game.manager.networkMode!= NetworkMode.SERVER) {
+            throw new InvalidParameterException("Called not from server.");
+        }
         Player player = game.getCurrentPlayer();
         Graph gameGraph = game.getGameGraph();
         GamePhase phase = game.getGamePhase();
         BotMove move = null;
+
         if (player == null || gameGraph == null)
             throw new InvalidParameterException("null values");
-        if (!player.isBot())
-            throw new InvalidParameterException("Player is not bot");
-        if (game == null)
-            throw new InvalidParameterException("Game is not set");
 
         switch (phase) {
             case REINFORCEMENT:

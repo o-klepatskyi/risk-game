@@ -24,10 +24,8 @@ public class FortifyPanel extends SidePanel {
     private JSpinner troopsToTransferSpinner;
     private JButton fortifyButton, skipButton;
 
-    private GameWindow gameWindow;
-
     public FortifyPanel(GameWindow gameWindow) {
-        this.gameWindow = gameWindow;
+        super(gameWindow);
         initLabels();
         initButtons();
     }

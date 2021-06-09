@@ -367,7 +367,6 @@ public class Game {
     }
 
     public void openGameOverMenu() {
-        System.out.println("opening game over window");
         JFrame frame = gameWindow.getFrame();
         gameWindow.setVisible(false);
         frame.remove(gameWindow);

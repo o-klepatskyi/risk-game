@@ -172,7 +172,7 @@ public class GameOverWindow extends JPanel {
     }
 
     private void openMenu() {
-        manager.gameOver();
+        if (manager != null) manager.gameOver();
         panel.setVisible(false);
         frame.remove(panel);
         frame.add(new MainMenu(frame));

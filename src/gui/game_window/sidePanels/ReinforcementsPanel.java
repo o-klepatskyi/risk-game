@@ -4,6 +4,7 @@ import gui.game_window.GameWindow;
 import logic.Territory;
 import logic.network.Message;
 import logic.network.MessageType;
+import logic.network.MultiplayerManager;
 import util.res.Fonts;
 import util.res.SoundPlayer;
 import util.exceptions.IllegalNumberOfReinforceTroopsException;
@@ -24,11 +25,10 @@ public class ReinforcementsPanel extends SidePanel {
     private JButton deployTroopsButton;
 
     private int playerBonus, troopsLeft;
-    private GameWindow gameWindow;
     private ArrayList<String> labelsBonuses;
 
     public ReinforcementsPanel(GameWindow gameWindow, int bonus, ArrayList<String> labels) {
-        this.gameWindow = gameWindow;
+        super(gameWindow);
         playerBonus = bonus;
         troopsLeft = bonus;
         this.labelsBonuses = labels;

@@ -1,8 +1,8 @@
 package gui.game_window.sidePanels;
 
 import gui.game_window.GameWindow;
-import logic.Game;
 import logic.Territory;
+import logic.network.MultiplayerManager;
 import util.res.SoundPlayer;
 
 import logic.network.Message;
@@ -22,10 +22,9 @@ public class AttackPanel extends SidePanel {
     private JLabel alliedTroopsLabel, enemyTroopsLabel,  alliedTroops, enemyTroops;
     private ValueJLabel victoryChance;
     private JButton attackButton, endAttack;
-    private GameWindow gameWindow;
 
     public AttackPanel(GameWindow gameWindow) {
-        this.gameWindow = gameWindow;
+        super(gameWindow);
         initLabels();
         initButtons();
     }

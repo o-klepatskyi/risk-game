@@ -28,7 +28,7 @@ public class GameWindow extends JPanel {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setLayout(new GridBagLayout());
 
-        sidePanel = SidePanel.getEmptyPanel();
+        sidePanel = new SidePanel(this);
         gameFlow = new TopPanel();
 
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -65,7 +65,7 @@ public class GameWindow extends JPanel {
     private void updateSidePanel(GamePhase gamePhase) {
         remove(sidePanel);
         if (game.isMultiplayer && !game.isCurrentPlayerActive()) {
-            sidePanel = SidePanel.getEmptyPanel();
+            sidePanel = new SidePanel(this);
         } else {
             remove(sidePanel);
             switch (gamePhase) {
@@ -79,7 +79,7 @@ public class GameWindow extends JPanel {
                     sidePanel = new FortifyPanel(this);
                     break;
                 default:
-                    sidePanel = SidePanel.getEmptyPanel();
+                    sidePanel = new SidePanel(this);
             }
         }
         gbc.gridx = 0;

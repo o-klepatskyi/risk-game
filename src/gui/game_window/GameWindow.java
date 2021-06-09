@@ -4,7 +4,7 @@ import gui.game_window.sidePanels.*;
 import gui.game_window.topPanel.Logo;
 import gui.game_window.topPanel.TopPanel;
 import logic.Game;
-import logic.GameOption;
+import logic.GamePhase;
 import logic.Territory;
 import util.exceptions.*;
 
@@ -56,19 +56,19 @@ public class GameWindow extends JPanel {
     }
 
     public void updatePhase() {
-        GameOption gameOption = game.getGameOption();
-        updateSidePanel(gameOption);
-        gameFlow.updatePhase(game.getCurrentPlayer(), gameOption);
+        GamePhase gamePhase = game.getGameOption();
+        updateSidePanel(gamePhase);
+        gameFlow.updatePhase(game.getCurrentPlayer(), gamePhase);
         gameMap.drawField();
     }
 
-    private void updateSidePanel(GameOption gameOption) {
+    private void updateSidePanel(GamePhase gamePhase) {
         remove(sidePanel);
         if (game.isMultiplayer && !game.isCurrentPlayerActive()) {
             sidePanel = SidePanel.getEmptyPanel();
         } else {
             remove(sidePanel);
-            switch (gameOption) {
+            switch (gamePhase) {
                 case REINFORCEMENT:
                     sidePanel = createReinforcementsPanel();
                     break;

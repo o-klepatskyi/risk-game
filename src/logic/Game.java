@@ -12,17 +12,17 @@ import util.exceptions.*;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Game {
     private final ArrayList<Player> players;
-    private final int numberOfPlayers;
 
     private GameWindow gameWindow;
     private Graph gameGraph;
 
     private Player currentPlayer;
-    private GameOption gameOption;
+    private GamePhase gamePhase;
     private GameMap gameMap;
 
     public final boolean isMultiplayer;
@@ -36,7 +36,6 @@ public class Game {
         isMultiplayer = false;
         this.players = new ArrayList<>(players);
         this.map = map;
-        numberOfPlayers = players.size();
 
         gameGraph = map.initGraph(this.players);
         start();
@@ -50,7 +49,6 @@ public class Game {
         this.manager = manager;
         isMultiplayer = true;
         this.players = new ArrayList<>(players);
-        numberOfPlayers = players.size();
         this.map = map;
         gameGraph = map.getGameGraph();
         start();
@@ -90,8 +88,8 @@ public class Game {
         return gameGraph;
     }
 
-    public GameOption getGameOption() {
-        return gameOption;
+    public GamePhase getGameOption() {
+        return gamePhase;
     }
 
     public Player getCurrentPlayer() {
@@ -263,7 +261,7 @@ public class Game {
     }
 
     public void nextPhase() {
-        switch (gameOption) {
+        switch (gamePhase) {
             case REINFORCEMENT:
                 attackPhase();
                 break;
@@ -282,28 +280,28 @@ public class Game {
      * so why not just include it in that method????
      */
     private void reinforcePhase() {
-        gameOption = GameOption.REINFORCEMENT;
+        gamePhase = GamePhase.REINFORCEMENT;
     }
 
     /**
      * must be applied after reinforcePhase() call
      */
     private void attackPhase() {
-        gameOption = GameOption.ATTACK;
+        gamePhase = GamePhase.ATTACK;
     }
 
     /**
      * must be applied after attackPhase() call
      */
     private void fortifyPhase() {
-        gameOption = GameOption.FORTIFY;
+        gamePhase = GamePhase.FORTIFY;
     }
 
     /**
      * removes dead player and gives turn to next player
      */
     public void nextPlayerTurn() {
-        System.out.println("Old player: " + currentPlayer);
+//        System.out.println("Old player: " + currentPlayer);
         removeDeadPlayers();
 
         int index = players.indexOf(currentPlayer);
@@ -313,7 +311,7 @@ public class Game {
 
         currentPlayer = players.get(index);
 
-        System.out.println("Current player: " + currentPlayer);
+//        System.out.println("Current player: " + currentPlayer);
         if (currentPlayer.isBot()) {
             nextPlayerTurn(); // todo: bot integration
             return;
@@ -359,13 +357,6 @@ public class Game {
 
             openGameOverMenu();
         }
-        else if (isMultiplayer && manager.networkMode == NetworkMode.SERVER) {
-            if (!anyBotsLeft() && manager.server.userNames.size() == 1)
-            JOptionPane.showMessageDialog(null,
-                    "You are the only player left on the server.",
-                    "No players connected.",
-                    JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     private boolean anyBotsLeft() {
@@ -376,12 +367,12 @@ public class Game {
     }
 
     public void openGameOverMenu() {
+        System.out.println("opening game over window");
         JFrame frame = gameWindow.getFrame();
         gameWindow.setVisible(false);
         frame.remove(gameWindow);
-        frame.add(new GameOverWindow(frame, currentPlayer));
+        frame.add(new GameOverWindow(frame, currentPlayer, manager));
         frame.pack();
-        if (isMultiplayer) manager.closeServer();
     }
 
     private ArrayList<String> continentLabels;
@@ -418,25 +409,34 @@ public class Game {
     }
 
     private void removeDeadPlayers() {
-        for (Player p : players) {
-            if (playerIsDead(p)) {
-                players.remove(p);
-                if (isMultiplayer && manager.client.username.equals(p.getName())) {
-                    showEliminatedMessage();
-                }
-            }
+        players.removeIf(this::playerIsDead);
+        if (isMultiplayer &&
+            !players.stream().map(Player::getName).collect(Collectors.toList()).contains(manager.client.username)) {
+            showEliminatedMessage();
         }
     }
 
+    private boolean shownEliminatedMessage = false;
+
     private void showEliminatedMessage() {
-        Object[] possibleValues = { "Stay in game", "Leave"};
-        Object selectedValue = JOptionPane.showInputDialog(null,
-                "You have been eliminated from game. Stay here?", "Game over",
-                JOptionPane.INFORMATION_MESSAGE, null,
-                possibleValues, possibleValues[0]);
-        if (selectedValue.equals(possibleValues[1])) {
+        if (shownEliminatedMessage) return;
+        if (players.size() == 1) {
+            return;
+        }
+        Object[] options = {"Stay in game",
+                "Leave"};
+        int n = JOptionPane.showOptionDialog(null,
+                "You have been eliminated from game.\nDo you like to stay here?",
+                "GAME OVER",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+        if (n != 0) {
             manager.closeClient();
         }
+        shownEliminatedMessage = true;
     }
 
     private boolean playerIsDead(Player player) {
@@ -510,7 +510,7 @@ public class Game {
     }
 
     private void pickFirstPlayer() {
-        gameOption = GameOption.REINFORCEMENT;
+        gamePhase = GamePhase.REINFORCEMENT;
         currentPlayer = players.get(players.size()-1);
         nextPlayerTurn();
     }

@@ -1,6 +1,6 @@
 package logic;
 
-public enum GameOption {
+public enum GamePhase {
     REINFORCEMENT,
     ATTACK,
     FORTIFY

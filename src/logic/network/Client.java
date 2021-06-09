@@ -72,10 +72,13 @@ public class Client {
         try {
             isClosed = true;
             socket.close();
-            openMainMenu();
-            JOptionPane.showMessageDialog(null,
-                    "Connection closed: " + cause,
-                    "Lost connection with server",JOptionPane.ERROR_MESSAGE);
+
+            if (cause != MessageType.GAME_OVER) {
+                openMainMenu();
+                JOptionPane.showMessageDialog(null,
+                        "Connection closed: " + cause,
+                        "Lost connection with server",JOptionPane.ERROR_MESSAGE);
+            }
         } catch (IOException ex) {
             System.err.println("Error writing to server: " + ex.getMessage());
         }

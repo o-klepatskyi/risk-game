@@ -115,8 +115,17 @@ public final class MultiplayerManager {
         playerMenu = null;
     }
 
-    public void openGameOverMenu() {
-        game.openGameOverMenu();
+    public void gameOver() {
+        if (networkMode == SERVER) {
+            server.isClosed = true;
+            try {
+                new Socket("127.0.0.1", server.port); // to close the cycle in Server class
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            client.close(GAME_OVER);
+        }
     }
 
     public void skipDisconnectedUserMove(String username) {

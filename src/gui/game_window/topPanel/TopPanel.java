@@ -1,7 +1,7 @@
 package gui.game_window.topPanel;
 
 import gui.game_window.GameWindow;
-import logic.GameOption;
+import logic.GamePhase;
 import logic.Player;
 import util.res.Fonts;
 
@@ -35,9 +35,9 @@ public class TopPanel extends JPanel {
         }
     }
 
-    public void updatePhase(Player player, GameOption gameOption) {
+    public void updatePhase(Player player, GamePhase gamePhase) {
         currentPlayer.setText(player.getName());
         currentPlayer.setForeground(player.getColor());
-        currentState.setText(gameOption.toString());
+        currentState.setText(gamePhase.toString());
     }
 }

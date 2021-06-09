@@ -2,6 +2,7 @@ package gui.game_over_window;
 
 import gui.main_menu.MainMenu;
 import logic.Player;
+import logic.network.MultiplayerManager;
 import util.res.Fonts;
 import util.res.Images;
 import util.res.SoundPlayer;
@@ -24,11 +25,13 @@ public class GameOverWindow extends JPanel {
 
     private final int SIZE = 500;
     private int menuOptionChosen;
+    private final MultiplayerManager manager;
 
-    public GameOverWindow(JFrame frame, Player player) {
+    public GameOverWindow(JFrame frame, Player player, MultiplayerManager manager) {
         SoundPlayer.gameOverSound();
         this.frame = frame;
         this.player = player;
+        this.manager = manager;
         panel = this;
 
         initWindow();
@@ -169,10 +172,10 @@ public class GameOverWindow extends JPanel {
     }
 
     private void openMenu() {
+        manager.gameOver();
         panel.setVisible(false);
         frame.remove(panel);
         frame.add(new MainMenu(frame));
         frame.pack();
     }
-
 }

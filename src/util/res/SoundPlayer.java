@@ -4,11 +4,11 @@ import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 
-public class SoundPlayer {
+public abstract class SoundPlayer {
     private static Clip backgroundMusic;
     private static Clip currentClip;
 
-    private static boolean muted = false;
+    private static boolean muted = true;
 
     public static Clip play(AudioInputStream audioInputStream) {
         Clip clip = null;

@@ -32,6 +32,7 @@ public class Server {
                 userThreads.add(newUser);
                 newUser.start();
             }
+            System.out.println("Server closed.");
         } catch (IOException | IllegalArgumentException ex) {
             JOptionPane.showMessageDialog(null,
                     "Error occurred while setting up the server. Please restart the game.",
@@ -40,8 +41,6 @@ public class Server {
             System.err.println("Error in the server: " + ex.getMessage());
             ex.printStackTrace();
         }
-
-        System.out.println("Server closed.");
     }
 
     /**

@@ -115,9 +115,6 @@ public class ClientReadThread extends Thread {
                             "Player disconnected.",
                             JOptionPane.ERROR_MESSAGE);
                 }
-                if (type == GAME_OVER) {
-                    client.manager.openGameOverMenu();
-                }
                 if (type == PLAYER_LEFT_IN_GAME) {
                     client.manager.skipDisconnectedUserMove(response.username);
                     JOptionPane.showMessageDialog(null,

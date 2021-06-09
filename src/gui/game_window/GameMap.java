@@ -35,7 +35,7 @@ public class GameMap extends JPanel {
 
         panel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if(!game.getGameOption().equals(GameOption.REINFORCEMENT)) {
+                if(!game.getGameOption().equals(GamePhase.REINFORCEMENT)) {
                     resetButtons();
                     updateTerritories();
                 }
@@ -83,8 +83,8 @@ public class GameMap extends JPanel {
             addListeners();
         }
 
-        if(game.getGameOption().equals(GameOption.REINFORCEMENT))
-            showOptions(GameOption.REINFORCEMENT);
+        if(game.getGameOption().equals(GamePhase.REINFORCEMENT))
+            showOptions(GamePhase.REINFORCEMENT);
         if (game.getGameWindow() != null) {
             game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
         }
@@ -181,7 +181,7 @@ public class GameMap extends JPanel {
                                     resetButtons();
                             }
                         } else {
-                            if(game.getGameOption().equals(GameOption.REINFORCEMENT)) {
+                            if(game.getGameOption().equals(GamePhase.REINFORCEMENT)) {
                                 resetButtons();
                                 highlightButton(button, "src");
                                 showOptions(game.getGameOption());
@@ -233,7 +233,7 @@ public class GameMap extends JPanel {
                     else {
                         if(src != button) {
                             SoundPlayer.territoryChosenSound();
-                            if(game.getGameOption().equals(GameOption.REINFORCEMENT))
+                            if(game.getGameOption().equals(GamePhase.REINFORCEMENT))
                                 button.setBorder(BorderFactory.createLineBorder(Color.WHITE, BORDER_MARGIN));
                             else
                                 button.setBorder(BorderFactory.createLineBorder(Color.BLACK, BORDER_MARGIN));
@@ -242,7 +242,7 @@ public class GameMap extends JPanel {
                 }
 
                 public void mouseExited(MouseEvent e) {
-                    if(!buttonClicked && !game.getGameOption().equals(GameOption.REINFORCEMENT))
+                    if(!buttonClicked && !game.getGameOption().equals(GamePhase.REINFORCEMENT))
                         resetButtons();
                     else {
                         if(!button.equals(src) && !button.equals(dst))
@@ -254,8 +254,8 @@ public class GameMap extends JPanel {
     }
 
 
-    private void showOptions(GameOption option){
-        if(src != null || option.equals(GameOption.REINFORCEMENT)) {
+    private void showOptions(GamePhase option){
+        if(src != null || option.equals(GamePhase.REINFORCEMENT)) {
             ArrayList<Territory> filter = new ArrayList<>();
             Territory territory = null;
             if(src != null)

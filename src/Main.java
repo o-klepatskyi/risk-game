@@ -6,7 +6,7 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
         openMainMenu();
-        //SoundPlayer.menuBackgroundMusic();
+        SoundPlayer.menuBackgroundMusic();
     }
 
     private static void openMainMenu() {

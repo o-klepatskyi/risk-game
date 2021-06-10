@@ -30,21 +30,21 @@ public class UserThread extends Thread {
                 sendMessage(new Message(INVALID_NAME));
             } else if(server.hasUser(userNameMsg.username)) {
                 sendMessage(new Message(NAME_ERROR));
-            } else if (server.getUserNames().size() == 6) {
+            } else if (server.getUserNames().size() == 6 && !server.manager.isGameStarted()) {
                 sendMessage(new Message(MAX_PLAYERS_ERROR));
+            } else if (server.manager.isGameStarted()) {
+                sendMessage(new Message(GAME_STARTED_ERROR));
             } else {
                 this.username = userNameMsg.username;
                 sendMessage(new Message(OK));
-
                 updateUsers(username);
                 sendMessage(new Message(MAP_CHANGED, server.manager.getCurrentMapInComboBox()));
 
                 Message clientMessage;
-
                 do {
                     System.out.println(userNameMsg.username + " thread listening...");
                     clientMessage = (Message) objectInputStream.readObject();
-                    System.out.println("Server received: " + clientMessage);
+                    System.out.println("Server thread received: " + clientMessage);
                     MessageType type = clientMessage.type;
                     if (type == COLOR_CHANGED || type == BOT_ADDED || type == PLAYER_DELETED) {
                         server.broadcast(new Message(PLAYERS, clientMessage.players));
@@ -65,17 +65,12 @@ public class UserThread extends Thread {
                 } while (clientMessage.type != CLOSE_CONNECTION_BY_CLIENT);
 
             }
+            socket.close();
         } catch (Exception ex) {
             System.err.println("Error in UserThread " + username + ": " + ex.getMessage());
-            //ex.printStackTrace();
-            server.removeUser(username, this);
+            ex.printStackTrace();
         }
-        try {
-            socket.close();
-        } catch (IOException e) {
-            System.out.println("Couldn't close the socket in thread " + username);
-            //e.printStackTrace();
-        }
+
         server.removeUser(username, this);
         System.out.println("User '" + username + "' left server.");
     }

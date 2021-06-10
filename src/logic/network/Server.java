@@ -74,22 +74,16 @@ public class Server {
         boolean removed = userNames.remove(userName);
         if (removed) {
             userThreads.remove(aUser);
-            if (manager.playerMenu != null) {
-                manager.playerMenu.removePlayer(userName);
-                try {
+            try {
+                if (!manager.isGameStarted()) {
+                    manager.playerMenu.removePlayer(userName);
                     broadcast(new Message(MessageType.PLAYERS, manager.getPlayers()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
+                } else {
                     broadcast(new Message(MessageType.PLAYER_LEFT_IN_GAME, userName));
-                } catch (IOException e) {
-                    System.err.println("Couldn't broadcast message USER_LEFT in server.removeUser()");
-                    //e.printStackTrace();
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
         }
     }
 

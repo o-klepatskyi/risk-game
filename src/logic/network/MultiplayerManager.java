@@ -24,6 +24,9 @@ public final class MultiplayerManager {
     public PlayerMenu playerMenu;
     public JFrame frame;
     public ArrayList<Player> players;
+    private boolean isGameStarted = false;
+
+    public static final String BOT_NAME = "Bot";
 
     public MultiplayerManager(NetworkMode mode) {
         this.networkMode = mode;
@@ -80,8 +83,6 @@ public final class MultiplayerManager {
         }
     }
 
-    public static final String BOT_NAME = "Bot";
-
     public void closeClient() {
         sendMessage(new Message(CLOSE_CONNECTION_BY_CLIENT));
         client.close(CLOSE_CONNECTION_BY_CLIENT);
@@ -104,9 +105,12 @@ public final class MultiplayerManager {
      */
     public void startGame(Map map) {
         game = new Game(playerMenu.getPlayers(), map, this);
+
+        isGameStarted = true;
+
         game.start();
-        frame.remove(playerMenu);
-        game.getGameWindow().setFrame(frame);
+        playerMenu.getParent().remove(playerMenu);
+        game.getGameWindow().setFrame((JFrame) playerMenu.getParent());
         frame.add(game.getGameWindow());
         frame.pack();
         playerMenu = null;
@@ -133,12 +137,16 @@ public final class MultiplayerManager {
     }
 
     public void changeMap(MapType mapType) {
-        if (playerMenu != null) {
+        if (!isGameStarted) {
             playerMenu.changeMap(mapType);
         }
     }
 
     public MapType getCurrentMapInComboBox() {
         return playerMenu.getSelectedMapType();
+    }
+
+    public boolean isGameStarted() {
+        return isGameStarted;
     }
 }

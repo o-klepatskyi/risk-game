@@ -45,6 +45,10 @@ public class ClientReadThread extends Thread {
             client.close(INVALID_NAME);
             return;
         }
+        if (first_response.type == GAME_STARTED_ERROR) {
+            client.close(GAME_STARTED_ERROR);
+            return;
+        }
         if (first_response.type != OK) {
             showConnectionErrorMessage();
             client.close(CONNECTION_ERROR);

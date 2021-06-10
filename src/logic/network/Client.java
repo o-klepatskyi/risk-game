@@ -85,10 +85,10 @@ public class Client {
 
     public void openPlayerMenu() {
         manager.frame.getContentPane().removeAll();
-       manager.frame.add(manager.playerMenu);
-       manager.frame.revalidate();
-       manager.frame.repaint();
-       manager.frame.pack();
+        manager.frame.add(manager.playerMenu);
+        manager.frame.revalidate();
+        manager.frame.repaint();
+        manager.frame.pack();
     }
 
     public void openMainMenu() {

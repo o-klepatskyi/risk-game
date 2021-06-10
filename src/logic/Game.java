@@ -192,7 +192,7 @@ public class Game {
         if(dstTerritory == null)
             throw new DstNotStatedException("Destination territory is invalid!");
 
-        if (isMultiplayer) {
+        if (isMultiplayer && isCurrentPlayerActive()) {
             manager.sendMessage(
                     new Message(MessageType.FORTIFY,
                             Territory.getIdentical(srcTerritory),

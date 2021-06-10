@@ -26,7 +26,7 @@ public abstract class Bot {
         Player    player      = game.getCurrentPlayer();
         Graph     gameGraph   = game.getGameGraph();
         GamePhase phase       = game.getGamePhase();
-
+        System.out.println("here");
         if (player == null || gameGraph == null)
             throw new InvalidParameterException("null values");
         if (!game.isMultiplayer && !player.isBot())
@@ -60,6 +60,7 @@ public abstract class Bot {
             delay = 1000;
         }
         Timer timer = new Timer(delay, e -> {
+            System.out.println("and here");
             game.botMove(botMove);
         });
         timer.setRepeats(false);

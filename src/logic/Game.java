@@ -90,8 +90,6 @@ public class Game {
         if(numberOfTroops > currentPlayer.getBonus())
             throw new IllegalNumberOfReinforceTroopsException("Number of troops for reinforcement exceeds bonus!");
 
-        System.out.println(isMultiplayer && (isCurrentPlayerActive() || (isServer && currentPlayer.isBot())));
-
         if (isMultiplayer && (isCurrentPlayerActive() || (isServer && currentPlayer.isBot())))
             manager.sendMessage(new Message(MessageType.REINFORCE, srcTerritory, numberOfTroops));
 
@@ -104,7 +102,10 @@ public class Game {
             gameWindow.game.nextPhase();
         } else {
             gameWindow.update();
-            if (isServer && (currentPlayer.isBot() || !isCurrentPlayerOnline())) Bot.makeMove();
+
+            if (isMultiplayer) {
+                if (isServer && (currentPlayer.isBot() || !isCurrentPlayerOnline())) Bot.makeMove();
+            } else if (currentPlayer.isBot()) Bot.makeMove();
         }
     }
 
@@ -167,7 +168,9 @@ public class Game {
                     newDst.getOwner()));
         }
 
-        if (isServer && (currentPlayer.isBot() || !isCurrentPlayerOnline())) Bot.makeMove();
+        if (isMultiplayer) {
+            if (isServer && (currentPlayer.isBot() || !isCurrentPlayerOnline())) Bot.makeMove();
+        } else if (currentPlayer.isBot()) Bot.makeMove();
     }
 
     /**
@@ -386,9 +389,8 @@ public class Game {
     }
 
     private void checkForGameOver() {
-        //System.out.println(players);
         removeDeadPlayers();
-        //System.out.println(players);
+
         if(players.size() == 1) {
             Log.write("GAME OVER!!!");
             Log.write(currentPlayer.getName() + " IS A WINNER");

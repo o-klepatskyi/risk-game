@@ -38,16 +38,16 @@ public class Client {
             new ClientReadThread(socket, this).start();
             System.out.println("User '" + username + "' connected to the server");
         } catch (UnknownHostException ex) {
-            System.err.println("Server not found with IP-address " + ex.getMessage());
+            System.err.println("Server not found: " + ex.getMessage());
             JOptionPane.showMessageDialog(null,
                     ex.getMessage(),
                     "Server not found",
                     JOptionPane.ERROR_MESSAGE);
             openMainMenu();
         } catch (IOException ex) {
-            System.err.println("I/O Error: " + ex.getMessage());
+            System.err.println(ex.getMessage());
             JOptionPane.showMessageDialog(null,
-                    ex.getMessage(),
+                    "Connection refused on address " + hostname + ":" + port,
                     "I/O Error",
                     JOptionPane.ERROR_MESSAGE);
             openMainMenu();
@@ -74,13 +74,36 @@ public class Client {
 
             if (cause != MessageType.GAME_OVER) {
                 openMainMenu();
-                JOptionPane.showMessageDialog(null,
-                        "Connection closed: " + cause,
-                        "Lost connection with server",JOptionPane.ERROR_MESSAGE);
+                switch (cause) {
+                    case CONNECTION_ERROR -> showConnectionErrorMessage();
+                    case DUPLICATE_NAME_ERROR -> showDuplicateNameError();
+                    case INVALID_NAME -> showInvalidNameError();
+                    case CONNECTION_CLOSED_BY_ADMIN -> showConnectionClosedByAdminError();
+                    case CLOSE_CONNECTION_BY_CLIENT -> showConnectionClosedByClientError();
+                    default -> showError(cause);
+                }
             }
         } catch (IOException ex) {
             System.err.println("Error writing to server: " + ex.getMessage());
         }
+    }
+
+    private void showConnectionClosedByClientError() {
+        JOptionPane.showMessageDialog(null,
+                "Connection closed with server.",
+                "Lost connection with server", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void showConnectionClosedByAdminError() {
+        JOptionPane.showMessageDialog(null,
+                "Connection closed by admin.",
+                "Lost connection with server", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void showError(MessageType cause) {
+        JOptionPane.showMessageDialog(null,
+                "Connection closed: " + cause,
+                "Lost connection with server", JOptionPane.ERROR_MESSAGE);
     }
 
     public void openPlayerMenu() {
@@ -96,5 +119,26 @@ public class Client {
         manager.frame.add(new MainMenu(manager.frame));
         manager.frame.getContentPane().repaint();
         manager.frame.pack();
+    }
+
+    private void showInvalidNameError() {
+        JOptionPane.showMessageDialog(null,
+                "Name " + getUserName() + " can not be used.\nPlease choose another username and reconnect.",
+                "Invalid username",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void showDuplicateNameError() {
+        JOptionPane.showMessageDialog(null,
+                "Name " + getUserName() + " is already occupied",
+                "Duplicate username",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void showConnectionErrorMessage() {
+        JOptionPane.showMessageDialog(null,
+                "Error occurred while connecting to the room.",
+                "Connection error",
+                JOptionPane.ERROR_MESSAGE);
     }
 }

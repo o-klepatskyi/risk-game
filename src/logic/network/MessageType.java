@@ -2,7 +2,7 @@ package logic.network;
 
 public enum MessageType {
     CLOSE_CONNECTION_BY_CLIENT,
-    NAME_ERROR,
+    DUPLICATE_NAME_ERROR,
     OK,
     USERNAME,
     MAX_PLAYERS_ERROR,

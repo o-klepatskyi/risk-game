@@ -29,7 +29,7 @@ public class UserThread extends Thread {
             } else if (userNameMsg.username.equals(MultiplayerManager.BOT_NAME)) {
                 sendMessage(new Message(INVALID_NAME));
             } else if(server.hasUser(userNameMsg.username)) {
-                sendMessage(new Message(NAME_ERROR));
+                sendMessage(new Message(DUPLICATE_NAME_ERROR));
             } else if (server.getUserNames().size() == 6 && !server.manager.isGameStarted()) {
                 sendMessage(new Message(MAX_PLAYERS_ERROR));
             } else if (server.manager.isGameStarted()) {

@@ -30,18 +30,15 @@ public class ClientReadThread extends Thread {
             first_response = (Message) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException exception) {
             exception.printStackTrace();
-            showConnectionErrorMessage();
             client.close(CONNECTION_ERROR);
             return;
         }
 
-        if (first_response == null || first_response.type == NAME_ERROR) {
-            showDuplicateNameError();
-            client.close(NAME_ERROR);
+        if (first_response == null || first_response.type == DUPLICATE_NAME_ERROR) {
+            client.close(DUPLICATE_NAME_ERROR);
             return;
         }
         if (first_response.type == INVALID_NAME) {
-            showInvalidNameError();
             client.close(INVALID_NAME);
             return;
         }
@@ -50,33 +47,11 @@ public class ClientReadThread extends Thread {
             return;
         }
         if (first_response.type != OK) {
-            showConnectionErrorMessage();
             client.close(CONNECTION_ERROR);
             return;
         }
         client.openPlayerMenu();
         mainCycle();
-    }
-
-    private void showInvalidNameError() {
-        JOptionPane.showMessageDialog(null,
-                "Name " + client.getUserName() + " can not be used. Please choose another username and reconnect.",
-                "Invalid username",
-                JOptionPane.ERROR_MESSAGE);
-    }
-
-    private void showDuplicateNameError() {
-        JOptionPane.showMessageDialog(null,
-                "Name " + client.getUserName() + " is already occupied",
-                "Duplicate username",
-                JOptionPane.ERROR_MESSAGE);
-    }
-
-    private void showConnectionErrorMessage() {
-        JOptionPane.showMessageDialog(null,
-                "Error occurred while connecting to the room.",
-                "Connection error",
-                JOptionPane.ERROR_MESSAGE);
     }
 
     private void mainCycle() {

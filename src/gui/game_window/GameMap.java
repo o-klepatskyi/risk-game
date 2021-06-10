@@ -259,6 +259,8 @@ public class GameMap extends JPanel {
 
 
     private void showOptions(GamePhase option){
+        if (game.isMultiplayer && !game.isCurrentPlayerActive()) return;
+        if (game.getCurrentPlayer().isBot()) return;
         if(src != null || option.equals(GamePhase.REINFORCEMENT)) {
             ArrayList<Territory> filter = new ArrayList<>();
             Territory territory = null;

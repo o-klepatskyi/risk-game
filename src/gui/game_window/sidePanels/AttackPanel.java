@@ -134,7 +134,7 @@ public class AttackPanel extends SidePanel {
             enemyTroops.setForeground(Color.white);
         }
 
-        if (src != null && dst != null) {
+        if (src != null && dst != null && src.getTroops() > 1) {
             attackButton.setEnabled(true);
             victoryChance.setValue(gameWindow.calculateProbability() + "%");
         } else {

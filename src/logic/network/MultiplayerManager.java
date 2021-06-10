@@ -53,7 +53,6 @@ public final class MultiplayerManager {
     }
 
     void addPlayer(String username) {
-        System.out.println("Manager adding player " + username + "...");
         playerMenu.addPlayer(username);
     }
 
@@ -91,7 +90,7 @@ public final class MultiplayerManager {
 
     public void initGame() {
         players = new ArrayList<>(getPlayers());
-        logic.maps.Map map = playerMenu.getSelectedMap();
+        Map map = playerMenu.getSelectedMap();
         map.initGraph(players);
         try {
             server.broadcast(new Message(START_GAME, map));

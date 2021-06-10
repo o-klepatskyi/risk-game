@@ -147,11 +147,12 @@ public class ServerMenu extends JPanel {
         MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.SERVER);
         PlayerMenu pm = new PlayerMenu(frame, multiplayerManager);
 
+        frame.remove(this);
+        frame.add(new LoadingMenu());
+        frame.pack();
+
         multiplayerManager.setPlayerMenu(pm);
         multiplayerManager.startServer(portNumber, username, frame);
-
-        setVisible(false);
-        frame.remove(this);
     }
 
     private boolean getServerInfo() {

@@ -147,10 +147,13 @@ public class ClientMenu extends JPanel {
         MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.CLIENT);
         PlayerMenu pm = new PlayerMenu(frame, multiplayerManager);
 
+        frame.remove(this);
+        frame.add(new LoadingMenu());
+        frame.pack();
+
+
         multiplayerManager.setPlayerMenu(pm);
         multiplayerManager.startClient(ipAddress, portNumber, username, frame);
-        setVisible(false);
-        frame.remove(this);
     }
 
     private boolean getClientInfo() {

@@ -2,6 +2,7 @@ package gui.menus.multiplayer_menu;
 
 import gui.HintTextField;
 import gui.player_menu.PlayerMenu;
+import gui.player_menu.PlayerNameField;
 import logic.network.MultiplayerManager;
 import logic.network.NetworkMode;
 import util.res.Fonts;
@@ -54,9 +55,9 @@ public class ServerMenu extends JPanel {
 
     private void initTextFields() {
         ArrayList<JTextField> fields = new ArrayList<>();
-        nameField = new HintTextField("Enter username", 20);
+        nameField = new HintTextField("Enter username", PlayerNameField.MAX_CHARACTERS);
         fields.add(nameField);
-        portField = new HintTextField("Enter port number", 20);
+        portField = new HintTextField("Enter port number");
         fields.add(portField);
 
         for (JTextField field : fields) {

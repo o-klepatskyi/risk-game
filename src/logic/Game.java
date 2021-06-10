@@ -556,7 +556,7 @@ public class Game {
 
     private Territory findTerritory(Territory territory) {
         for (Territory t : gameGraph.getTerritories()) {
-            if (territory.equals(t)) return t;
+            if (territory.getName().equals(t.getName())) return t;
         }
         return null;
     }

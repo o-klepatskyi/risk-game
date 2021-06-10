@@ -79,6 +79,9 @@ public class Game {
     }
 
     public void reinforce(int numberOfTroops, Territory src) throws SrcNotStatedException, IllegalNumberOfReinforceTroopsException {
+        if (gamePhase != GamePhase.REINFORCEMENT)
+            throw new IllegalStateException("Wrong game phase: " + gamePhase);
+
         Territory srcTerritory = findTerritory(src);
 
         if(srcTerritory == null)
@@ -106,6 +109,9 @@ public class Game {
     }
 
     public void attack(Territory srcTerritory, Territory dstTerritory) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException, IllegalNumberOfAttackTroopsException {
+        if (gamePhase != GamePhase.ATTACK)
+            throw new IllegalStateException("Wrong game phase: " + gamePhase);
+
         Territory src = Territory.getIdentical(srcTerritory), dst = Territory.getIdentical(dstTerritory);
         if(srcTerritory == null)
             throw new SrcNotStatedException("Source territory was not stated!");
@@ -168,6 +174,9 @@ public class Game {
      * for client only
      */
     public void attack(String srcName, int srcTroops, Player srcOwner, String dstName, int dstTroops, Player dstOwner) {
+        if (gamePhase != GamePhase.ATTACK)
+            throw new IllegalStateException("Wrong game phase: " + gamePhase);
+
         Territory src = findTerritoryInGraph(srcName);
         Territory dst = findTerritoryInGraph(dstName);
 
@@ -185,6 +194,9 @@ public class Game {
      * method for client
      */
     public void fortify(Territory src, Territory dst, int numberOfTroops) throws IllegalNumberOfFortifyTroopsException, WrongTerritoriesPairException, SrcNotStatedException, DstNotStatedException {
+        if (gamePhase != GamePhase.FORTIFY)
+            throw new IllegalStateException("Wrong game phase: " + gamePhase);
+
         Territory srcTerritory = findTerritory(src);
         Territory dstTerritory = findTerritory(dst);
 
@@ -222,6 +234,13 @@ public class Game {
         nextPhase();
     }
 
+    public void skipFortify() {
+        if (isMultiplayer && (isCurrentPlayerActive() || (isServer && currentPlayer.isBot()))) {
+            gameWindow.game.manager.sendMessage(new Message(MessageType.END_FORTIFY));
+        }
+        nextPhase();
+    }
+
     public void nextPhase() {
         switch (gamePhase) {
             case REINFORCEMENT -> attackPhase();
@@ -233,9 +252,6 @@ public class Game {
                 fortifyPhase();
             }
             case FORTIFY -> {
-                if (isMultiplayer && (isCurrentPlayerActive() || (isServer && currentPlayer.isBot()))) {
-                    gameWindow.game.manager.sendMessage(new Message(MessageType.END_FORTIFY));
-                }
                 nextPlayerTurn();
             }
         }
@@ -370,9 +386,9 @@ public class Game {
     }
 
     private void checkForGameOver() {
-        System.out.println(players);
+        //System.out.println(players);
         removeDeadPlayers();
-        System.out.println(players);
+        //System.out.println(players);
         if(players.size() == 1) {
             Log.write("GAME OVER!!!");
             Log.write(currentPlayer.getName() + " IS A WINNER");

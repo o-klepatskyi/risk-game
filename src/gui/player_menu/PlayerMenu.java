@@ -97,8 +97,6 @@ public class PlayerMenu extends JPanel {
             add(panel);
         }
 
-
-
         if (isMultiplayer) {
             if (isServer) {
                 if (currentPlayerNumber == MAX_PLAYER_NUMBER) {
@@ -114,13 +112,11 @@ public class PlayerMenu extends JPanel {
                     fp.getStartButton().setToolTipText("Wait for players to connect");
                 } else {
                     fp.getStartButton().setEnabled(true);
-                    fp.getStartButton().setToolTipText("");
+                    fp.getStartButton().setToolTipText(null);
                 }
 
                 fp.getMapComboBox().setEnabled(true);
             }
-
-
         } else {
             if (currentPlayerNumber == MAX_PLAYER_NUMBER) {
                 fp.getAddPlayerButton().setEnabled(false);

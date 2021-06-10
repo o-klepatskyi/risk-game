@@ -139,7 +139,7 @@ public class FortifyPanel extends SidePanel {
     }
 
     private void skipFortify() {
-        gameWindow.game.nextPhase();
+        gameWindow.game.skipFortify();
     }
 
     private void fortify() {

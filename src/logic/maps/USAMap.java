@@ -286,12 +286,12 @@ class USAMap extends Map {
         }
     }
 
-    private Continent theWest = new Continent("The West", 2);
-    private Continent fourCorners = new Continent("Four Corners", 2);
-    private Continent upperMidwest = new Continent("Upper Midwest", 4);
-    private Continent sunbelt = new Continent("Sunbelt", 5);
-    private Continent greatLakes = new Continent("Great lakes", 3);
-    private Continent dixieland = new Continent("Dixieland", 6);
-    private Continent northEast = new Continent("North East", 4);
-    private Continent newEngland = new Continent("New England", 2);
+    private final Continent theWest = new Continent("The West", 2);
+    private final Continent fourCorners = new Continent("Four Corners", 2);
+    private final Continent upperMidwest = new Continent("Upper Midwest", 4);
+    private final Continent sunbelt = new Continent("Sunbelt", 5);
+    private final Continent greatLakes = new Continent("Great lakes", 3);
+    private final Continent dixieland = new Continent("Dixieland", 6);
+    private final Continent northEast = new Continent("North East", 4);
+    private final Continent newEngland = new Continent("New England", 2);
 }

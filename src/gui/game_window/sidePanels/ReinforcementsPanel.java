@@ -25,14 +25,14 @@ public class ReinforcementsPanel extends SidePanel {
 
     public ReinforcementsPanel(GameWindow gameWindow) {
         super(gameWindow);
-        int bonus = gameWindow.game.getCurrentPlayer().getBonus();
-        if (troopsLeft == 0) {
-            playerBonus = bonus;
-        }
-        troopsLeft = bonus;
+        troopsLeft = gameWindow.game.getCurrentPlayer().getBonus();
         this.labelsBonuses = gameWindow.game.getContinentsLabels();
         initLabels();
         initButtons();
+    }
+
+    public static void setBonus(int bonus) {
+        playerBonus = bonus;
     }
 
     private void initLabels() {

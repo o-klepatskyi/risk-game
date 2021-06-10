@@ -16,8 +16,8 @@ public class GameMap extends JPanel {
     private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
     private final int BORDER_MARGIN = 5;
 
-    private Game game;
-    private ArrayList<JButton> buttons;
+    private final Game game;
+    private final ArrayList<JButton> buttons;
     private final JPanel panel;
 
     private boolean buttonClicked = false;

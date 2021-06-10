@@ -1,5 +1,6 @@
 package logic;
 
+import gui.game_window.sidePanels.ReinforcementsPanel;
 import gui.menus.GameOverMenu;
 import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
@@ -393,6 +394,7 @@ public class Game {
             }
         }
         currentPlayer.setBonus(bonus);
+        ReinforcementsPanel.setBonus(bonus);
         Log.write(currentPlayer.getName() + " receives bonus: " + "(" + currentPlayer.getBonus() + ")");
     }
 

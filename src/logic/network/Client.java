@@ -80,6 +80,7 @@ public class Client {
                     case INVALID_NAME -> showInvalidNameError();
                     case CONNECTION_CLOSED_BY_ADMIN -> showConnectionClosedByAdminError();
                     case CLOSE_CONNECTION_BY_CLIENT -> showConnectionClosedByClientError();
+                    // todo SERVER_CLOSED_ERROR
                     default -> showError(cause);
                 }
             }

@@ -336,7 +336,7 @@ public class Game {
                         if (gamePhase != GamePhase.FORTIFY) {
                             throw new InvalidParameterException("Wrong type move " + botMove.type + " for game phase " + gamePhase);
                         }
-                        nextPhase();
+                        skipFortify();
                         break;
                     case FORTIFY:
                         if (gamePhase != GamePhase.FORTIFY) {

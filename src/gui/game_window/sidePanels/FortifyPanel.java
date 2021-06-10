@@ -2,8 +2,6 @@ package gui.game_window.sidePanels;
 
 import gui.game_window.GameWindow;
 import logic.Territory;
-import logic.network.Message;
-import logic.network.MessageType;
 import util.exceptions.DstNotStatedException;
 import util.exceptions.IllegalNumberOfFortifyTroopsException;
 import util.exceptions.SrcNotStatedException;

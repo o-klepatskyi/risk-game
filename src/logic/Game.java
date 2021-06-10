@@ -233,8 +233,18 @@ public class Game {
     private void reinforcePhase() {
         gamePhase = GamePhase.REINFORCEMENT;
         gameWindow.update();
+        if (isServer) {
+            System.out.println("current player");
+            System.out.println("is server?: " + isServer);
+            System.out.println("is bot?: " + currentPlayer.isBot());
+            System.out.println("is online?: " + isCurrentPlayerOnline());
+        }
 
-        if (currentPlayer.isBot() || (isServer && !isCurrentPlayerOnline())) {
+        if (isMultiplayer) {
+            if (isServer && (currentPlayer.isBot() || !isCurrentPlayerOnline())) {
+                Bot.makeMove();
+            }
+        } else if (currentPlayer.isBot()) {
             Bot.makeMove();
         }
     }
@@ -245,7 +255,11 @@ public class Game {
     private void attackPhase() {
         gamePhase = GamePhase.ATTACK;
         gameWindow.update();
-        if (currentPlayer.isBot() || (isServer && !isCurrentPlayerOnline())) {
+        if (isMultiplayer) {
+            if (isServer && (currentPlayer.isBot() || !isCurrentPlayerOnline())) {
+                Bot.makeMove();
+            }
+        } else if (currentPlayer.isBot()) {
             Bot.makeMove();
         }
     }
@@ -256,7 +270,11 @@ public class Game {
     private void fortifyPhase() {
         gamePhase = GamePhase.FORTIFY;
         gameWindow.update();
-        if (currentPlayer.isBot() || (isServer && !isCurrentPlayerOnline())) {
+        if (isMultiplayer) {
+            if (isServer && (currentPlayer.isBot() || !isCurrentPlayerOnline())) {
+                Bot.makeMove();
+            }
+        } else if (currentPlayer.isBot()) {
             Bot.makeMove();
         }
     }
@@ -334,8 +352,7 @@ public class Game {
         if (manager.networkMode != NetworkMode.SERVER)
             throw new InvalidParameterException("Called not from server");
 
-        return !currentPlayer.isBot() ||
-                manager.server.userNames.contains(currentPlayer.getName());
+        return manager.server.userNames.contains(currentPlayer.getName());
     }
 
     private void checkForGameOver() {

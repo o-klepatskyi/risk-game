@@ -50,6 +50,8 @@ public abstract class Bot {
                 move = new BotMove(BotMoveType.END_FORTIFY);
                 break;
         }
+
+
         final BotMove botMove = move;
         int delay;
         if (move.type == BotMoveType.REINFORCEMENT) {

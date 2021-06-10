@@ -87,7 +87,7 @@ public class Game {
         if(numberOfTroops > currentPlayer.getBonus())
             throw new IllegalNumberOfReinforceTroopsException("Number of troops for reinforcement exceeds bonus!");
 
-        if (isMultiplayer && isCurrentPlayerActive())
+        if (isMultiplayer && (isCurrentPlayerActive() || (isServer && currentPlayer.isBot())))
             manager.sendMessage(new Message(MessageType.REINFORCE, srcTerritory, numberOfTroops));
 
         srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
@@ -146,7 +146,7 @@ public class Game {
                     + dstTerritory.getName() + "(" + dstTerritory.getTroops() + ")");
         }
 
-        if (gameWindow.game.isMultiplayer) {
+        if (isMultiplayer && (isCurrentPlayerActive() || (isServer && currentPlayer.isBot()))) {
             Territory newSrc = gameWindow.game.findTerritoryInGraph(src.getName()),
                     newDst = gameWindow.game.findTerritoryInGraph(dst.getName());
 
@@ -192,7 +192,7 @@ public class Game {
         if(dstTerritory == null)
             throw new DstNotStatedException("Destination territory is invalid!");
 
-        if (isMultiplayer && isCurrentPlayerActive()) {
+        if (isMultiplayer && (isCurrentPlayerActive() || (isServer && currentPlayer.isBot()))) {
             manager.sendMessage(
                     new Message(MessageType.FORTIFY,
                             Territory.getIdentical(srcTerritory),

@@ -105,8 +105,7 @@ public class PlayerMenu extends JPanel {
                     fp.getAddPlayerButton().setEnabled(true);
                 }
 
-                if (    currentPlayerNumber < 2 &&
-                        multiplayerManager.server != null &&
+                if (    multiplayerManager.server != null &&
                         multiplayerManager.server.userNames.size() < 2) {
                     fp.getStartButton().setEnabled(false);
                     fp.getStartButton().setToolTipText("Wait for players to connect");

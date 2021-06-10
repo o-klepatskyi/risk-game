@@ -31,7 +31,7 @@ class TestMap extends Map{
                 new Coordinates(500,350),
                 new Coordinates(200,500),
                 new Coordinates(350,500),
-                new Coordinates(500,500),
+                new Coordinates(500,500)
         };
 
         initializeTerritories(namesOfTerritories, coordinates);
@@ -89,5 +89,4 @@ class TestMap extends Map{
 
     private Continent topLeft = new Continent("Top left", 3);
     private Continent bottomRight = new Continent("Bottom Right", 3);
-
 }

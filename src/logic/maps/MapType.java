@@ -5,6 +5,7 @@ import java.io.Serializable;
 public enum MapType implements Serializable {
     EARTH("Earth"),
     EUROPE("Europe"),
+    USA("USA"),
     TEST("Test");
 
 
@@ -29,6 +30,7 @@ public enum MapType implements Serializable {
             case EARTH: return new WorldMap();
             case TEST: return new TestMap();
             case EUROPE: return new EuropeMap();
+            case USA: return new USAMap();
             default: return null;
         }
     }

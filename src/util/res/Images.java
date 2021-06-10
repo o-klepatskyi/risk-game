@@ -19,6 +19,8 @@ public abstract class Images {
 
     public static final Image MAP_EARTH         = new ImageIcon(Images.class.getResource("images/maps/earth-map.png")).getImage();
     public static final Image MAP_EUROPE        = new ImageIcon(Images.class.getResource("images/maps/europe-map.png")).getImage();
+    public static final Image MAP_USA        = new ImageIcon(Images.class.getResource("images/maps/usa-map.png")).getImage();
+
 
     public static Image getSlideImage(int slide) {
         String path = "";
@@ -36,6 +38,7 @@ public abstract class Images {
         switch (name) {
             case EARTH: return MAP_EARTH;
             case EUROPE: return MAP_EUROPE;
+            case USA: return MAP_USA;
             default: return GAME_MAP_BG;
         }
     }

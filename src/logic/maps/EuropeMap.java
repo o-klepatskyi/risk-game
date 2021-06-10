@@ -60,7 +60,7 @@ class EuropeMap extends Map{
                 "Kuban",
                 "Kazakhstan",
                 "Siberia",
-                "Ural",
+                "Ural"
         };
 
         Coordinates[] coordinates = new Coordinates[] {
@@ -112,7 +112,7 @@ class EuropeMap extends Map{
                 new Coordinates(800,390),
                 new Coordinates(878,260),
                 new Coordinates(800,40),
-                new Coordinates(865,160),
+                new Coordinates(865,160)
         };
 
         initializeTerritories(namesOfTerritories, coordinates);

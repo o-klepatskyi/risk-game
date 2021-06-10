@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-// todo: attacking with one troop
 public class GameMap extends JPanel {
     private final Color DISABLED_COLOR = Color.LIGHT_GRAY;
     private final int BORDER_MARGIN = 5;
@@ -33,7 +32,7 @@ public class GameMap extends JPanel {
 
         panel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                System.out.println(e.getX() + "; " + e.getY());
+                System.out.println(e.getX() + ", " + e.getY());
                 if(!game.getGamePhase().equals(GamePhase.REINFORCEMENT) && !game.getCurrentPlayer().isBot()) {
                     resetButtons();
                     updateTerritories();

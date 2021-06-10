@@ -6,8 +6,8 @@ import logic.Coordinates;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class TestMap extends Map{
-    public TestMap() {
+class TestMap extends Map{
+    TestMap() {
         type = MapType.TEST;
 
         String[] namesOfTerritories = new String[] {

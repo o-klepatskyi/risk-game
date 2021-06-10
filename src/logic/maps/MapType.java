@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 public enum MapType implements Serializable {
     EARTH("Earth"),
+    EUROPE("Europe"),
     TEST("Test");
+
 
     public final String name;
 
@@ -26,6 +28,7 @@ public enum MapType implements Serializable {
         switch(type) {
             case EARTH: return new WorldMap();
             case TEST: return new TestMap();
+            case EUROPE: return new EuropeMap();
             default: return null;
         }
     }

@@ -6,9 +6,9 @@ import logic.Coordinates;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class WorldMap extends Map {
+class WorldMap extends Map {
 
-    public WorldMap() {
+    WorldMap() {
         type = MapType.EARTH;
 
         String[] namesOfTerritories = new String[] {

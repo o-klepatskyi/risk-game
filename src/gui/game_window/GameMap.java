@@ -33,6 +33,7 @@ public class GameMap extends JPanel {
 
         panel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
+                System.out.println(e.getX() + "; " + e.getY());
                 if(!game.getGamePhase().equals(GamePhase.REINFORCEMENT) && !game.getCurrentPlayer().isBot()) {
                     resetButtons();
                     updateTerritories();

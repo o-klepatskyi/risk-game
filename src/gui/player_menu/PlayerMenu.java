@@ -81,7 +81,7 @@ public class PlayerMenu extends JPanel {
                     panel.getRemovePlayerButton().setEnabled(false);
                 }
 
-                if (isMultiplayer && panel.getPlayerNameField().getText().equals(multiplayerManager.client.username) && isServer) {
+                if (isMultiplayer && panel.getPlayerNameField().getText().equals(multiplayerManager.client.username)) {
                     panel.getRemovePlayerButton().setEnabled(false);
                 }
             }
@@ -98,17 +98,41 @@ public class PlayerMenu extends JPanel {
         }
 
 
-        if (!isMultiplayer || isServer) {
+
+        if (isMultiplayer) {
+            if (isServer) {
+                if (currentPlayerNumber == MAX_PLAYER_NUMBER) {
+                    fp.getAddPlayerButton().setEnabled(false);
+                } else {
+                    fp.getAddPlayerButton().setEnabled(true);
+                }
+
+                if (    currentPlayerNumber < 2 &&
+                        multiplayerManager.server != null &&
+                        multiplayerManager.server.userNames.size() < 2) {
+                    fp.getStartButton().setEnabled(false);
+                    fp.getStartButton().setToolTipText("Wait for players to connect");
+                } else {
+                    fp.getStartButton().setEnabled(true);
+                    fp.getStartButton().setToolTipText("");
+                }
+
+                fp.getMapComboBox().setEnabled(true);
+            }
+
+
+        } else {
             if (currentPlayerNumber == MAX_PLAYER_NUMBER) {
                 fp.getAddPlayerButton().setEnabled(false);
             } else {
                 fp.getAddPlayerButton().setEnabled(true);
             }
-
-            if (currentPlayerNumber == MIN_PLAYER_NUMBER) {
+            if (currentPlayerNumber < 2) {
                 fp.getStartButton().setEnabled(false);
+                fp.getStartButton().setToolTipText("Wait for players to connect");
             } else {
                 fp.getStartButton().setEnabled(true);
+                fp.getStartButton().setToolTipText("");
             }
             fp.getMapComboBox().setEnabled(true);
         }

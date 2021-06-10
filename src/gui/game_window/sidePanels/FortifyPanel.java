@@ -139,10 +139,6 @@ public class FortifyPanel extends SidePanel {
     }
 
     private void skipFortify() {
-        if (gameWindow.game.isMultiplayer) {
-            gameWindow.game.manager.sendMessage(new Message(MessageType.END_FORTIFY));
-        }
-
         gameWindow.game.nextPhase();
     }
 

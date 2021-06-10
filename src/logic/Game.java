@@ -87,6 +87,8 @@ public class Game {
         if(numberOfTroops > currentPlayer.getBonus())
             throw new IllegalNumberOfReinforceTroopsException("Number of troops for reinforcement exceeds bonus!");
 
+        System.out.println(isMultiplayer && (isCurrentPlayerActive() || (isServer && currentPlayer.isBot())));
+
         if (isMultiplayer && (isCurrentPlayerActive() || (isServer && currentPlayer.isBot())))
             manager.sendMessage(new Message(MessageType.REINFORCE, srcTerritory, numberOfTroops));
 
@@ -99,7 +101,7 @@ public class Game {
             gameWindow.game.nextPhase();
         } else {
             gameWindow.update();
-            if (currentPlayer.isBot() || (isServer && !isCurrentPlayerOnline())) Bot.makeMove();
+            if (isServer && (currentPlayer.isBot() || !isCurrentPlayerOnline())) Bot.makeMove();
         }
     }
 
@@ -159,7 +161,7 @@ public class Game {
                     newDst.getOwner()));
         }
 
-        if (currentPlayer.isBot() || (isServer && !isCurrentPlayerOnline())) Bot.makeMove();
+        if (isServer && (currentPlayer.isBot() || !isCurrentPlayerOnline())) Bot.makeMove();
     }
 
     /**
@@ -223,8 +225,19 @@ public class Game {
     public void nextPhase() {
         switch (gamePhase) {
             case REINFORCEMENT -> attackPhase();
-            case ATTACK -> fortifyPhase();
-            case FORTIFY -> nextPlayerTurn();
+
+            case ATTACK -> {
+                if (isMultiplayer && (isCurrentPlayerActive() || (isServer && currentPlayer.isBot()))) {
+                    gameWindow.game.manager.sendMessage(new Message(MessageType.END_ATTACK));
+                }
+                fortifyPhase();
+            }
+            case FORTIFY -> {
+                if (isMultiplayer && (isCurrentPlayerActive() || (isServer && currentPlayer.isBot()))) {
+                    gameWindow.game.manager.sendMessage(new Message(MessageType.END_FORTIFY));
+                }
+                nextPlayerTurn();
+            }
         }
     }
 

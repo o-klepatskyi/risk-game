@@ -102,9 +102,6 @@ public class AttackPanel extends SidePanel {
 
     private void endAttack() {
         gameWindow.game.nextPhase();
-        if (gameWindow.game.isMultiplayer) {
-            gameWindow.game.manager.sendMessage(new Message(MessageType.END_ATTACK));
-        }
     }
 
     private void attack() {

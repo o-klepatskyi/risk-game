@@ -6,7 +6,7 @@ public enum MapType implements Serializable {
     EARTH("Earth"),
     EUROPE("Europe"),
     USA("USA"),
-    GOT("Game of Thrones"),
+    GOT("Westeros"),
     TEST("Test");
 
 

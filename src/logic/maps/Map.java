@@ -43,16 +43,19 @@ public abstract class Map implements Serializable {
     private void distributeTerritories(int numberOfPlayers, ArrayList<Player> players) {
         int territoriesLeft = numberOfTerritories;
         ArrayList<Territory> territories = new ArrayList<>(this.territories);
-        for(int i = 0; i < numberOfPlayers; i++) {
-            int playerTerritoriesNumber = numberOfTerritories / numberOfPlayers;
-            int playerTroopsNumber = getInitialPlayerTroopsNumber(numberOfPlayers);
-            ArrayList<Territory> playerTerritories = new ArrayList<>();
 
+        int playerTerritoriesNumber = numberOfTerritories / numberOfPlayers;
+        int playerTroopsNumber = getInitialPlayerTroopsNumber(numberOfPlayers);
+        ArrayList<Territory> playerTerritories = new ArrayList<>();
+
+        for(int i = 0; i < numberOfPlayers; i++) {
 
             if(i == numberOfPlayers-1) {
                 playerTerritoriesNumber = territoriesLeft;
             }
+
             int troopsLeft = playerTroopsNumber - playerTerritoriesNumber;
+
             for(int j = 0; j < playerTerritoriesNumber; j++){
                 Territory territory = getRandomTerritory(territories);
                 territory.setOwner(players.get(i));

@@ -5,7 +5,7 @@ import javax.swing.*;
 /**
  * Class for quicker change in JLabel.
  */
-class ValueJLabel extends JLabel {
+public class ValueJLabel extends JLabel {
     private String text, value;
 
     public ValueJLabel() {

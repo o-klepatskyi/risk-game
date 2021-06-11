@@ -172,6 +172,7 @@ class EuropeMap extends Map{
         gameGraph.addEdge(findTerritory("Austria"), findTerritory("Hungary"));
         gameGraph.addEdge(findTerritory("Yugoslavia"), findTerritory("Hungary"));
         gameGraph.addEdge(findTerritory("Romania"), findTerritory("Hungary"));
+        gameGraph.addEdge(findTerritory("Romania"), findTerritory("East Poland"));
         gameGraph.addEdge(findTerritory("Yugoslavia"), findTerritory("Bulgaria"));
         gameGraph.addEdge(findTerritory("Yugoslavia"), findTerritory("Greece"));
         gameGraph.addEdge(findTerritory("Yugoslavia"), findTerritory("Romania"));

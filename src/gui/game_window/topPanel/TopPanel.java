@@ -1,43 +1,37 @@
 package gui.game_window.topPanel;
 
 import gui.game_window.GameWindow;
-import logic.GamePhase;
-import logic.Player;
-import util.res.Fonts;
+import logic.Game;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class TopPanel extends JPanel {
-    private final int WIDTH = (int) (GameWindow.WIDTH*0.75);
-    private final int HEIGHT = (int) (GameWindow.HEIGHT*0.1);
+    static final int WIDTH = (int) (GameWindow.WIDTH*0.75);
+    static final int HEIGHT = (int) (GameWindow.HEIGHT*0.1);
 
-    private JLabel currentState;
-    private JLabel currentPlayer;
+    private final Game game;
+    private GamePhasePanel gamePhasePanel;
+    private PlayersStatePanel playersStatePanel;
 
-    public TopPanel() {
+    public TopPanel(Game game) {
+        this.game = game;
         setOpaque(true);
+        setLayout(new FlowLayout());
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        // to make labels aligned left
-        //setLayout(new BoxLayout(this,0));
-        initLabels();
+        initPanels();
     }
 
-    private void initLabels() {
-        if (currentPlayer == null && currentState == null) {
-            currentPlayer = new JLabel();
-            currentPlayer.setFont(Fonts.BUTTON_FONT.deriveFont((float) HEIGHT - 30));
-            add(currentPlayer);
+    private void initPanels() {
+        gamePhasePanel = new GamePhasePanel();
+        playersStatePanel = new PlayersStatePanel(game);
 
-            currentState = new JLabel();
-            currentState.setFont(Fonts.BUTTON_FONT.deriveFont((float) HEIGHT - 30));
-            add(currentState);
-        }
+        add(gamePhasePanel);
+        add(playersStatePanel);
     }
 
-    public void updatePhase(Player player, GamePhase gamePhase) {
-        currentPlayer.setText(player.getName());
-        currentPlayer.setForeground(player.getColor());
-        currentState.setText(gamePhase.toString());
+    public void updatePanel() {
+        gamePhasePanel.updatePhase(game.getCurrentPlayer(), game.getGamePhase());
+        playersStatePanel.updatePlayers();
     }
 }

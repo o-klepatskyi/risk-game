@@ -1,0 +1,46 @@
+package gui.game_window.topPanel;
+
+import gui.game_window.GameWindow;
+import logic.GamePhase;
+import logic.Player;
+import util.res.Fonts;
+
+import javax.swing.*;
+import java.awt.*;
+
+class GamePhasePanel extends JPanel {
+    private final int WIDTH = TopPanel.WIDTH;
+    private final int HEIGHT = TopPanel.HEIGHT/2;
+
+    private JLabel currentState;
+    private JLabel currentPlayer;
+
+    public GamePhasePanel() {
+        setOpaque(true);
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        initLabels();
+    }
+
+    private void initLabels() {
+        if (currentPlayer == null && currentState == null) {
+            currentPlayer = new JLabel();
+            currentPlayer.setFont(Fonts.BUTTON_FONT.deriveFont((float) HEIGHT - 10));
+            add(currentPlayer);
+
+            currentState = new JLabel();
+            currentState.setFont(Fonts.BUTTON_FONT.deriveFont((float) HEIGHT - 10));
+            add(currentState);
+        }
+    }
+
+    public void updatePhase(Player player, GamePhase gamePhase) {
+        currentPlayer.setText(player.getName());
+        currentPlayer.setForeground(player.getColor());
+
+        if (gamePhase == GamePhase.REINFORCEMENT) {
+            currentState.setText(" - " + gamePhase + " - " + player.getBonus() + " troops left");
+        } else {
+            currentState.setText(" - " + gamePhase);
+        }
+    }
+}

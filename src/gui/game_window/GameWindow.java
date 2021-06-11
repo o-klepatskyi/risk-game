@@ -27,7 +27,7 @@ public class GameWindow extends JPanel {
         setLayout(new GridBagLayout());
 
         sidePanel = new SidePanel(this);
-        gameFlow = new TopPanel();
+        gameFlow = new TopPanel(game);
 
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         gbc.fill = GridBagConstraints.BOTH;
@@ -56,7 +56,7 @@ public class GameWindow extends JPanel {
     public void update() {
         GamePhase gamePhase = game.getGamePhase();
         updateSidePanel(gamePhase);
-        gameFlow.updatePhase(game.getCurrentPlayer(), gamePhase);
+        gameFlow.updatePanel();
         gameMap.drawField();
     }
 

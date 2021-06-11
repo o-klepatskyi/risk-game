@@ -141,7 +141,7 @@ public class Game {
             srcTerritory.setTroops(1);
             dstTerritory.setTroops(troopsLeft[0]);
             dstTerritory.setOwner(srcTerritory.getOwner());
-            gameMap.drawField();
+            gameWindow.update();
             gameMap.explosionEffect(dstTerritory.getCoordinates());
             Log.write("Attacker wins!");
             Log.write(srcTerritory.getName() + "(" + srcTerritory.getTroops() +  ") "
@@ -151,7 +151,7 @@ public class Game {
         else {
             srcTerritory.setTroops(1);
             dstTerritory.setTroops(troopsLeft[1]);
-            gameMap.drawField();
+            gameWindow.update();
             gameMap.explosionEffect(dstTerritory.getCoordinates());
             Log.write("Defender wins!");
             Log.write(srcTerritory.getName() + "(" + srcTerritory.getTroops() +  ")"
@@ -191,7 +191,7 @@ public class Game {
         dst.setTroops(dstTroops);
         dst.setOwner(dstOwner);
 
-        gameMap.drawField();
+        gameWindow.update();
         gameMap.explosionEffect(dst.getCoordinates());
         checkForGameOver();
     }
@@ -437,7 +437,7 @@ public class Game {
     }
 
     private void removeDeadPlayers() {
-        players.removeIf(this::playerIsDead); // todo logging player elimination & player panel
+        players.removeIf(this::playerIsDead); // todo logging player elimination
         if (isMultiplayer &&
             !players.stream().map(Player::getName).collect(Collectors.toList()).contains(manager.client.username)) {
             showEliminatedMessage();
@@ -537,4 +537,6 @@ public class Game {
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
+
+    public List<Player> getPlayers() {return new ArrayList<>(players);}
 }

@@ -6,6 +6,7 @@ public enum MapType implements Serializable {
     EARTH("Earth"),
     EUROPE("Europe"),
     USA("USA"),
+    GOT("Game of Thrones"),
     TEST("Test");
 
 
@@ -31,6 +32,7 @@ public enum MapType implements Serializable {
             case TEST: return new TestMap();
             case EUROPE: return new EuropeMap();
             case USA: return new USAMap();
+            case GOT: return new GoTMap();
             default: return null;
         }
     }

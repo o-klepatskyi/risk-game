@@ -165,7 +165,7 @@ public class GameMap extends JPanel {
 
     private void addListeners() {
         for(JButton button : buttons){
-            button.addMouseListener(new MouseListener() {
+            button.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
                     if(!buttonClicked && button.getBackground().equals(game.getCurrentPlayer().getColor())) {
                         resetButtons();
@@ -211,14 +211,6 @@ public class GameMap extends JPanel {
                         }
                     }
                     updateTerritories();
-                }
-
-                public void mousePressed(MouseEvent e) {
-
-                }
-
-                public void mouseReleased(MouseEvent e) {
-
                 }
 
                 public void mouseEntered(MouseEvent e) {

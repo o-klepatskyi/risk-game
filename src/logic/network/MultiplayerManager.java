@@ -37,7 +37,18 @@ public final class MultiplayerManager {
             throw new InvalidParameterException("Wrong network mode");
         }
         server = new Server(portNumber, this);
-        new Thread(() -> server.execute()).start();
+        new Thread(() -> {
+            try {
+                server.execute();
+            } catch (IOException ignored) {
+                MainFrame.openMainMenu();
+                JOptionPane.showMessageDialog(null,
+                        "Error occurred while setting up the server. Please restart the game.",
+                        "Server error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }).start();
+        System.out.println(server == null);
         startClient("127.0.0.1", portNumber, userName);
     }
 

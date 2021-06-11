@@ -19,10 +19,10 @@ public class Server {
         this.port = port;
     }
 
-    public void execute() {
+    public void execute() throws IOException {
         try (ServerSocket serverSocket = new ServerSocket(port)){
 
-            System.out.println("Chat Server is listening on port " + port);
+            System.out.println("Server is listening on port " + port);
 
             while (!isClosed) {
                 Socket socket = serverSocket.accept();
@@ -34,12 +34,8 @@ public class Server {
             }
             System.out.println("Server closed.");
         } catch (IOException | IllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(null,
-                    "Error occurred while setting up the server. Please restart the game.",
-                    "Server error",
-                    JOptionPane.ERROR_MESSAGE);
-            System.err.println("Error in the server: " + ex.getMessage());
             ex.printStackTrace();
+            throw ex;
         }
     }
 

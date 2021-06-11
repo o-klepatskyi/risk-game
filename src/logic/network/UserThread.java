@@ -66,11 +66,11 @@ public class UserThread extends Thread {
 
             }
             socket.close();
+
         } catch (Exception ex) {
             System.err.println("Error in UserThread " + username + ": " + ex.getMessage());
             ex.printStackTrace();
         }
-
         server.removeUser(username, this);
         System.out.println("User '" + username + "' left server.");
     }

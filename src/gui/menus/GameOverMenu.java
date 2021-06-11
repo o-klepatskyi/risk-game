@@ -1,12 +1,8 @@
 package gui.menus;
 
 import gui.MainFrame;
-import gui.menus.main_menu.MainMenu;
 import logic.Player;
-import logic.network.MultiplayerManager;
-import util.res.Fonts;
-import util.res.Images;
-import util.res.SoundPlayer;
+import util.res.*;
 
 import javax.swing.*;
 import java.awt.*;

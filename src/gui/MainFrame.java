@@ -4,10 +4,7 @@ import gui.game_window.GameWindow;
 import gui.menus.GameOverMenu;
 import gui.menus.RulesMenu;
 import gui.menus.main_menu.MainMenu;
-import gui.menus.multiplayer_menu.ClientMenu;
-import gui.menus.multiplayer_menu.LoadingMenu;
-import gui.menus.multiplayer_menu.MultiplayerMenu;
-import gui.menus.multiplayer_menu.ServerMenu;
+import gui.menus.multiplayer_menu.*;
 import gui.player_menu.PlayerMenu;
 import logic.Player;
 import logic.network.MultiplayerManager;
@@ -97,10 +94,12 @@ public class MainFrame {
         frame.pack();
     }
 
-    public static void openGameOverMenu(Player currentPlayer) {
+    public static void openGameOverMenu(Player player) {
         frame.getContentPane().removeAll();
-        frame.add(new GameOverMenu(currentPlayer));
+        JPanel menu = new GameOverMenu(player);
+        frame.add(menu);
         frame.pack();
+        menu.setFocusable(true);
     }
 
     public static boolean isMultiplayer() {

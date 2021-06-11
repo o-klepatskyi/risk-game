@@ -2,10 +2,7 @@ package gui.menus.multiplayer_menu;
 
 import gui.HintTextField;
 import gui.MainFrame;
-import gui.player_menu.PlayerMenu;
 import gui.player_menu.PlayerNameField;
-import logic.network.MultiplayerManager;
-import logic.network.NetworkMode;
 import util.res.Fonts;
 import util.res.Images;
 import util.res.SoundPlayer;

@@ -1,1 +1,41 @@
 Game started
+Ontario reinforced (7)
+Ontario reinforced (7)
+oleg turn
+oleg receives bonus: (7)
+oleg turn
+oleg receives bonus: (7)
+Eastern United States reinforced (7)
+Eastern United States reinforced (7)
+oleg fortifies territory
+Eastern United States -> Western United States(8)
+ivan turn
+ivan receives bonus: (7)
+oleg fortifies territory
+Eastern United States -> Western United States(8)
+ivan turn
+ivan receives bonus: (7)
+Ontario reinforced (7)
+Ontario reinforced (7)
+ivan vs oleg
+Ontario vs Western United States
+Attacker wins!
+Ontario(1) Western United States(15)
+ivan vs oleg
+Western United States vs Eastern United States
+Attacker wins!
+Western United States(1) Eastern United States(14)
+oleg turn
+oleg receives bonus: (6)
+Great Britain reinforced (6)
+ivan turn
+ivan receives bonus: (7)
+Yakutsk reinforced (1)
+Western Europe reinforced (1)
+East Africa reinforced (1)
+Indonesia reinforced (1)
+Brazil reinforced (1)
+Brazil reinforced (1)
+Ontario reinforced (1)
+oleg turn
+oleg receives bonus: (6)

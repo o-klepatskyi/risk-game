@@ -2,7 +2,6 @@ package logic;
 
 import gui.MainFrame;
 import gui.game_window.sidePanels.ReinforcementsPanel;
-import gui.menus.GameOverMenu;
 import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
 import logic.bot.Bot;

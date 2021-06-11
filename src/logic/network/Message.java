@@ -43,10 +43,11 @@ public class Message implements Serializable {
         this.players = players;
     }
 
-    public Message(MessageType type, logic.maps.Map map) {
+    public Message(MessageType type, Map map, Collection<Player> players) {
         if (type != START_GAME) throw new InvalidParameterException("Message type exception");
         this.type = type;
         this.map = map;
+        this.players = players;
     }
 
     public Message(MessageType type, String srcName, int srcTroops, Player srcOwner, String dstName, int dstTroops, Player dstOwner) {

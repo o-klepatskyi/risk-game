@@ -13,6 +13,8 @@ import java.net.Socket;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+
 import static logic.network.NetworkMode.*;
 import static logic.network.MessageType.*;
 
@@ -103,8 +105,9 @@ public final class MultiplayerManager {
         players = new ArrayList<>(getPlayers());
         Map map = playerMenu.getSelectedMap();
         map.initGraph(players);
+        Collections.shuffle(players);
         try {
-            server.broadcast(new Message(START_GAME, map));
+            server.broadcast(new Message(START_GAME, map, players));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -113,8 +116,8 @@ public final class MultiplayerManager {
     /**
      * client-only
      */
-    public void startGame(Map map) {
-        game = new Game(playerMenu.getPlayers(), map, this);
+    public void startGame(Map map, Collection<Player> players) {
+        game = new Game(players, map, this);
         isGameStarted = true;
         game.start();
         MainFrame.openGameWindow(game.getGameWindow());

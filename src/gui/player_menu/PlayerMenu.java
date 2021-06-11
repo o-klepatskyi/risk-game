@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import gui.MainFrame;
 import logic.Game;
@@ -241,13 +243,15 @@ public class PlayerMenu extends JPanel {
         if (MainFrame.isMultiplayer()) {
             if (MainFrame.isServer()) MainFrame.manager.initGame();
         } else {
-            Game game = new Game(getPlayers(), getSelectedMap());
+            java.util.List<Player> players = getPlayers();
+            Collections.shuffle(players);
+            Game game = new Game(players, getSelectedMap());
             MainFrame.openGameWindow(game.getGameWindow());
             game.start();
         }
     }
 
-    public Collection<Player> getPlayers() {
+    public List<Player> getPlayers() {
         ArrayList<Player> players = new ArrayList<>(playerPanels.size());
         for (PlayerPanel pp : playerPanels) {
             players.add(pp.getPlayer());

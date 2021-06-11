@@ -4,7 +4,6 @@ import gui.HintTextField;
 import gui.Main;
 import gui.player_menu.PlayerNameField;
 import util.res.Fonts;
-import util.res.Images;
 import util.res.SoundPlayer;
 
 import javax.swing.*;
@@ -14,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 // todo add setKeyListener method to manipulate with mouse
-// todo add loading panel
 public class ServerMenu extends Menu {
 
     private HintTextField portField, nameField;

@@ -69,6 +69,7 @@ public class Client {
 
     public void close(MessageType cause) {
         try {
+            if (isClosed) return;
             isClosed = true;
             socket.close();
 
@@ -80,13 +81,19 @@ public class Client {
                     case INVALID_NAME -> showInvalidNameError();
                     case CONNECTION_CLOSED_BY_ADMIN -> showConnectionClosedByAdminError();
                     case CLOSE_CONNECTION_BY_CLIENT -> showConnectionClosedByClientError();
-                    // todo SERVER_CLOSED_ERROR
+                    case SERVER_CLOSED_ERROR -> showServerClosedError();
                     default -> showError(cause);
                 }
             }
         } catch (IOException ex) {
             System.err.println("Error writing to server: " + ex.getMessage());
         }
+    }
+
+    private void showServerClosedError() {
+        JOptionPane.showMessageDialog(null,
+                "Server closed.",
+                "Lost connection with server", JOptionPane.ERROR_MESSAGE);
     }
 
     private void showConnectionClosedByClientError() {

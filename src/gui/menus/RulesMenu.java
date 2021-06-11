@@ -71,7 +71,7 @@ public class RulesMenu extends JPanel {
             @Override
             public void mouseEntered(MouseEvent e) {
                 if (prev.isEnabled()) {
-                    // todo
+                    SoundPlayer.optionChosenSound();
                 }
             }
         });
@@ -87,7 +87,7 @@ public class RulesMenu extends JPanel {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                // todo
+                SoundPlayer.optionChosenSound();
             }
         });
         buttons.add(back);
@@ -104,7 +104,7 @@ public class RulesMenu extends JPanel {
             @Override
             public void mouseEntered(MouseEvent e) {
                 if (next.isEnabled()) {
-                    // todo
+                    SoundPlayer.optionChosenSound();
                 }
             }
         });

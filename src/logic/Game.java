@@ -534,26 +534,6 @@ public class Game {
         return gamePhase;
     }
 
-    public boolean removePlayer(Player p) {
-        return players.remove(p);
-    }
-
-    public Collection<Player> getPlayers() {
-        return players;
-    }
-
-    public GameWindow getGameWindow() {
-        return gameWindow;
-    }
-
-    public GameMap getGameMap() {
-        return gameMap;
-    }
-
-    public Graph getGameGraph() {
-        return gameGraph;
-    }
-
     public Player getCurrentPlayer() {
         return currentPlayer;
     }

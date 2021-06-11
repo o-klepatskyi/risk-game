@@ -246,7 +246,7 @@ public class PlayerMenu extends JPanel {
             java.util.List<Player> players = getPlayers();
             if (Main.isShuffling()) Collections.shuffle(players);
             Game game = new Game(players, getSelectedMap());
-            Main.openGameWindow(game.getGameWindow());
+            Main.openGameWindow(game.gameWindow);
             game.start();
         }
     }

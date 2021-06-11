@@ -49,7 +49,7 @@ public class GameWindow extends JPanel {
         this.add(sidePanel, gbc);
 
         gbc.gridx = 1;
-        gameMap = game.getGameMap();
+        gameMap = game.gameMap;
         this.add(gameMap, gbc);
     }
 
@@ -58,10 +58,6 @@ public class GameWindow extends JPanel {
         updateSidePanel(gamePhase);
         gameFlow.updatePhase(game.getCurrentPlayer(), gamePhase);
         gameMap.drawField();
-
-//        frame.getContentPane().revalidate();
-//        frame.getContentPane().repaint();
-//        frame.pack();
     }
 
     private void updateSidePanel(GamePhase gamePhase) {

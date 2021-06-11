@@ -120,7 +120,7 @@ public final class MultiplayerManager {
         game = new Game(players, map, this);
         isGameStarted = true;
         game.start();
-        Main.openGameWindow(game.getGameWindow());
+        Main.openGameWindow(game.gameWindow);
         playerMenu = null;
     }
 

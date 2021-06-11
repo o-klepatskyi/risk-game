@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class GameMap extends JPanel {
@@ -18,7 +17,6 @@ public class GameMap extends JPanel {
 
     private final Game game;
     private final ArrayList<JButton> buttons;
-    private final JPanel panel;
 
     private boolean buttonClicked = false;
     private JButton src, dst;
@@ -27,10 +25,9 @@ public class GameMap extends JPanel {
         this.setLayout(null);
         setPreferredSize(new Dimension((int) (GameWindow.WIDTH*0.75), (int) (GameWindow.HEIGHT*0.9)));
         this.game = game;
-        panel = this;
         buttons = new ArrayList<>();
 
-        panel.addMouseListener(new MouseAdapter() {
+        addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 System.out.println(e.getX() + ", " + e.getY());
                 if(!game.getGamePhase().equals(GamePhase.REINFORCEMENT) && !game.getCurrentPlayer().isBot()) {
@@ -44,7 +41,7 @@ public class GameMap extends JPanel {
     }
 
     private void updateTerritories() {
-        game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
+        game.gameWindow.updateChosenTerritories(getSrcTerritory(), getDstTerritory());
     }
 
     /**
@@ -55,7 +52,7 @@ public class GameMap extends JPanel {
         clearField();
         buttons.clear();
 
-        ArrayList<Territory> territories = game.getGameGraph().getTerritories();
+        ArrayList<Territory> territories = game.gameGraph.getTerritories();
         int BUTTON_WIDTH = 50;
         int BUTTON_HEIGHT = 25;
         int BUTTON_MARGIN_LEFT = 20;
@@ -71,7 +68,7 @@ public class GameMap extends JPanel {
             button.setFocusPainted(false);
             button.setBorder(null);
 
-            panel.add(button);
+            add(button);
             buttons.add(button);
 
         }
@@ -88,9 +85,8 @@ public class GameMap extends JPanel {
 
             if(game.getGamePhase().equals(GamePhase.REINFORCEMENT))
                 showOptions(GamePhase.REINFORCEMENT);
-            if (game.getGameWindow() != null) {
-                game.getGameWindow().updateChosenTerritories(getSrcTerritory(), getDstTerritory());
-            }
+
+            game.gameWindow.updateChosenTerritories(getSrcTerritory(), getDstTerritory());
         }
 
         revalidate();
@@ -105,7 +101,7 @@ public class GameMap extends JPanel {
         if(src == null)
             return null;
 
-        return game.getGameGraph().getVertex(src.getName());
+        return game.gameGraph.getVertex(src.getName());
     }
 
     /**
@@ -115,12 +111,12 @@ public class GameMap extends JPanel {
         if(dst == null)
             return null;
 
-        return game.getGameGraph().getVertex(dst.getName());
+        return game.gameGraph.getVertex(dst.getName());
     }
 
     public void explosionEffect(Coordinates coordinates) {
         SoundPlayer.explosionSound();
-        String territoryName = game.getGameGraph().getVertex(coordinates).getName();
+        String territoryName = game.gameGraph.getVertex(coordinates).getName();
         JButton territoryButton = null;
         for(JButton button : buttons) {
             if(button.getName().equals(territoryName)) {
@@ -134,7 +130,7 @@ public class GameMap extends JPanel {
             JLabel explosion = new JLabel(explosionIcon);
             explosion.setBounds(coordinates.getX()-SIZE/2, coordinates.getY()-SIZE/2, SIZE, SIZE);
             territoryButton.setVisible(false);
-            panel.add(explosion);
+            add(explosion);
 
             JButton finalTerritoryButton = territoryButton;
             new java.util.Timer().schedule(
@@ -158,9 +154,9 @@ public class GameMap extends JPanel {
 
     private void clearField() {
         resetButtons();
-        panel.removeAll();
-        panel.revalidate();
-        panel.repaint();
+        removeAll();
+        revalidate();
+        repaint();
     }
 
     private void addListeners() {
@@ -257,23 +253,23 @@ public class GameMap extends JPanel {
             ArrayList<Territory> filter = new ArrayList<>();
             Territory territory = null;
             if(src != null)
-                territory = game.getGameGraph().getVertex(src.getName());
+                territory = game.gameGraph.getVertex(src.getName());
             switch (option) {
                 case REINFORCEMENT:
-                    filter = game.getGameGraph().getTerritories(game.getCurrentPlayer());
+                    filter = game.gameGraph.getTerritories(game.getCurrentPlayer());
                     break;
                 case ATTACK:
-                    filter = game.getGameGraph().getAdjacentTerritories(territory);
+                    filter = game.gameGraph.getAdjacentTerritories(territory);
                     break;
                 case FORTIFY:
-                    filter = game.getGameGraph().getConnectedTerritories(territory);
+                    filter = game.gameGraph.getConnectedTerritories(territory);
                     break;
 
             }
 
             Territory dst;
             for(JButton b : buttons) {
-                dst = game.getGameGraph().getVertex(b.getName());
+                dst = game.gameGraph.getVertex(b.getName());
                 if(!filter.contains(dst)){
                     makeButtonInactive(b);
                 }
@@ -283,7 +279,7 @@ public class GameMap extends JPanel {
 
     private void resetButtons() {
         for(JButton b : buttons) {
-            b.setBackground(game.getGameGraph().getVertex(b.getName()).getOwner().getColor());
+            b.setBackground(game.gameGraph.getVertex(b.getName()).getOwner().getColor());
             b.setBorder(null);
             b.setForeground(Color.WHITE);
         }

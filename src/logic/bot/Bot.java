@@ -24,7 +24,7 @@ public abstract class Bot {
             throw new InvalidParameterException("Current player is neither bot nor offline");
 
         Player    player      = game.getCurrentPlayer();
-        Graph     gameGraph   = game.getGameGraph();
+        Graph     gameGraph   = game.gameGraph;
         GamePhase phase       = game.getGamePhase();
 
         if (player == null || gameGraph == null)

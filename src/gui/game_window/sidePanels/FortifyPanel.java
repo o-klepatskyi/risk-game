@@ -55,6 +55,7 @@ public class FortifyPanel extends SidePanel {
             fortifyButton.setEnabled(false);
             troopsToTransferSpinner.setModel(new SpinnerNumberModel(0,0,0,0));
         }
+        ((JSpinner.DefaultEditor) troopsToTransferSpinner.getEditor()).getTextField().setEditable(false);
     }
 
     private void initLabels() {

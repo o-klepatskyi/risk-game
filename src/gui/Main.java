@@ -40,7 +40,11 @@ public class Main {
         frame.add(menu);
         frame.pack();
         menu.setFocusable(true);
-        manager = null;
+        if (isMultiplayer()) {
+            if(isServer()) manager.closeServer();
+            else manager.closeClient();
+            manager = null;
+        }
     }
 
     public static void openPlayerMenu() {

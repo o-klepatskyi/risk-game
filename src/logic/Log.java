@@ -3,7 +3,7 @@ package logic;
 import java.io.*;
 
 public class Log {
-    public static final String fileName = "Logs.txt";
+    public static final String fileName = "logs.txt";
     public static void initLog() {
         PrintWriter writer = null;
         try {

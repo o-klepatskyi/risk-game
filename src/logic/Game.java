@@ -17,7 +17,6 @@ import javax.swing.*;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Game {
     private final ArrayList<Player> players;
@@ -130,7 +129,7 @@ public class Game {
         if(attackTroops == 1)
             throw new IllegalNumberOfAttackTroopsException("Not enough troops to attack (1)!");
 
-        int[] troopsLeft = dice_rolls(attackTroops, defendTroops);
+        int[] troopsLeft = Dice.dice_rolls(attackTroops, defendTroops);
 
         Log.write(srcTerritory.getOwner().getName()
                 + "(" + srcTerritory.getOwner().getColor() + ")" +
@@ -138,7 +137,7 @@ public class Game {
 
         Log.write(srcTerritory.getName() + " vs " + dstTerritory.getName());
 
-        if(attackerWins(troopsLeft)) {
+        if(Dice.attackerWins(troopsLeft)) {
             srcTerritory.setTroops(1);
             dstTerritory.setTroops(troopsLeft[0]);
             dstTerritory.setOwner(srcTerritory.getOwner());
@@ -498,7 +497,7 @@ public class Game {
         int attackerWinsCount = 0;
         final double COUNT_OF_DICE_ROLLS = 10000;
         for(int i = 0; i < COUNT_OF_DICE_ROLLS; i++) {
-            if(attackerWins(dice_rolls(attackTroops, defendTroops)))
+            if(Dice.attackerWins(Dice.dice_rolls(attackTroops, defendTroops)))
                 attackerWinsCount++;
         }
         double probability = attackerWinsCount / COUNT_OF_DICE_ROLLS;
@@ -506,67 +505,6 @@ public class Game {
         return (int) Math.round(probability);
     }
 
-    private int[] dice_rolls(int attackTroops, int defendTroops) {
-        attackTroops--;
-        while (attackTroops > 0 && defendTroops > 0) {
-            int[] attackCast = attackDice(attackTroops);
-            int[] defendCast = defendDice(defendTroops);
-            int[] totalTroopsLost = compareCasts(attackCast, defendCast);
-            attackTroops -= totalTroopsLost[0];
-            defendTroops -= totalTroopsLost[1];
-        }
-        return new int[]{attackTroops, defendTroops};
-    }
-
-    private int[] attackDice(int units) {
-        int[] cast;
-        if(units >= 3) {
-            cast = new int[]{Dice.roll(), Dice.roll(), Dice.roll()};
-        }
-        else if(units == 2) {
-            cast = new int[]{Dice.roll(), Dice.roll()};
-        }
-        else {
-            cast = new int[]{Dice.roll()};
-        }
-        Arrays.sort(cast);
-        cast = reversed(cast);
-        return cast;
-    }
-
-    private int[] defendDice(int units) {
-        int[] cast;
-        if(units >= 2) {
-            cast = new int[]{Dice.roll(), Dice.roll()};
-        }
-        else {
-            cast = new int[]{Dice.roll()};
-        }
-        Arrays.sort(cast);
-        cast = reversed(cast);
-        return cast;
-    }
-
-    private int[] compareCasts(int[] attack_cast, int[] defend_cast) {
-        int[] totalLost = {0, 0};
-        for(int i = 0; i < Math.min(attack_cast.length, defend_cast.length); i++) {
-            if(attack_cast[i] > defend_cast[i]) {
-                totalLost[1]++;
-            }
-            else {
-                totalLost[0]++;
-            }
-        }
-        return totalLost;
-    }
-
-    private int[] reversed(int[] array) {
-        return IntStream.range(0, array.length).map(i -> array[array.length-i-1]).toArray();
-    }
-
-    private boolean attackerWins(int[] troopsLeft) {
-        return troopsLeft[0] > 0;
-    }
 
     private void pickFirstPlayer() {
         gamePhase = GamePhase.FORTIFY;

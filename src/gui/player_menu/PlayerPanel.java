@@ -1,5 +1,6 @@
 package gui.player_menu;
 
+import gui.MainFrame;
 import logic.Player;
 import util.res.Fonts;
 
@@ -34,7 +35,7 @@ class PlayerPanel extends JPanel {
         add(playerNameField);
 
         try {
-            colorComboBox = new ColorComboBox(colorModel, player.getColor(), parent.multiplayerManager);
+            colorComboBox = new ColorComboBox(colorModel, player.getColor());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -121,7 +122,7 @@ class PlayerPanel extends JPanel {
             removePlayerButton.setPreferredSize(new Dimension((int) (WIDTH * (3.0 / 16.0)), HEIGHT - 10));
             removePlayerButton.setEnabled(false);
 
-            if (!parent.isMultiplayer || parent.isServer) {
+            if (!MainFrame.isMultiplayer() || MainFrame.isServer()) {
                 PlayerPanel currentPanel = this;
                 removePlayerButton.addMouseListener(new MouseAdapter() {
                     @Override

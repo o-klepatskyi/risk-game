@@ -1,6 +1,7 @@
 package gui.menus.multiplayer_menu;
 
 import gui.HintTextField;
+import gui.MainFrame;
 import gui.player_menu.PlayerMenu;
 import gui.player_menu.PlayerNameField;
 import logic.network.MultiplayerManager;
@@ -20,8 +21,6 @@ import java.util.ArrayList;
 public class ServerMenu extends JPanel {
 
     private HintTextField portField, nameField;
-    private final JFrame frame;
-    private final JPanel panel;
     private JButton enterButton, backButton;
     private GridBagConstraints gbc;
 
@@ -33,10 +32,7 @@ public class ServerMenu extends JPanel {
     private String username;
     private int portNumber;
 
-    ServerMenu(JFrame frame) {
-        this.frame = frame;
-        panel = this;
-
+    public ServerMenu() {
         initWindow();
         initTextFields();
         initButtons();
@@ -97,8 +93,8 @@ public class ServerMenu extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                back();
                 SoundPlayer.buttonClickedSound();
+                MainFrame.openMultiplayerMenu();
             }
 
             @Override
@@ -145,15 +141,8 @@ public class ServerMenu extends JPanel {
     }
 
     private void openPlayerMenu() {
-        MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.SERVER);
-        PlayerMenu pm = new PlayerMenu(frame, multiplayerManager);
-
-        frame.remove(this);
-        frame.add(new LoadingMenu());
-        frame.pack();
-
-        multiplayerManager.setPlayerMenu(pm);
-        multiplayerManager.startServer(portNumber, username, frame);
+        MainFrame.openLoadingMenu();
+        MainFrame.createMultiplayerManager(portNumber, username);
     }
 
     private boolean getServerInfo() {
@@ -172,15 +161,6 @@ public class ServerMenu extends JPanel {
         }
 
         return true;
-    }
-
-    private void back() {
-        panel.setVisible(false);
-        frame.remove(panel);
-        JPanel menu = new MultiplayerMenu(frame);
-        frame.add(menu);
-        frame.pack();
-        menu.setFocusable(true);
     }
 
     @Override

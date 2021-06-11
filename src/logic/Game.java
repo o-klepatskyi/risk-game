@@ -1,5 +1,6 @@
 package logic;
 
+import gui.MainFrame;
 import gui.game_window.sidePanels.ReinforcementsPanel;
 import gui.menus.GameOverMenu;
 import gui.game_window.GameMap;
@@ -400,11 +401,7 @@ public class Game {
     }
 
     public void openGameOverMenu() {
-        JFrame frame = gameWindow.getFrame();
-        gameWindow.setVisible(false);
-        frame.remove(gameWindow);
-        frame.add(new GameOverMenu(frame, currentPlayer, manager));
-        frame.pack();
+        MainFrame.openGameOverMenu(currentPlayer);
     }
 
     private ArrayList<String> continentLabels;

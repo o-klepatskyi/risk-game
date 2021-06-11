@@ -1,5 +1,6 @@
 package logic.network;
 
+import gui.MainFrame;
 import gui.menus.main_menu.MainMenu;
 
 import javax.swing.*;
@@ -108,18 +109,11 @@ public class Client {
     }
 
     public void openPlayerMenu() {
-        manager.frame.getContentPane().removeAll();
-        manager.frame.add(manager.playerMenu);
-        manager.frame.revalidate();
-        manager.frame.repaint();
-        manager.frame.pack();
+        MainFrame.openPlayerMenu();
     }
 
     public void openMainMenu() {
-        manager.frame.getContentPane().removeAll();
-        manager.frame.add(new MainMenu(manager.frame));
-        manager.frame.getContentPane().repaint();
-        manager.frame.pack();
+        MainFrame.openMainMenu();
     }
 
     private void showInvalidNameError() {

@@ -1,0 +1,42 @@
+Afghanistan: Ukraine, Ural, China, India, MiddleEast
+Alaska: Alberta, NorthwestTerritory, Kamchatka
+Alberta: Alaska, NorthwestTerritory, Ontario, WesternUnitedStates
+Argentina: Peru, Brazil
+Brazil: Venezuela, NorthAfrica, Argentina, Peru
+CentralAmerica: WesternUnitedStates, Venezuela, EasternUnitedStates
+China: Afghanistan, Siberia, Mongolia, Siam, India, Ural
+Congo: NorthAfrica, EastAfrica, SouthAfrica
+EastAfrica: Egypt, Madagascar, SouthAfrica, Congo, NorthAfrica, MiddleEast
+EasternAustralia: NewGuinea, WesternAustralia
+EasternUnitedStates: WesternUnitedStates, Ontario, Quebec, CentralAmerica
+Egypt: SouthernEurope, MiddleEast, EastAfrica, NorthAfrica
+GreatBritain: Iceland, Scandinavia, NorthernEurope, WesternEurope
+Greenland: NorthwestTerritory, Ontario, Quebec, Iceland
+Iceland: Greenland, GreatBritain, Scandinavia
+India: MiddleEast, Afghanistan, China, Siam
+Indonesia: Siam, NewGuinea, WesternAustralia
+Irkutsk: Siberia, Yakutsk, Kamchatka, Mongolia
+Japan: Kamchatka, Mongolia
+Kamchatka: Yakutsk, Alaska, Japan, Mongolia, Irkutsk
+Madagascar: EastAfrica, SouthAfrica
+MiddleEast: Ukraine, Afghanistan, India, Egypt, EastAfrica
+Mongolia: Siberia, Irkutsk, Kamchatka, Japan, China
+NewGuinea: Indonesia, EasternAustralia, WesternAustralia
+NorthAfrica: WesternEurope, SouthernEurope, Egypt, Congo, Brazil
+NorthernEurope: GreatBritain, Ukraine, SouthernEurope, WesternEurope, Scandinavia
+NorthwestTerritory: Alaska, Greenland, Ontario, Alberta
+Ontario: NorthwestTerritory, Greenland, Quebec, EasternUnitedStates, WesternUnitedStates, Alberta
+Peru: Brazil, Argentina, Venezuela
+Quebec: Ontario, Greenland, EasternUnitedStates
+Scandinavia: GreatBritain, Ukraine, NorthernEurope, Iceland
+Siam: India, China, Indonesia
+Siberia: Ural, Yakutsk, Irkutsk, Mongolia, China
+SouthAfrica: Congo, EastAfrica, Madagascar
+SouthernEurope: WesternEurope, NorthernEurope, Ukraine, Egypt, NorthAfrica, MiddleEast
+Ukraine: Scandinavia, Ural, Afghanistan, MiddleEast, SouthernEurope, NorthernEurope
+Ural: Ukraine, Siberia, Afghanistan, China
+Venezuela: CentralAmerica, Brazil, Peru
+WesternAustralia: Indonesia, NewGuinea, EasternAustralia
+WesternEurope: GreatBritain, NorthernEurope, SouthernEurope, NorthAfrica
+WesternUnitedStates: Alberta, Ontario, EasternUnitedStates, CentralAmerica
+Yakutsk: Siberia, Kamchatka, Irkutsk

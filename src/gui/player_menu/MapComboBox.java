@@ -1,5 +1,6 @@
 package gui.player_menu;
 
+import gui.MainFrame;
 import logic.maps.MapType;
 import logic.network.Message;
 import logic.network.MessageType;
@@ -11,13 +12,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class MapComboBox extends JComboBox<MapType> {
-
     private MapType oldValue;
-    private final MultiplayerManager manager;
 
-    public MapComboBox(MultiplayerManager manager) {
+    public MapComboBox() {
         super(MapType.values());
-        this.manager = manager;
         setFont(Fonts.BUTTON_FONT.deriveFont(18f));
         setEnabled(false);
         setEditable(false);
@@ -34,8 +32,8 @@ public class MapComboBox extends JComboBox<MapType> {
         if (selectedValue != null && !selectedValue.equals(oldValue)) {
             System.out.println("map changed");
             oldValue = selectedValue;
-            if (manager != null ) {
-                manager.sendMessage(new Message(MessageType.MAP_CHANGED, selectedValue));
+            if (MainFrame.isMultiplayer()) {
+                MainFrame.manager.sendMessage(new Message(MessageType.MAP_CHANGED, selectedValue));
             }
         }
     }

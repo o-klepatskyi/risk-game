@@ -123,7 +123,7 @@ public class RulesMenu extends JPanel {
     private void back() {
         panel.setVisible(false);
         frame.remove(panel);
-        frame.add(new MainMenu(frame));
+        frame.add(new MainMenu());
         frame.pack();
     }
 

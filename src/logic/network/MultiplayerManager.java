@@ -1,5 +1,6 @@
 package logic.network;
 
+import gui.MainFrame;
 import gui.player_menu.PlayerMenu;
 import logic.Game;
 import logic.Player;
@@ -22,7 +23,6 @@ public final class MultiplayerManager {
     public final NetworkMode networkMode;
     public Game game;
     public PlayerMenu playerMenu;
-    public JFrame frame;
     public ArrayList<Player> players;
     private boolean isGameStarted = false;
 
@@ -32,17 +32,16 @@ public final class MultiplayerManager {
         this.networkMode = mode;
     }
 
-    public void startServer(int portNumber, String userName, JFrame frame) {
+    public void startServer(int portNumber, String userName) {
         if (networkMode != SERVER) {
             throw new InvalidParameterException("Wrong network mode");
         }
         server = new Server(portNumber, this);
         new Thread(() -> server.execute()).start();
-        startClient("127.0.0.1", portNumber, userName, frame);
+        startClient("127.0.0.1", portNumber, userName);
     }
 
-    public void startClient(String ipAddress, int portNumber, String username, JFrame frame) {
-        this.frame = frame;
+    public void startClient(String ipAddress, int portNumber, String username) {
         if (client != null) {
             System.err.println("Client is already activated.");
             return;
@@ -105,14 +104,9 @@ public final class MultiplayerManager {
      */
     public void startGame(Map map) {
         game = new Game(playerMenu.getPlayers(), map, this);
-
         isGameStarted = true;
-
         game.start();
-        playerMenu.getParent().remove(playerMenu);
-        game.getGameWindow().setFrame((JFrame) playerMenu.getParent());
-        frame.add(game.getGameWindow());
-        frame.pack();
+        MainFrame.openGameWindow(game.getGameWindow());
         playerMenu = null;
     }
 

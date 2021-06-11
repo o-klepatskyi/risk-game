@@ -1,8 +1,6 @@
 package gui.menus.main_menu;
 
-import gui.menus.multiplayer_menu.MultiplayerMenu;
-import gui.player_menu.PlayerMenu;
-import gui.menus.RulesMenu;
+import gui.MainFrame;
 import util.res.Fonts;
 import util.res.Images;
 import util.res.SoundPlayer;
@@ -11,10 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-// todo: Call menu.setFocusable(true) AFTER calling frame.pack()
+
 public class MainMenu extends JPanel {
-    private final JPanel panel;
-    private final JFrame frame;
     private JButton play, multiplayer, rules, exit;
     private GridBagConstraints gbc;
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
@@ -22,10 +18,7 @@ public class MainMenu extends JPanel {
     private final int SIZE = 500;
     private int menuOptionChosen;
 
-    public MainMenu(JFrame frame) {
-        this.frame = frame;
-        panel = this;
-
+    public MainMenu() {
         initWindow();
         initButtons();
         setKeyListener();
@@ -97,7 +90,7 @@ public class MainMenu extends JPanel {
         play = new JButton("Play");
         play.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                openPlayerMenu();
+                MainFrame.openPlayerMenu();
                 SoundPlayer.buttonClickedSound();
             }
 
@@ -113,7 +106,7 @@ public class MainMenu extends JPanel {
         multiplayer.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
-                openMultiplayerMenu();
+                MainFrame.openMultiplayerMenu();
             }
 
             public void mouseEntered(MouseEvent e) {
@@ -128,7 +121,7 @@ public class MainMenu extends JPanel {
         rules.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
-                openRulesMenu();
+                MainFrame.openRulesMenu();
             }
 
             public void mouseEntered(MouseEvent e) {
@@ -186,15 +179,15 @@ public class MainMenu extends JPanel {
                     switch(menuOptionChosen){
                         case 1:
                             SoundPlayer.buttonClickedSound();
-                            openPlayerMenu();
+                            MainFrame.openPlayerMenu();
                             break;
                         case 2:
                             SoundPlayer.buttonClickedSound();
-                            openMultiplayerMenu();
+                            MainFrame.openMultiplayerMenu();
                             break;
                         case 3:
                             SoundPlayer.buttonClickedSound();
-                            openRulesMenu();
+                            MainFrame.openRulesMenu();
                             break;
                         case 4:
                             SoundPlayer.buttonClickedSound();
@@ -209,26 +202,4 @@ public class MainMenu extends JPanel {
             }
         });
     }
-
-    private void openPlayerMenu() {
-        panel.setVisible(false);
-        frame.remove(panel);
-        frame.add(new PlayerMenu(frame));
-        frame.pack();
-    }
-
-    private void openMultiplayerMenu() {
-        panel.setVisible(false);
-        frame.remove(panel);
-        frame.add(new MultiplayerMenu(frame));
-        frame.pack();
-    }
-
-    private void openRulesMenu() {
-        panel.setVisible(false);
-        frame.remove(panel);
-        frame.add(new RulesMenu(frame));
-        frame.pack();
-    }
-
 }

@@ -6,7 +6,6 @@ import gui.game_window.topPanel.TopPanel;
 import logic.Game;
 import logic.GamePhase;
 import logic.Territory;
-import util.exceptions.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +19,6 @@ public class GameWindow extends JPanel {
     public final Game game;
     private GameMap gameMap;
     private GridBagConstraints gbc = new GridBagConstraints();
-    private JFrame frame;
 
     public GameWindow(Game game) {
         this.game = game;
@@ -60,6 +58,10 @@ public class GameWindow extends JPanel {
         updateSidePanel(gamePhase);
         gameFlow.updatePhase(game.getCurrentPlayer(), gamePhase);
         gameMap.drawField();
+
+//        frame.getContentPane().revalidate();
+//        frame.getContentPane().repaint();
+//        frame.pack();
     }
 
     private void updateSidePanel(GamePhase gamePhase) {
@@ -99,13 +101,5 @@ public class GameWindow extends JPanel {
             System.err.println(e.getMessage());
         }
         return 0;
-    }
-
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
-    }
-
-    public JFrame getFrame() {
-        return frame;
     }
 }

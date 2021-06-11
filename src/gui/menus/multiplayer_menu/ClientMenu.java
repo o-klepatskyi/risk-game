@@ -1,6 +1,7 @@
 package gui.menus.multiplayer_menu;
 
 import gui.HintTextField;
+import gui.MainFrame;
 import gui.player_menu.PlayerMenu;
 import gui.player_menu.PlayerNameField;
 import logic.network.MultiplayerManager;
@@ -17,11 +18,8 @@ import java.util.ArrayList;
 
 // todo add setKeyListener method to manipulate with mouse
 public class ClientMenu extends JPanel {
-
     private HintTextField portField, ipField, nameField;
     private JButton enterButton, backButton;
-    private final JFrame frame;
-    private final JPanel panel;
     private GridBagConstraints gbc;
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
 
@@ -31,10 +29,7 @@ public class ClientMenu extends JPanel {
 
     private final int SIZE = 500;
 
-    ClientMenu(JFrame frame) {
-        this.frame = frame;
-        panel = this;
-
+    public ClientMenu() {
         initWindow();
         initTextFields();
         initButtons();
@@ -97,8 +92,8 @@ public class ClientMenu extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                back();
                 SoundPlayer.buttonClickedSound();
+                MainFrame.openMultiplayerMenu();
             }
 
             @Override
@@ -145,16 +140,8 @@ public class ClientMenu extends JPanel {
     }
 
     private void openPlayerMenu() {
-        MultiplayerManager multiplayerManager = new MultiplayerManager(NetworkMode.CLIENT);
-        PlayerMenu pm = new PlayerMenu(frame, multiplayerManager);
-
-        frame.remove(this);
-        frame.add(new LoadingMenu());
-        frame.pack();
-
-
-        multiplayerManager.setPlayerMenu(pm);
-        multiplayerManager.startClient(ipAddress, portNumber, username, frame);
+        MainFrame.openLoadingMenu();
+        MainFrame.createMultiplayerManager(ipAddress, portNumber, username);
     }
 
     private boolean getClientInfo() {
@@ -169,15 +156,6 @@ public class ClientMenu extends JPanel {
             return false;
         }
         return true;
-    }
-
-    private void back() {
-        panel.setVisible(false);
-        frame.remove(panel);
-        JPanel menu = new MultiplayerMenu(frame);
-        frame.add(menu);
-        frame.pack();
-        menu.setFocusable(true);
     }
 
     @Override

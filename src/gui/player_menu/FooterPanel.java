@@ -1,8 +1,7 @@
 package gui.player_menu;
 
-import gui.menus.main_menu.MainMenu;
+import gui.MainFrame;
 import logic.maps.MapType;
-import logic.network.MultiplayerManager;
 import util.res.Fonts;
 import util.res.SoundPlayer;
 
@@ -21,10 +20,8 @@ class FooterPanel extends JPanel {
     private JButton startButton;
     private JComboBox<MapType> comboBox;
     private final PlayerMenu parent;
-    private JFrame frame;
-    private JPanel menu = this;
 
-    FooterPanel(PlayerMenu parent, JFrame frame, MultiplayerManager manager) {
+    FooterPanel(PlayerMenu parent) {
         setSize(WIDTH, HEIGHT);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setMaximumSize(new Dimension(WIDTH, HEIGHT));
@@ -33,12 +30,11 @@ class FooterPanel extends JPanel {
         setBackground(new Color(255, 255, 255, 123));
 
         this.parent = parent;
-        this.frame = frame;
 
         JLabel mapLabel = new JLabel("Map: ");
         mapLabel.setFont(Fonts.LABEL_FONT.deriveFont(20f));
         add(mapLabel);
-        comboBox = new MapComboBox(manager);
+        comboBox = new MapComboBox();
         comboBox.setPreferredSize(new Dimension(WIDTH/5+10, HEIGHT-10));
         add(comboBox);
         add(getAddPlayerButton());
@@ -57,9 +53,9 @@ class FooterPanel extends JPanel {
             addPlayerButton = new JButton("Add player");
             addPlayerButton.setPreferredSize(new Dimension(WIDTH/5+10, HEIGHT-10));
             addPlayerButton.setFont(BUTTON_FONT.deriveFont(18f));
-            if (parent.isMultiplayer) {
+            if (MainFrame.isMultiplayer()) {
                 addPlayerButton.setText("Add bot");
-                if (parent.isServer) {
+                if (MainFrame.isServer()) {
                     addPlayerButton.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
@@ -98,7 +94,7 @@ class FooterPanel extends JPanel {
             startButton.setPreferredSize(new Dimension(WIDTH/5+10, HEIGHT-10));
             startButton.setFont(BUTTON_FONT.deriveFont(18f));
             startButton.setEnabled(false);
-            if (parent.isMultiplayer && !parent.isServer) {
+            if (MainFrame.isMultiplayer() && !MainFrame.isServer()) {
                 startButton.setToolTipText("Only room owner can start the game");
             } else {
                 startButton.addMouseListener(new MouseAdapter() {
@@ -140,14 +136,10 @@ class FooterPanel extends JPanel {
     }
 
     private void closeAction() {
-        if (parent.isMultiplayer) {
-            parent.multiplayerManager.closeClient();
+        if (MainFrame.isMultiplayer()) {
+            MainFrame.manager.closeClient();
         } else {
-            frame.remove(parent);
-            frame.add(new MainMenu(frame));
-            frame.revalidate();
-            frame.repaint();
-            frame.pack();
+            MainFrame.openMainMenu();
         }
     }
 }

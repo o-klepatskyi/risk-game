@@ -1,5 +1,6 @@
 package gui.menus.multiplayer_menu;
 
+import gui.MainFrame;
 import gui.menus.main_menu.MainMenu;
 import util.res.Fonts;
 import util.res.Images;
@@ -12,9 +13,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 // todo add setKeyListener method to manipulate with mouse
 public class MultiplayerMenu extends JPanel {
-
-    private final JFrame frame;
-    private final JPanel panel;
     private JButton serverButton, clientButton, backButton;
     private GridBagConstraints gbc;
 
@@ -23,10 +21,7 @@ public class MultiplayerMenu extends JPanel {
 
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
 
-    public MultiplayerMenu(JFrame frame) {
-        this.frame = frame;
-        panel = this;
-
+    public MultiplayerMenu() {
         initWindow();
         initButtons();
 
@@ -51,7 +46,7 @@ public class MultiplayerMenu extends JPanel {
         serverButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                openServerMenu();
+                MainFrame.openServerMenu();
                 SoundPlayer.buttonClickedSound();
             }
 
@@ -68,8 +63,8 @@ public class MultiplayerMenu extends JPanel {
         clientButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                openClientMenu();
                 SoundPlayer.buttonClickedSound();
+                MainFrame.openClientMenu();
             }
 
             @Override
@@ -85,8 +80,8 @@ public class MultiplayerMenu extends JPanel {
         backButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                back();
                 SoundPlayer.buttonClickedSound();
+                MainFrame.openMainMenu();
             }
 
             @Override
@@ -139,31 +134,6 @@ public class MultiplayerMenu extends JPanel {
         backButton.setForeground(Color.WHITE);
         backButton.setText("Back");
     }
-
-    private void openServerMenu() {
-        setVisible(false);
-        frame.remove(this);
-        frame.add(new ServerMenu(frame));
-        frame.pack();
-    }
-
-    private void openClientMenu() {
-        frame.remove(this);
-        frame.add(new ClientMenu(frame));
-        frame.revalidate();
-        frame.repaint();
-        frame.pack();
-    }
-
-    private void back() {
-        panel.setVisible(false);
-        frame.remove(panel);
-        JPanel menu = new MainMenu(frame);
-        frame.add(menu);
-        frame.pack();
-        menu.setFocusable(true);
-    }
-
 
     @Override
     protected void paintComponent(Graphics g) {

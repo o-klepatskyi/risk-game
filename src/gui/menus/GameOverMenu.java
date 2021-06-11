@@ -1,5 +1,6 @@
 package gui.menus;
 
+import gui.MainFrame;
 import gui.menus.main_menu.MainMenu;
 import logic.Player;
 import logic.network.MultiplayerManager;
@@ -16,8 +17,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class GameOverMenu extends JPanel {
-    private final JPanel panel;
-    private final JFrame frame;
     private final Player player;
     private JButton menu, exit;
     private GridBagConstraints gbc;
@@ -25,14 +24,10 @@ public class GameOverMenu extends JPanel {
 
     private final int SIZE = 500;
     private int menuOptionChosen;
-    private final MultiplayerManager manager;
 
-    public GameOverMenu(JFrame frame, Player player, MultiplayerManager manager) {
+    public GameOverMenu(Player player) {
         SoundPlayer.gameOverSound();
-        this.frame = frame;
         this.player = player;
-        this.manager = manager;
-        panel = this;
 
         initWindow();
         addLabels();
@@ -99,8 +94,8 @@ public class GameOverMenu extends JPanel {
         menu = new JButton("Menu");
         menu.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                openMenu();
                 SoundPlayer.buttonClickedSound();
+                MainFrame.openMainMenu();
             }
 
             public void mouseEntered(MouseEvent e) {
@@ -158,7 +153,7 @@ public class GameOverMenu extends JPanel {
                     switch(menuOptionChosen){
                         case 1:
                             SoundPlayer.buttonClickedSound();
-                            openMenu();
+                            MainFrame.openMainMenu();
                             break;
                         case 2:
                             SoundPlayer.buttonClickedSound();
@@ -166,16 +161,7 @@ public class GameOverMenu extends JPanel {
                             break;
                     }
                 }
-
             }
         });
-    }
-
-    private void openMenu() {
-        if (manager != null) manager.gameOver();
-        panel.setVisible(false);
-        frame.remove(panel);
-        frame.add(new MainMenu(frame));
-        frame.pack();
     }
 }

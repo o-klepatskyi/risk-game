@@ -1,9 +1,9 @@
 package gui.player_menu;
 
+import gui.MainFrame;
 import logic.PlayerColor;
 import logic.network.Message;
 import logic.network.MessageType;
-import logic.network.MultiplayerManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,11 +15,10 @@ class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
     private final int SIZE = PlayerMenu.HEIGHT/10;
     private PlayerColor oldSelectedColor;
     private final ColorModel colorModel;
-    private MultiplayerManager manager;
 
-    ColorComboBox(final ColorModel colorModel, Color color, MultiplayerManager manager) {
+    ColorComboBox(final ColorModel colorModel, Color color) {
         this.colorModel = colorModel;
-        this.manager = manager;
+
         setSize(SIZE, SIZE);
         setPreferredSize(new Dimension(SIZE+20,SIZE));
         setEditable(false);
@@ -56,8 +55,8 @@ class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
         if (selectedColor != null && !selectedColor.equals(oldSelectedColor)) {
             oldSelectedColor = selectedColor;
             colorModel.chooseColor(selectedColor, previousSelectedColor);
-            if (manager != null ) {
-                manager.sendMessage(new Message(MessageType.COLOR_CHANGED, manager.playerMenu.getPlayers()));
+            if (MainFrame.isMultiplayer()) {
+                MainFrame.manager.sendMessage(new Message(MessageType.COLOR_CHANGED, MainFrame.manager.playerMenu.getPlayers()));
             }
         }
     }

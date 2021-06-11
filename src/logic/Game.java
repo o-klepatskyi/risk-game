@@ -71,10 +71,11 @@ public class Game {
             isStarted = true;
             Bot.setGame(this);
 
-            pickFirstPlayer(); // starting point of the game
 
             Log.initLog();
             Log.write("Game started");
+
+            pickFirstPlayer(); // starting point of the game
         }
     }
 
@@ -131,7 +132,10 @@ public class Game {
 
         int[] troopsLeft = dice_rolls(attackTroops, defendTroops);
 
-        Log.write(srcTerritory.getOwner().getName() + " vs " + dstTerritory.getOwner().getName());
+        Log.write(srcTerritory.getOwner().getName()
+                + "(" + srcTerritory.getOwner().getColor() + ")" +
+                " vs " + dstTerritory.getOwner().getName());
+
         Log.write(srcTerritory.getName() + " vs " + dstTerritory.getName());
 
         if(attackerWins(troopsLeft)) {
@@ -231,7 +235,7 @@ public class Game {
             throw new WrongTerritoriesPairException("These territories are not connected!");
         }
 
-        Log.write(srcTerritory.getOwner().getName() + " fortifies territory");
+        Log.write(srcTerritory.getOwner().getName() + "(" + srcTerritory.getOwner().getColor() + ")" + " fortifies territory");
         Log.write(srcTerritory.getName() + " -> " + dstTerritory.getName() + "(" + numberOfTroops + ")");
 
         nextPhase();
@@ -266,12 +270,6 @@ public class Game {
     private void reinforcePhase() {
         gamePhase = GamePhase.REINFORCEMENT;
         gameWindow.update();
-        if (isServer) {
-            System.out.println("current player");
-            System.out.println("is server?: " + isServer);
-            System.out.println("is bot?: " + currentPlayer.isBot());
-            System.out.println("is online?: " + isCurrentPlayerOnline());
-        }
 
         if (isMultiplayer) {
             if (isServer && (currentPlayer.isBot() || !isCurrentPlayerOnline())) {
@@ -313,7 +311,7 @@ public class Game {
     }
 
     public void botMove(BotMove botMove) {
-        System.out.println(botMove);
+        //System.out.println(botMove);
         if (botMove != null) {
             try {
                 switch (botMove.type) {
@@ -372,9 +370,9 @@ public class Game {
 
         checkForGameOver();
 
-        Log.write(currentPlayer.getName() + " turn");
-        setBonus();
+        Log.write(currentPlayer.getName() + "(" + currentPlayer.getColor() + ")" + " turn");
 
+        setBonus();
         gameWindow.update();
         reinforcePhase();
     }
@@ -393,7 +391,7 @@ public class Game {
 
         if(players.size() == 1) {
             Log.write("GAME OVER!!!");
-            Log.write(currentPlayer.getName() + " IS A WINNER");
+            Log.write(currentPlayer.getName() + "(" + currentPlayer.getColor() + ")" + " IS A WINNER");
 
             openGameOverMenu();
         }
@@ -422,7 +420,9 @@ public class Game {
         }
         currentPlayer.setBonus(bonus);
         ReinforcementsPanel.setBonus(bonus);
-        Log.write(currentPlayer.getName() + " receives bonus: " + "(" + currentPlayer.getBonus() + ")");
+        Log.write(currentPlayer.getName() +
+                "(" + currentPlayer.getColor() + ")" +
+                " receives bonus: " + "(" + currentPlayer.getBonus() + ")");
     }
 
     public ArrayList<String> getContinentsLabels() {
@@ -438,7 +438,7 @@ public class Game {
     }
 
     private void removeDeadPlayers() {
-        players.removeIf(this::playerIsDead);
+        players.removeIf(this::playerIsDead); // todo logging player elimination & player panel
         if (isMultiplayer &&
             !players.stream().map(Player::getName).collect(Collectors.toList()).contains(manager.client.username)) {
             showEliminatedMessage();
@@ -569,7 +569,7 @@ public class Game {
     }
 
     private void pickFirstPlayer() {
-        gamePhase = GamePhase.REINFORCEMENT;
+        gamePhase = GamePhase.FORTIFY;
         currentPlayer = players.get(players.size()-1);
         nextPlayerTurn();
     }

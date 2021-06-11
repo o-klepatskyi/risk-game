@@ -1,6 +1,6 @@
 package logic.network;
 
-import gui.MainFrame;
+import gui.Main;
 import gui.player_menu.PlayerMenu;
 import logic.Game;
 import logic.Player;
@@ -43,7 +43,7 @@ public final class MultiplayerManager {
             try {
                 server.execute();
             } catch (IOException ignored) {
-                MainFrame.openMainMenu();
+                Main.openMainMenu();
                 JOptionPane.showMessageDialog(null,
                         "Error occurred while setting up the server. Please restart the game.",
                         "Server error",
@@ -105,7 +105,7 @@ public final class MultiplayerManager {
         players = new ArrayList<>(getPlayers());
         Map map = playerMenu.getSelectedMap();
         map.initGraph(players);
-        Collections.shuffle(players);
+        if (Main.isShuffling()) Collections.shuffle(players);
         try {
             server.broadcast(new Message(START_GAME, map, players));
         } catch (IOException e) {
@@ -120,7 +120,7 @@ public final class MultiplayerManager {
         game = new Game(players, map, this);
         isGameStarted = true;
         game.start();
-        MainFrame.openGameWindow(game.getGameWindow());
+        Main.openGameWindow(game.getGameWindow());
         playerMenu = null;
     }
 

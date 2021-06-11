@@ -1,7 +1,6 @@
 package logic.network;
 
-import gui.MainFrame;
-import gui.menus.main_menu.MainMenu;
+import gui.Main;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -109,11 +108,11 @@ public class Client {
     }
 
     public void openPlayerMenu() {
-        MainFrame.openPlayerMenu();
+        Main.openPlayerMenu();
     }
 
     public void openMainMenu() {
-        MainFrame.openMainMenu();
+        Main.openMainMenu();
     }
 
     private void showInvalidNameError() {

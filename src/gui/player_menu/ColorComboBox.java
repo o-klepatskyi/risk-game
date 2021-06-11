@@ -1,6 +1,6 @@
 package gui.player_menu;
 
-import gui.MainFrame;
+import gui.Main;
 import logic.PlayerColor;
 import logic.network.Message;
 import logic.network.MessageType;
@@ -55,8 +55,8 @@ class ColorComboBox extends JComboBox<PlayerColor> implements ActionListener {
         if (selectedColor != null && !selectedColor.equals(oldSelectedColor)) {
             oldSelectedColor = selectedColor;
             colorModel.chooseColor(selectedColor, previousSelectedColor);
-            if (MainFrame.isMultiplayer()) {
-                MainFrame.manager.sendMessage(new Message(MessageType.COLOR_CHANGED, MainFrame.manager.playerMenu.getPlayers()));
+            if (Main.isMultiplayer()) {
+                Main.manager.sendMessage(new Message(MessageType.COLOR_CHANGED, Main.manager.playerMenu.getPlayers()));
             }
         }
     }

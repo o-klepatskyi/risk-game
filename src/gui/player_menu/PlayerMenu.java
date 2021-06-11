@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import gui.MainFrame;
+import gui.Main;
 import logic.Game;
 import logic.Player;
 import logic.maps.Map;
@@ -42,7 +42,7 @@ public class PlayerMenu extends JPanel {
     }
 
     public void updatePanels() {
-        if (!MainFrame.isMultiplayer() && playerPanels.size() == 0) {
+        if (!Main.isMultiplayer() && playerPanels.size() == 0) {
             for (int i = 0; i < MIN_PLAYER_NUMBER; i++) {
                 addPlayerPanel();
             }
@@ -56,7 +56,7 @@ public class PlayerMenu extends JPanel {
         add(hp);
 
         for (PlayerPanel panel : playerPanels) {
-            if (!MainFrame.isMultiplayer() || MainFrame.isServer()) {
+            if (!Main.isMultiplayer() || Main.isServer()) {
                 if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
                     panel.getRemovePlayerButton().setEnabled(true);
                 }
@@ -64,15 +64,15 @@ public class PlayerMenu extends JPanel {
                     panel.getRemovePlayerButton().setEnabled(false);
                 }
 
-                if (MainFrame.isMultiplayer() && panel.getPlayerNameField().getText().equals(MainFrame.manager.client.username)) {
+                if (Main.isMultiplayer() && panel.getPlayerNameField().getText().equals(Main.manager.client.username)) {
                     panel.getRemovePlayerButton().setEnabled(false);
                 }
             }
 
-            if (MainFrame.isMultiplayer()) {
-                if (MainFrame.isServer() && panel.getBotCheckBox().isSelected()) {
+            if (Main.isMultiplayer()) {
+                if (Main.isServer() && panel.getBotCheckBox().isSelected()) {
                     // they are already enabled
-                } else if (!MainFrame.manager.client.username.equals(panel.getPlayerNameField().getText())) {
+                } else if (!Main.manager.client.username.equals(panel.getPlayerNameField().getText())) {
                     panel.getColorComboBox().setEnabled(false);
                 }
             }
@@ -80,16 +80,16 @@ public class PlayerMenu extends JPanel {
             add(panel);
         }
 
-        if (MainFrame.isMultiplayer()) {
-            if (MainFrame.isServer()) {
+        if (Main.isMultiplayer()) {
+            if (Main.isServer()) {
                 if (currentPlayerNumber == MAX_PLAYER_NUMBER) {
                     fp.getAddPlayerButton().setEnabled(false);
                 } else {
                     fp.getAddPlayerButton().setEnabled(true);
                 }
 
-                if (    MainFrame.isServer() &&
-                        MainFrame.manager.server.userNames.size() < 2) {
+                if (    Main.isServer() &&
+                        Main.manager.server.userNames.size() < 2) {
                     fp.getStartButton().setEnabled(false);
                     fp.getStartButton().setToolTipText("Wait for players to connect");
                 } else {
@@ -117,8 +117,8 @@ public class PlayerMenu extends JPanel {
 
         add(fp);
 
-        MainFrame.frame.revalidate();
-        MainFrame.frame.repaint();
+        Main.frame.revalidate();
+        Main.frame.repaint();
     }
 
 
@@ -159,7 +159,7 @@ public class PlayerMenu extends JPanel {
     private void addPlayerPanel(String playerName) {
         PlayerPanel p = new PlayerPanel(this, colorModel);
 
-        if (playerName.length() > 0 && MainFrame.isMultiplayer()) {
+        if (playerName.length() > 0 && Main.isMultiplayer()) {
             p.getPlayerNameField().setEditable(false);
             p.getPlayerNameField().setText(playerName);
             p.getBotCheckBox().setEnabled(false);
@@ -183,14 +183,14 @@ public class PlayerMenu extends JPanel {
         currentPlayerNumber++;
 
         try {
-            MainFrame.manager.sendMessage(new Message(MessageType.BOT_ADDED, getPlayers()));
+            Main.manager.sendMessage(new Message(MessageType.BOT_ADDED, getPlayers()));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void addPlayerPanel(Player player) {
-        if (player != null && MainFrame.isMultiplayer()) {
+        if (player != null && Main.isMultiplayer()) {
             PlayerPanel p = new PlayerPanel(this, colorModel, player);
             playerPanels.add(p);
             currentPlayerNumber++;
@@ -198,7 +198,7 @@ public class PlayerMenu extends JPanel {
     }
 
     public void removePlayer(String username) {
-        if (MainFrame.isMultiplayer()) {
+        if (Main.isMultiplayer()) {
             for (PlayerPanel p : playerPanels) {
                 if (p.getPlayerNameField().getText().equals(username)) {
                     removePlayerPanel(p);
@@ -209,14 +209,14 @@ public class PlayerMenu extends JPanel {
     }
 
     public void removePlayer(PlayerPanel playerPanel) {
-        if (MainFrame.isMultiplayer()) {
+        if (Main.isMultiplayer()) {
             if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
                 if (!playerPanel.getBotCheckBox().isSelected()) { // when it is not bot, close connection
                     String username = playerPanel.getPlayer().getName();
-                    MainFrame.manager.sendMessage(new Message(MessageType.CONNECTION_CLOSED_BY_ADMIN, username));
+                    Main.manager.sendMessage(new Message(MessageType.CONNECTION_CLOSED_BY_ADMIN, username));
                 }
                 removePlayerPanel(playerPanel);
-                MainFrame.manager.sendMessage(new Message(MessageType.PLAYER_DELETED, getPlayers()));
+                Main.manager.sendMessage(new Message(MessageType.PLAYER_DELETED, getPlayers()));
             }
         } else {
             if (currentPlayerNumber > MIN_PLAYER_NUMBER) {
@@ -240,13 +240,13 @@ public class PlayerMenu extends JPanel {
     }
 
     public void startGame() {
-        if (MainFrame.isMultiplayer()) {
-            if (MainFrame.isServer()) MainFrame.manager.initGame();
+        if (Main.isMultiplayer()) {
+            if (Main.isServer()) Main.manager.initGame();
         } else {
             java.util.List<Player> players = getPlayers();
-            Collections.shuffle(players);
+            if (Main.isShuffling()) Collections.shuffle(players);
             Game game = new Game(players, getSelectedMap());
-            MainFrame.openGameWindow(game.getGameWindow());
+            Main.openGameWindow(game.getGameWindow());
             game.start();
         }
     }

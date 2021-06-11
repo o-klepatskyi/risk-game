@@ -1,6 +1,5 @@
 package gui.menus;
 
-import gui.menus.main_menu.MainMenu;
 import util.res.Fonts;
 import util.res.Images;
 import util.res.SoundPlayer;

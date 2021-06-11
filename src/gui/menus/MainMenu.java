@@ -1,8 +1,7 @@
-package gui.menus.main_menu;
+package gui.menus;
 
-import gui.MainFrame;
+import gui.Main;
 import util.res.Fonts;
-import util.res.Images;
 import util.res.SoundPlayer;
 
 import javax.swing.*;
@@ -10,12 +9,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class MainMenu extends JPanel {
-    private JButton play, multiplayer, rules, exit;
+public class MainMenu extends Menu {
+    private JButton play, multiplayer, rules, settings, exit;
     private GridBagConstraints gbc;
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
 
-    private final int SIZE = 500;
     private int menuOptionChosen;
 
     public MainMenu() {
@@ -37,13 +35,6 @@ public class MainMenu extends JPanel {
         gbc.insets = new Insets(85, 0, -70, 0);
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(Images.MAIN_MENU_BG, 0, 0, this.getWidth(), this.getHeight(), null);
-        g.drawImage(Images.MENU_PANEL, SIZE/6, SIZE/3 + SIZE/40, 3*SIZE/4 - SIZE / 12, SIZE/2+SIZE/20+SIZE/40, null);
-    }
-
     private void resetButtons() {
         play.setForeground(Color.WHITE);
         play.setText("Play");
@@ -53,6 +44,9 @@ public class MainMenu extends JPanel {
 
         rules.setForeground(Color.WHITE);
         rules.setText("Rules");
+
+        settings.setForeground(Color.WHITE);
+        settings.setText("Settings");
 
         exit.setForeground(Color.WHITE);
         exit.setText("Exit");
@@ -76,8 +70,12 @@ public class MainMenu extends JPanel {
                 rules.setText("< Rules >");
                 SoundPlayer.optionChosenSound();
                 break;
-
             case 4:
+                settings.setForeground(Color.YELLOW);
+                settings.setText("< Settings >");
+                SoundPlayer.optionChosenSound();
+                break;
+            case 5:
                 exit.setForeground(Color.YELLOW);
                 exit.setText("< Exit >");
                 SoundPlayer.optionChosenSound();
@@ -90,7 +88,7 @@ public class MainMenu extends JPanel {
         play = new JButton("Play");
         play.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                MainFrame.openPlayerMenu();
+                Main.openPlayerMenu();
                 SoundPlayer.buttonClickedSound();
             }
 
@@ -106,7 +104,7 @@ public class MainMenu extends JPanel {
         multiplayer.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
-                MainFrame.openMultiplayerMenu();
+                Main.openMultiplayerMenu();
             }
 
             public void mouseEntered(MouseEvent e) {
@@ -121,7 +119,7 @@ public class MainMenu extends JPanel {
         rules.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
-                MainFrame.openRulesMenu();
+                Main.openRulesMenu();
             }
 
             public void mouseEntered(MouseEvent e) {
@@ -132,6 +130,21 @@ public class MainMenu extends JPanel {
         });
         buttons.add(rules);
 
+        settings = new JButton("Settings");
+        settings.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                SoundPlayer.buttonClickedSound();
+                Main.openSettingsMenu();
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
+                menuOptionChosen = 4;
+                highlightOption(menuOptionChosen);
+            }
+        });
+        buttons.add(settings);
+
         exit = new JButton("Exit");
         exit.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -141,7 +154,7 @@ public class MainMenu extends JPanel {
 
             public void mouseEntered(MouseEvent e) {
                 SoundPlayer.optionChosenSound();
-                menuOptionChosen = 4;
+                menuOptionChosen = 5;
                 highlightOption(menuOptionChosen);
             }
         });
@@ -163,13 +176,13 @@ public class MainMenu extends JPanel {
                 int key = e.getKeyCode();
                 if(key == KeyEvent.VK_UP) {
                     if(menuOptionChosen == 1)
-                        menuOptionChosen = 4;
+                        menuOptionChosen = 5;
                     else
                         menuOptionChosen--;
                     highlightOption(menuOptionChosen);
                 }
                 else if(key == KeyEvent.VK_DOWN) {
-                    if(menuOptionChosen == 4)
+                    if(menuOptionChosen == 5)
                         menuOptionChosen = 1;
                     else
                         menuOptionChosen++;
@@ -179,26 +192,25 @@ public class MainMenu extends JPanel {
                     switch(menuOptionChosen){
                         case 1:
                             SoundPlayer.buttonClickedSound();
-                            MainFrame.openPlayerMenu();
+                            Main.openPlayerMenu();
                             break;
                         case 2:
                             SoundPlayer.buttonClickedSound();
-                            MainFrame.openMultiplayerMenu();
+                            Main.openMultiplayerMenu();
                             break;
                         case 3:
                             SoundPlayer.buttonClickedSound();
-                            MainFrame.openRulesMenu();
+                            Main.openRulesMenu();
                             break;
                         case 4:
+                            SoundPlayer.buttonClickedSound();
+                            Main.openSettingsMenu();
+                        case 5:
                             SoundPlayer.buttonClickedSound();
                             System.exit(0);
                             break;
                     }
                 }
-                else if(key == KeyEvent.VK_M) {
-                    SoundPlayer.setMuted(!SoundPlayer.getMuted());
-                }
-
             }
         });
     }

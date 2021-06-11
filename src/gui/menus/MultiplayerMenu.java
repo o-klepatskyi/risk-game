@@ -1,7 +1,6 @@
-package gui.menus.multiplayer_menu;
+package gui.menus;
 
-import gui.MainFrame;
-import gui.menus.main_menu.MainMenu;
+import gui.Main;
 import util.res.Fonts;
 import util.res.Images;
 import util.res.SoundPlayer;
@@ -12,11 +11,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 // todo add setKeyListener method to manipulate with mouse
-public class MultiplayerMenu extends JPanel {
+public class MultiplayerMenu extends Menu {
     private JButton serverButton, clientButton, backButton;
     private GridBagConstraints gbc;
 
-    private final int SIZE = 500;
     private int menuOptionChosen;
 
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
@@ -46,7 +44,7 @@ public class MultiplayerMenu extends JPanel {
         serverButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                MainFrame.openServerMenu();
+                Main.openServerMenu();
                 SoundPlayer.buttonClickedSound();
             }
 
@@ -64,7 +62,7 @@ public class MultiplayerMenu extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
-                MainFrame.openClientMenu();
+                Main.openClientMenu();
             }
 
             @Override
@@ -81,7 +79,7 @@ public class MultiplayerMenu extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
-                MainFrame.openMainMenu();
+                Main.openMainMenu();
             }
 
             @Override
@@ -133,13 +131,6 @@ public class MultiplayerMenu extends JPanel {
 
         backButton.setForeground(Color.WHITE);
         backButton.setText("Back");
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(Images.MAIN_MENU_BG, 0, 0, this.getWidth(), this.getHeight(), null);
-        g.drawImage(Images.MENU_PANEL, SIZE/6, SIZE/3 + SIZE/40, 3*SIZE/4 - SIZE / 12, SIZE/2+SIZE/20+SIZE/40, null);
     }
 }
 

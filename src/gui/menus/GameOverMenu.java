@@ -1,6 +1,6 @@
 package gui.menus;
 
-import gui.MainFrame;
+import gui.Main;
 import logic.Player;
 import util.res.*;
 
@@ -12,13 +12,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class GameOverMenu extends JPanel {
+public class GameOverMenu extends Menu {
     private final Player player;
     private JButton menu, exit;
     private GridBagConstraints gbc;
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
 
-    private final int SIZE = 500;
     private int menuOptionChosen;
 
     public GameOverMenu(Player player) {
@@ -53,13 +52,6 @@ public class GameOverMenu extends JPanel {
 
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(Images.MAIN_MENU_BG, 0, 0, this.getWidth(), this.getHeight(), null);
-        g.drawImage(Images.MENU_PANEL, SIZE/6, SIZE/3 + SIZE/40, 3*SIZE/4 - SIZE / 12, SIZE/2+SIZE/20+SIZE/40, null);
-    }
-
     private void resetButtons() {
         menu.setForeground(Color.WHITE);
         menu.setText("Menu");
@@ -91,7 +83,7 @@ public class GameOverMenu extends JPanel {
         menu.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
-                MainFrame.openMainMenu();
+                Main.openMainMenu();
             }
 
             public void mouseEntered(MouseEvent e) {
@@ -149,7 +141,7 @@ public class GameOverMenu extends JPanel {
                     switch(menuOptionChosen){
                         case 1:
                             SoundPlayer.buttonClickedSound();
-                            MainFrame.openMainMenu();
+                            Main.openMainMenu();
                             break;
                         case 2:
                             SoundPlayer.buttonClickedSound();

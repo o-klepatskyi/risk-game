@@ -1,6 +1,6 @@
 package gui.player_menu;
 
-import gui.MainFrame;
+import gui.Main;
 import logic.maps.MapType;
 import util.res.Fonts;
 import util.res.SoundPlayer;
@@ -53,9 +53,9 @@ class FooterPanel extends JPanel {
             addPlayerButton = new JButton("Add player");
             addPlayerButton.setPreferredSize(new Dimension(WIDTH/5+10, HEIGHT-10));
             addPlayerButton.setFont(BUTTON_FONT.deriveFont(18f));
-            if (MainFrame.isMultiplayer()) {
+            if (Main.isMultiplayer()) {
                 addPlayerButton.setText("Add bot");
-                if (MainFrame.isServer()) {
+                if (Main.isServer()) {
                     addPlayerButton.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
@@ -94,7 +94,7 @@ class FooterPanel extends JPanel {
             startButton.setPreferredSize(new Dimension(WIDTH/5+10, HEIGHT-10));
             startButton.setFont(BUTTON_FONT.deriveFont(18f));
             startButton.setEnabled(false);
-            if (MainFrame.isMultiplayer() && !MainFrame.isServer()) {
+            if (Main.isMultiplayer() && !Main.isServer()) {
                 startButton.setToolTipText("Only room owner can start the game");
             } else {
                 startButton.addMouseListener(new MouseAdapter() {
@@ -136,10 +136,10 @@ class FooterPanel extends JPanel {
     }
 
     private void closeAction() {
-        if (MainFrame.isMultiplayer()) {
-            MainFrame.manager.closeClient();
+        if (Main.isMultiplayer()) {
+            Main.manager.closeClient();
         } else {
-            MainFrame.openMainMenu();
+            Main.openMainMenu();
         }
     }
 }

@@ -1,10 +1,7 @@
 package gui;
 
 import gui.game_window.GameWindow;
-import gui.menus.GameOverMenu;
-import gui.menus.RulesMenu;
-import gui.menus.main_menu.MainMenu;
-import gui.menus.multiplayer_menu.*;
+import gui.menus.*;
 import gui.player_menu.PlayerMenu;
 import logic.Player;
 import logic.network.MultiplayerManager;
@@ -12,7 +9,7 @@ import logic.network.NetworkMode;
 import util.res.SoundPlayer;
 import javax.swing.*;
 
-public class MainFrame {
+public class Main {
     public static JFrame frame;
     public static MultiplayerManager manager;
 
@@ -122,7 +119,23 @@ public class MainFrame {
         manager = new MultiplayerManager(NetworkMode.CLIENT);
         PlayerMenu pm = new PlayerMenu();
         manager.setPlayerMenu(pm);
-        MainFrame.manager.startClient(ipAddress, portNumber, username);
+        Main.manager.startClient(ipAddress, portNumber, username);
         pm.updatePanels();
+    }
+
+    public static void openSettingsMenu() {
+        frame.getContentPane().removeAll();
+        frame.add(new SettingsMenu());
+        frame.pack();
+    }
+
+    private static boolean isShuffling = true;
+
+    public static void setShuffledOption(boolean b) {
+        isShuffling = b;
+    }
+
+    public static boolean isShuffling() {
+        return isShuffling;
     }
 }

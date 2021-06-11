@@ -1,7 +1,7 @@
-package gui.menus.multiplayer_menu;
+package gui.menus;
 
 import gui.HintTextField;
-import gui.MainFrame;
+import gui.Main;
 import gui.player_menu.PlayerNameField;
 import util.res.Fonts;
 import util.res.Images;
@@ -15,13 +15,12 @@ import java.util.ArrayList;
 
 // todo add setKeyListener method to manipulate with mouse
 // todo add loading panel
-public class ServerMenu extends JPanel {
+public class ServerMenu extends Menu {
 
     private HintTextField portField, nameField;
     private JButton enterButton, backButton;
     private GridBagConstraints gbc;
 
-    private final int SIZE = 500;
     private int menuOptionChosen;
 
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
@@ -91,7 +90,7 @@ public class ServerMenu extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
-                MainFrame.openMultiplayerMenu();
+                Main.openMultiplayerMenu();
             }
 
             @Override
@@ -138,8 +137,8 @@ public class ServerMenu extends JPanel {
     }
 
     private void openPlayerMenu() {
-        MainFrame.openLoadingMenu();
-        MainFrame.createMultiplayerManager(portNumber, username);
+        Main.openLoadingMenu();
+        Main.createMultiplayerManager(portNumber, username);
     }
 
     private boolean getServerInfo() {
@@ -158,13 +157,6 @@ public class ServerMenu extends JPanel {
         }
 
         return true;
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(Images.MAIN_MENU_BG, 0, 0, this.getWidth(), this.getHeight(), null);
-        g.drawImage(Images.MENU_PANEL, SIZE/6, SIZE/3 + SIZE/40, 3*SIZE/4 - SIZE / 12, SIZE/2+SIZE/20+SIZE/40, null);
     }
 }
 

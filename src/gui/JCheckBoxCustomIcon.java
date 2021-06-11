@@ -1,11 +1,11 @@
-package gui.player_menu;
+package gui;
 
 import java.awt.*;
 import static util.res.Images.*;
 
 import javax.swing.*;
 
-class JCheckBoxCustomIcon extends JCheckBox {
+public class JCheckBoxCustomIcon extends JCheckBox {
 
     public JCheckBoxCustomIcon(int width, int height) {
         setSize(width, height);

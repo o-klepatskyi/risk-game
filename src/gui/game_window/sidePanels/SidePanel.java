@@ -1,7 +1,6 @@
 package gui.game_window.sidePanels;
 
-import gui.MainFrame;
-import gui.menus.main_menu.MainMenu;
+import gui.Main;
 import logic.Territory;
 import logic.network.MultiplayerManager;
 import logic.network.NetworkMode;
@@ -77,7 +76,7 @@ public class SidePanel extends JPanel {
                 if (n != 0) {
                     if (manager!= null) manager.closeClient();
                     else {
-                        MainFrame.openMainMenu();
+                        Main.openMainMenu();
                     }
                 }
             }

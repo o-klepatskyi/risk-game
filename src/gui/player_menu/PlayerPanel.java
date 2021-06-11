@@ -1,6 +1,7 @@
 package gui.player_menu;
 
-import gui.MainFrame;
+import gui.JCheckBoxCustomIcon;
+import gui.Main;
 import logic.Player;
 import util.res.Fonts;
 
@@ -122,7 +123,7 @@ class PlayerPanel extends JPanel {
             removePlayerButton.setPreferredSize(new Dimension((int) (WIDTH * (3.0 / 16.0)), HEIGHT - 10));
             removePlayerButton.setEnabled(false);
 
-            if (!MainFrame.isMultiplayer() || MainFrame.isServer()) {
+            if (!Main.isMultiplayer() || Main.isServer()) {
                 PlayerPanel currentPanel = this;
                 removePlayerButton.addMouseListener(new MouseAdapter() {
                     @Override

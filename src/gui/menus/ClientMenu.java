@@ -1,10 +1,9 @@
-package gui.menus.multiplayer_menu;
+package gui.menus;
 
 import gui.HintTextField;
-import gui.MainFrame;
+import gui.Main;
 import gui.player_menu.PlayerNameField;
 import util.res.Fonts;
-import util.res.Images;
 import util.res.SoundPlayer;
 
 import javax.swing.*;
@@ -14,7 +13,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 // todo add setKeyListener method to manipulate with mouse
-public class ClientMenu extends JPanel {
+public class ClientMenu extends Menu {
     private HintTextField portField, ipField, nameField;
     private JButton enterButton, backButton;
     private GridBagConstraints gbc;
@@ -23,8 +22,6 @@ public class ClientMenu extends JPanel {
     private String username, ipAddress;
     private int portNumber;
     private int menuOptionChosen;
-
-    private final int SIZE = 500;
 
     public ClientMenu() {
         initWindow();
@@ -90,7 +87,7 @@ public class ClientMenu extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 SoundPlayer.buttonClickedSound();
-                MainFrame.openMultiplayerMenu();
+                Main.openMultiplayerMenu();
             }
 
             @Override
@@ -137,8 +134,8 @@ public class ClientMenu extends JPanel {
     }
 
     private void openPlayerMenu() {
-        MainFrame.openLoadingMenu();
-        MainFrame.createMultiplayerManager(ipAddress, portNumber, username);
+        Main.openLoadingMenu();
+        Main.createMultiplayerManager(ipAddress, portNumber, username);
     }
 
     private boolean getClientInfo() {
@@ -153,12 +150,5 @@ public class ClientMenu extends JPanel {
             return false;
         }
         return true;
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(Images.MAIN_MENU_BG, 0, 0, this.getWidth(), this.getHeight(), null);
-        g.drawImage(Images.MENU_PANEL, SIZE/6, SIZE/3 + SIZE/40, 3*SIZE/4 - SIZE / 12, SIZE/2+SIZE/20+SIZE/40, null);
     }
 }

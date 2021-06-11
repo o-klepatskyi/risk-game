@@ -1,6 +1,6 @@
 package logic;
 
-import gui.MainFrame;
+import gui.Main;
 import gui.game_window.sidePanels.ReinforcementsPanel;
 import gui.game_window.GameMap;
 import gui.game_window.GameWindow;
@@ -400,7 +400,7 @@ public class Game {
     }
 
     public void openGameOverMenu() {
-        MainFrame.openGameOverMenu(currentPlayer);
+        Main.openGameOverMenu(currentPlayer);
     }
 
     private ArrayList<String> continentLabels;

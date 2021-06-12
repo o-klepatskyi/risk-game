@@ -1,6 +1,5 @@
 package gui.game_window.topPanel;
 
-import gui.game_window.GameWindow;
 import logic.GamePhase;
 import logic.Player;
 import util.res.Fonts;
@@ -24,11 +23,13 @@ class GamePhasePanel extends JPanel {
     private void initLabels() {
         if (currentPlayer == null && currentState == null) {
             currentPlayer = new JLabel();
-            currentPlayer.setFont(Fonts.BUTTON_FONT.deriveFont((float) HEIGHT - 10));
+            currentPlayer.setFont(Fonts.BUTTON_FONT.deriveFont((float) HEIGHT - 5));
+            currentPlayer.setVerticalAlignment(SwingConstants.CENTER);
             add(currentPlayer);
 
             currentState = new JLabel();
-            currentState.setFont(Fonts.BUTTON_FONT.deriveFont((float) HEIGHT - 10));
+            currentState.setFont(Fonts.BUTTON_FONT.deriveFont((float) HEIGHT - 5));
+            currentState.setVerticalAlignment(SwingConstants.CENTER);
             add(currentState);
         }
     }

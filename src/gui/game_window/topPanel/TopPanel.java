@@ -17,7 +17,7 @@ public class TopPanel extends JPanel {
     public TopPanel(Game game) {
         this.game = game;
         setOpaque(true);
-        setLayout(new FlowLayout());
+        setLayout(new FlowLayout(FlowLayout.LEADING, 0,0));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         initPanels();
     }

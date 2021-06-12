@@ -19,18 +19,25 @@ class PlayerBox extends JPanel {
 
         initPanel();
         initLabel();
-
         setVisible(true);
     }
 
     private void initPanel() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBorder(new LineBorder(Color.black));
+        setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
     }
 
     private void initLabel() {
-        playerLabel = new ValueJLabel(player.getName(), 0);
-        playerLabel.setFont(Fonts.BUTTON_FONT.deriveFont(17f));
+        playerLabel = new ValueJLabel(player.getName(), 99);
+        float fontSize = 25f;
+        playerLabel.setFont(Fonts.BUTTON_FONT.deriveFont(fontSize));
+        while(playerLabel.getPreferredSize().width > WIDTH - 5) {
+            playerLabel.setFont(Fonts.BUTTON_FONT.deriveFont(--fontSize));
+        }
+        playerLabel.setVerticalAlignment(SwingConstants.CENTER);
+        playerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        playerLabel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         add(playerLabel);
     }
 

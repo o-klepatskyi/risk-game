@@ -25,20 +25,11 @@ public class GameOverMenu extends Menu {
         this.player = player;
 
         initWindow();
-        addLabels();
         initButtons();
         setKeyListener();
 
         menuOptionChosen = 1;
         highlightOption(menuOptionChosen);
-    }
-
-    private void addLabels() {
-        JLabel winnerLabel = new JLabel("Winner: " + player.getName());
-        winnerLabel.setFont(LABEL_FONT);
-        winnerLabel.setForeground(player.getColor());
-        add(winnerLabel, gbc);
-
     }
 
     private void initWindow() {
@@ -49,7 +40,6 @@ public class GameOverMenu extends Menu {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(85, 0, -70, 0);
-
     }
 
     private void resetButtons() {
@@ -79,6 +69,12 @@ public class GameOverMenu extends Menu {
 
     private void initButtons() {
         ArrayList<JButton> buttons = new ArrayList<>();
+        JButton winnerLabel = new JButton("Winner:");
+        buttons.add(winnerLabel);
+        JButton winnerName = new JButton(player.getName());
+        buttons.add(winnerName);
+
+
         menu = new JButton("Menu");
         menu.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -116,6 +112,12 @@ public class GameOverMenu extends Menu {
             button.setFocusPainted(false);
             button.setForeground(Color.WHITE);
             add(button,gbc);
+        }
+
+        float fontSize = 35f;
+        winnerName.setForeground(player.getColor());
+        while (winnerName.getPreferredSize().width > 3*SIZE/4 - SIZE / 12) {
+            winnerName.setFont(LABEL_FONT.deriveFont(--fontSize));
         }
     }
 

@@ -58,12 +58,10 @@ public class Client {
         return this.username;
     }
 
-    public void sendMessage(Message msg) {
-        System.out.println(username + " sends message: " + msg);
-        try {
+    public void sendMessage(Message msg) throws IOException {
+        if (!socket.isClosed()) {
+            System.out.println(username + " sends message: " + msg);
             objectOutputStream.writeObject(msg);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -78,16 +76,23 @@ public class Client {
                 switch (cause) {
                     case CONNECTION_ERROR -> showConnectionErrorMessage();
                     case DUPLICATE_NAME_ERROR -> showDuplicateNameError();
-                    case INVALID_NAME -> showInvalidNameError();
+                    case INVALID_NAME_ERROR -> showInvalidNameError();
                     case CONNECTION_CLOSED_BY_ADMIN -> showConnectionClosedByAdminError();
                     case CLOSE_CONNECTION_BY_CLIENT -> showConnectionClosedByClientError();
                     case SERVER_CLOSED_ERROR -> showServerClosedError();
+                    case MAX_PLAYERS_ERROR -> showMaxPlayerError();
                     default -> showError(cause);
                 }
             }
         } catch (IOException ex) {
             System.err.println("Error writing to server: " + ex.getMessage());
         }
+    }
+
+    private void showMaxPlayerError() {
+        JOptionPane.showMessageDialog(null,
+                "Maximum number of players on server.",
+                "Lost connection with server", JOptionPane.ERROR_MESSAGE);
     }
 
     private void showServerClosedError() {

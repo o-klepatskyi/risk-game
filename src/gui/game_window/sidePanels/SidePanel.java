@@ -31,6 +31,7 @@ public class SidePanel extends JPanel {
 
     public SidePanel(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
+        BACKGROUND_IMAGE = Images.getSidePanelBg(gameWindow.game.map.getName());
         this.manager = gameWindow.game.manager;
         setOpaque(true);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -42,8 +43,10 @@ public class SidePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Images.SIDE_PANEL_BG, 0, 0,WIDTH, HEIGHT+100, this);
+        g.drawImage(BACKGROUND_IMAGE, 0, 0,WIDTH, HEIGHT+100, this);
     }
+
+    private final Image BACKGROUND_IMAGE;
 
     public void updateTerritories(Territory src, Territory dst) {
         this.src = src;

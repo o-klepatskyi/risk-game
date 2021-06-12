@@ -64,7 +64,11 @@ public final class MultiplayerManager {
     }
 
     public void sendMessage(Message msg) {
-        client.sendMessage(msg);
+        try {
+            client.sendMessage(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     void addPlayer(String username) {

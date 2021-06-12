@@ -27,10 +27,10 @@ public class UserThread extends Thread {
             if (userNameMsg == null || userNameMsg.type != USERNAME) {
                 sendMessage(new Message(CONNECTION_CLOSED_BY_ADMIN));
             } else if (userNameMsg.username.equals(MultiplayerManager.BOT_NAME)) {
-                sendMessage(new Message(INVALID_NAME));
+                sendMessage(new Message(INVALID_NAME_ERROR));
             } else if(server.hasUser(userNameMsg.username)) {
                 sendMessage(new Message(DUPLICATE_NAME_ERROR));
-            } else if (server.getUserNames().size() == 6 && !server.manager.isGameStarted()) {
+            } else if (server.manager.getPlayers().size() == 6) {
                 sendMessage(new Message(MAX_PLAYERS_ERROR));
             } else if (server.manager.isGameStarted()) {
                 sendMessage(new Message(GAME_STARTED_ERROR));
@@ -63,16 +63,14 @@ public class UserThread extends Thread {
                         server.broadcast(clientMessage, this);
                     }
                 } while (clientMessage.type != CLOSE_CONNECTION_BY_CLIENT);
-
             }
             socket.close();
-
+            server.removeUser(username, this);
+            System.out.println("User '" + username + "' left server.");
         } catch (Exception ex) {
             System.err.println("Error in UserThread " + username + ": " + ex.getMessage());
             ex.printStackTrace();
         }
-        server.removeUser(username, this);
-        System.out.println("User '" + username + "' left server.");
     }
 
     private void updateUsers(String username) throws IOException {
@@ -88,7 +86,9 @@ public class UserThread extends Thread {
      * Sends a message to the client.
      */
     void sendMessage(Message message) throws IOException {
-        System.out.println(username + " thread sends: " + message);
-        objOutputStream.writeObject(message);
+        if (!socket.isClosed()) {
+            System.out.println(username + " thread sends: " + message);
+            objOutputStream.writeObject(message);
+        }
     }
 }

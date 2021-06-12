@@ -38,8 +38,8 @@ public class ClientReadThread extends Thread {
             client.close(DUPLICATE_NAME_ERROR);
             return;
         }
-        if (first_response.type == INVALID_NAME) {
-            client.close(INVALID_NAME);
+        if (first_response.type == INVALID_NAME_ERROR) {
+            client.close(INVALID_NAME_ERROR);
             return;
         }
         if (first_response.type == GAME_STARTED_ERROR) {

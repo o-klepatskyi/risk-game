@@ -16,11 +16,6 @@ public abstract class Images {
     public static final Image DISABLED_CHECKBOX = new ImageIcon(Images.class.getResource("images/disabledIcon.jpg")).getImage();
     public static final Image SELECTED_CHECKBOX = new ImageIcon(Images.class.getResource("images/selectedIcon.png")).getImage();
 
-    public static final Image MAP_EARTH         = new ImageIcon(Images.class.getResource("images/maps/earth-map.png")).getImage();
-    public static final Image MAP_EUROPE        = new ImageIcon(Images.class.getResource("images/maps/europe-map.png")).getImage();
-    public static final Image MAP_USA        = new ImageIcon(Images.class.getResource("images/maps/usa-map.png")).getImage();
-    public static final Image MAP_GOT        = new ImageIcon(Images.class.getResource("images/maps/got-map.png")).getImage();
-
     public static Image getSlideImage(int slide) {
         String path = "";
         switch (slide) {
@@ -34,19 +29,27 @@ public abstract class Images {
     }
 
     public static Image getMapImage(MapType name) {
-        switch (name) {
-            case EARTH: return MAP_EARTH;
-            case EUROPE: return MAP_EUROPE;
-            case USA: return MAP_USA;
-            case GOT: return MAP_GOT;
-            default: return GAME_MAP_BG;
+        String path = "images/maps/" + name + ".png";
+
+        try {
+            new ImageIcon(Images.class.getResource(path)).getImage();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GAME_MAP_BG;
         }
+
+        return new ImageIcon(Images.class.getResource(path)).getImage();
     }
 
     public static Image getSidePanelBg(String name) {
         String path = "images/sidepanels/" + name + ".jpg";
 
-        System.out.println(path);
+        try {
+            new ImageIcon(Images.class.getResource(path)).getImage();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GAME_MAP_BG;
+        }
 
         return new ImageIcon(Images.class.getResource(path)).getImage();
     }

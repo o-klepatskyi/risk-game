@@ -24,12 +24,13 @@ class PlayersStatePanel extends JPanel {
     private void initPanel() {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-
-        for (Player p : game.getPlayers()) {
-            PlayerBox box = new PlayerBox(p);
+        java.util.List<Player> players = game.getPlayers();
+        for (Player p : players) {
+            PlayerBox box = new PlayerBox(p, WIDTH/players.size(), HEIGHT);
             panels.add(box);
             add(box);
         }
+        System.out.println("stop init");
     }
 
     public void updatePlayers() {

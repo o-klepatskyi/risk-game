@@ -9,21 +9,22 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 
 class PlayerBox extends JPanel {
-    private final int WIDTH = TopPanel.WIDTH / 6;
-    private final int HEIGHT = TopPanel.HEIGHT / 2;
     private final Player player;
     private ValueJLabel playerLabel;
 
-    PlayerBox(Player p) {
-        player = p;
+    private final int WIDTH;
+    private final int HEIGHT;
 
+    PlayerBox(Player p, int width, int height) {
+        player = p;
+        WIDTH = width;
+        HEIGHT = height;
         initPanel();
         initLabel();
-        setVisible(true);
+        System.out.println("end box");
     }
 
     private void initPanel() {
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBorder(new LineBorder(Color.black));
         setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
     }

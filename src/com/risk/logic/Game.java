@@ -439,7 +439,16 @@ public class Game {
     }
 
     private void removeDeadPlayers() {
-        players.removeIf(this::playerIsDead); // todo logging player elimination
+        ArrayList<Player> playersRemoved = new ArrayList<>();
+        for (Player player : players) {
+            if (playerIsDead(player)) {
+                playersRemoved.add(player);
+            }
+        }
+        players.removeAll(playersRemoved);
+        for (Player p : playersRemoved) {
+            Log.write("Player eliminated: " + p.getName() + "(" + p.getColor() + ")");
+        }
         if (isMultiplayer &&
             !players.stream().map(Player::getName).collect(Collectors.toList()).contains(manager.client.username)) {
             showEliminatedMessage();

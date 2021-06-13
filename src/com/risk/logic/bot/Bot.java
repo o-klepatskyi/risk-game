@@ -6,7 +6,6 @@ import com.risk.util.exceptions.SrcNotStatedException;
 import com.risk.util.exceptions.WrongTerritoriesPairException;
 
 import javax.swing.*;
-import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,8 +18,6 @@ public abstract class Bot {
 
     private static ArrayList<AttackUnit> attackUnits = new ArrayList<>();
     private static int numberOfAttacks = -1;
-
-    private static boolean fortified = true;
 
     /**
      * DO NOT call from this class. Will definitely cause problems.
@@ -76,21 +73,13 @@ public abstract class Bot {
                 }
                 break;
             case FORTIFY:
-                if(!fortified) {
-                    FortifyUnit fortifyUnit = getFortifyUnit();
-                    if(fortifyUnit == null) {
-                        move = new BotMove(BotMoveType.END_FORTIFY);
-                        fortified = false;
-                    }
-                    else {
-                        move = new BotMove(BotMoveType.FORTIFY,
-                                fortifyUnit.getSrc(), fortifyUnit.getDst(), fortifyUnit.getTroops());
-                        fortified = true;
-                    }
+                FortifyUnit fortifyUnit = getFortifyUnit();
+                if(fortifyUnit == null) {
+                    move = new BotMove(BotMoveType.END_FORTIFY);
                 }
                 else {
-                    move = new BotMove(BotMoveType.END_FORTIFY);
-                    fortified = false;
+                    move = new BotMove(BotMoveType.FORTIFY,
+                            fortifyUnit.getSrc(), fortifyUnit.getDst(), fortifyUnit.getTroops());
                 }
                 break;
         }
@@ -143,7 +132,7 @@ public abstract class Bot {
         }
 
         if(highProbabilityCount > 0) {
-            return ThreadLocalRandom.current().nextInt(0, highProbabilityCount+1);
+            return ThreadLocalRandom.current().nextInt(1, highProbabilityCount+1);
         }
         else {
             if(mediumProbabilityCount > 0)
@@ -165,8 +154,17 @@ public abstract class Bot {
         // if territory is inside - fortify
         for(Territory src : territories) {
             ArrayList<Territory> connected = graph.getConnectedTerritories(src);
-            if(Graph.samePlayerTerritories(connected)) {
+            if(Graph.samePlayerTerritories(connected, player)) {
                 Territory dst = connected.get(new Random().nextInt(connected.size()));
+                while(graph.getAdjacentTerritories(dst).size() == 0) {
+                    if(connected.size() > 1) {
+                        connected.remove(dst);
+                        dst = connected.get(new Random().nextInt(connected.size()));
+                    }
+                    else {
+                        return new FortifyUnit(src, dst, src.getTroops()-1);
+                    }
+                }
                 return new FortifyUnit(src, dst, src.getTroops()-1);
             }
         }
@@ -174,7 +172,7 @@ public abstract class Bot {
         // if no smart fortification -> choose random territories to fortify
 
         // 50/50 fortify or not
-        if(Math.random() >= 0.5) {
+        if(Math.random() >= 0.5 && territories.size() > 0) {
             Territory src = territories.get(new Random().nextInt(territories.size()));
             ArrayList<Territory> connected = graph.getConnectedTerritories(src);
             Territory dst = connected.get(new Random().nextInt(connected.size()));

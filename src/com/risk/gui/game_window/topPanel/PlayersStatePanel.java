@@ -30,7 +30,6 @@ class PlayersStatePanel extends JPanel {
             panels.add(box);
             add(box);
         }
-        System.out.println("stop init");
     }
 
     public void updatePlayers() {

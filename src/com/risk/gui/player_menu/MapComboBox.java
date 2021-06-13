@@ -29,7 +29,6 @@ public class MapComboBox extends JComboBox<MapType> {
         MapType selectedValue = (MapType) cb.getSelectedItem();
 
         if (selectedValue != null && !selectedValue.equals(oldValue)) {
-            System.out.println("map changed");
             oldValue = selectedValue;
             if (Main.isMultiplayer()) {
                 Main.manager.sendMessage(new Message(MessageType.MAP_CHANGED, selectedValue));

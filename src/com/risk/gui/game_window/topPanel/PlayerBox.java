@@ -21,7 +21,6 @@ class PlayerBox extends JPanel {
         HEIGHT = height;
         initPanel();
         initLabel();
-        System.out.println("end box");
     }
 
     private void initPanel() {

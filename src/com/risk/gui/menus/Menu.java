@@ -1,6 +1,6 @@
 package com.risk.gui.menus;
 
-import com.risk.util.res.Images;
+import com.risk.util.resources.Images;
 
 import javax.swing.*;
 import java.awt.*;

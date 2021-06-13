@@ -1,8 +1,8 @@
 package com.risk.gui.game_window;
 
-import com.risk.gui.game_window.sidePanels.*;
-import com.risk.gui.game_window.topPanel.Logo;
-import com.risk.gui.game_window.topPanel.TopPanel;
+import com.risk.gui.game_window.side_panels.*;
+import com.risk.gui.game_window.top_panel.Logo;
+import com.risk.gui.game_window.top_panel.TopPanel;
 import com.risk.logic.Game;
 import com.risk.logic.GamePhase;
 import com.risk.logic.Territory;
@@ -87,15 +87,5 @@ public class GameWindow extends JPanel {
 
     public void updateChosenTerritories(Territory src, Territory dst) {
         sidePanel.updateTerritories(src, dst);
-    }
-
-    public int calculateProbability() {
-        try {
-            return game.calculateProbability();
-        } catch (Exception e) {
-            System.out.print("CALCULATE in Game Window: ");
-            System.err.println(e.getMessage());
-        }
-        return 0;
     }
 }

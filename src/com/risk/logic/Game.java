@@ -1,7 +1,7 @@
 package com.risk.logic;
 
 import com.risk.gui.Main;
-import com.risk.gui.game_window.sidePanels.ReinforcementsPanel;
+import com.risk.gui.game_window.side_panels.ReinforcementsPanel;
 import com.risk.gui.game_window.GameMap;
 import com.risk.gui.game_window.GameWindow;
 import com.risk.logic.bot.Bot;
@@ -12,6 +12,7 @@ import com.risk.logic.network.MessageType;
 import com.risk.logic.network.MultiplayerManager;
 import com.risk.logic.network.NetworkMode;
 import com.risk.util.exceptions.*;
+import com.risk.util.resources.SoundPlayer;
 
 import javax.swing.*;
 import java.security.InvalidParameterException;
@@ -96,6 +97,7 @@ public class Game {
         srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
         currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
 
+        SoundPlayer.reinforceSound();
         Log.write(srcTerritory.getName() + " reinforced (" + numberOfTroops + ")");
 
         if (currentPlayer.getBonus() == 0) {
@@ -437,7 +439,16 @@ public class Game {
     }
 
     private void removeDeadPlayers() {
-        players.removeIf(this::playerIsDead); // todo logging player elimination
+        ArrayList<Player> playersRemoved = new ArrayList<>();
+        for (Player player : players) {
+            if (playerIsDead(player)) {
+                playersRemoved.add(player);
+            }
+        }
+        players.removeAll(playersRemoved);
+        for (Player p : playersRemoved) {
+            Log.write("Player eliminated: " + p.getName() + "(" + p.getColor() + ")");
+        }
         if (isMultiplayer &&
             !players.stream().map(Player::getName).collect(Collectors.toList()).contains(manager.client.username)) {
             showEliminatedMessage();

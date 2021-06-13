@@ -6,7 +6,7 @@ import com.risk.gui.player_menu.PlayerMenu;
 import com.risk.logic.Player;
 import com.risk.logic.network.MultiplayerManager;
 import com.risk.logic.network.NetworkMode;
-import com.risk.util.res.SoundPlayer;
+import com.risk.util.resources.SoundPlayer;
 import javax.swing.*;
 
 public class Main {

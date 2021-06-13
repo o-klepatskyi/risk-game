@@ -4,7 +4,7 @@ import com.risk.gui.Main;
 import com.risk.logic.maps.MapType;
 import com.risk.logic.network.Message;
 import com.risk.logic.network.MessageType;
-import com.risk.util.res.Fonts;
+import com.risk.util.resources.Fonts;
 
 import javax.swing.*;
 import java.awt.*;

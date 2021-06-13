@@ -1,8 +1,8 @@
 package com.risk.gui.menus;
 
-import com.risk.util.res.Fonts;
-import com.risk.util.res.Images;
-import com.risk.util.res.SoundPlayer;
+import com.risk.util.resources.Fonts;
+import com.risk.util.resources.Images;
+import com.risk.util.resources.SoundPlayer;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -44,7 +44,6 @@ public class RulesMenu extends JPanel {
         center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.setPreferredSize(new Dimension(WIDTH, HEIGHT*8/12));
-//        center.setBackground(Color.yellow);
         add(center, BorderLayout.CENTER);
 
         south = new JPanel();
@@ -180,47 +179,63 @@ public class RulesMenu extends JPanel {
     }
 
     private String[][] lines = new String[][] {
+            //0
             {       "Welcome to Risk - the Ultimate Battle!",
                     "It is the game of 2 to 6 generals, represented by each player.",
                     "Your task will be to eliminate all other players and to stay the last on the global map.",
-            "Game is developed by Makarov Ivan and Klepatskyi Oleh. 2021, Kyiv"},
+            "Game is developed by Team 'Risk Takers': Makarov Ivan and Klepatskyi Oleh. 2021"},
+            //1
             {       "At the start of each one of your turns, you will receive additional units, which",
                     "you will place on the board to reinforce your army.",
                     "Then you will attack your enemies, if you want.",
                     "After you are done with combat, you will get one chance to relocate some of your units."},
+            //2
             {"1 - Player panel, which provides settings such as username and color.",
-            "2 - Remove player buttons (they are here to regulate the number of players.",
-            "3 - Add player, Start game and Back buttons (their usages are obvious too)."},
+            "2 - Map chooser. There are 5 playable maps.",
+            "3 - Add player, Start game and Back buttons (their usages are obvious)."},
+            //3
             {       "1 - Top panel which shows current player and turn phase.",
-                    "2 - Side panel which is used to give your orders.",
-                    "3 - World map where territories are represented by colored rectangles.",
-                    "They are all clickable, you will use them to interact with the game."},
+                    "2 - Player info panel. Shows player name and their territories.",
+                    "3 - Side panel which is used to give your orders.",
+                    "And the map, where territories represented by clickable rectangles"},
+            //4
             {       "At the start of your turn, you gain additional units to reinforce your territories.",
                     "The number of units you get will be shown on the side panel.",
-                    "The math behind it is simple - you get the 1/3 (without remainder) of territories",
+                    "The math behind it is simple - you get the 1/3 (without remainder) of territories.",
                     "you conquered and additional units for controlling the continents."},
+            //5
+            {"NB: every continent's territories are the same color on the map.",
+            "For every continent you control you will gain additional troops",
+            "in reinforcement phase.",
+            "Their number depends on the size and location of the continent."},
+            //6
             {"Now choose your territory on the game map and the amount of troops to send there.",
                     "If everything goes OK, troops will appear in the chosen territory.",
                     "You can choose to put all of your reinforcements into one territory or spread them out",
                     "across your territories. Remember: You must place ALL of these reinforcements."},
+            //7
             {"You can invade from any one territory you control into an adjacent enemy territory.",
                     "Territories are adjacent if they share a border, or a sea-line runs between them.",
                     "You can even attack more than one territory on your turn.",
                     "You can only invade an enemy's territory - not your own."},
+            //8
             {"Click on your territory and all territories you can attack will be shown.",
                     "After considering winning chances click \"Attack\" button on side panel.",
                     "All your troops will now attack enemy. The results will appear simultaneously.",
                     "When you end your battles for this move, click \"End attack\" button to end phase."},
+            //9
             {"After you are finished attacking, you get ONE fortification.",
                     "This is not an attack; it is simply a movement from one of your territories to another.",
                     "Territories are \"connected\" if all the territories in between are also",
                     "CONTROLLED BY YOU. You cannot pass through enemy territories."},
+            //10
             {"Now choose one territory with at least 2 troops to transfer.",
                     "Remember: you MUST leave at least one unit behind — you cannot abandon a territory.",
                     "Then choose a destination from shown options and click Fortify to send them there.",
                     "Your move is now ended."},
+            //11
             {"You win if you are the last player in the game,",
-                    "meaning you control all 42 territories on the board.",
+                    "meaning you control all territories on the board.",
                     "You are the ruler of the world. Congrats!"}
     };
 
@@ -230,11 +245,12 @@ public class RulesMenu extends JPanel {
             "Interface - Player lobby",
             "Interface - Game menu",
             "Step 1: receive and place reinforcements",
-            "Step 1: reinforcement example",
+            "Continents",
+            "Reinforcement example",
             "Step 2: attack",
-            "Step 2: attack example",
+            "Attack example",
             "Step 3: fortify your position",
-            "Step 3: fortifying example",
+            "Fortifying example",
             "Winning"
     };
 }

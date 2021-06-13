@@ -46,9 +46,10 @@ public abstract class Map implements Serializable {
 
         int playerTerritoriesNumber = numberOfTerritories / numberOfPlayers;
         int playerTroopsNumber = getInitialPlayerTroopsNumber(numberOfPlayers);
-        ArrayList<Territory> playerTerritories = new ArrayList<>();
 
         for(int i = 0; i < numberOfPlayers; i++) {
+
+            ArrayList<Territory> playerTerritories = new ArrayList<>();
 
             if(i == numberOfPlayers-1) {
                 playerTerritoriesNumber = territoriesLeft;
@@ -72,6 +73,7 @@ public abstract class Map implements Serializable {
 
             territoriesLeft -= playerTerritoriesNumber;
         }
+        
     }
 
     /**

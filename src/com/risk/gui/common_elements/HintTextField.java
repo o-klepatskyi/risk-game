@@ -1,4 +1,4 @@
-package com.risk.gui;
+package com.risk.gui.common_elements;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;

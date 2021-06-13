@@ -1,5 +1,6 @@
 package com.risk.gui.game_window.side_panels;
 
+import com.risk.gui.common_elements.ValueJLabel;
 import com.risk.gui.game_window.GameWindow;
 import com.risk.logic.Territory;
 import com.risk.util.resources.Fonts;

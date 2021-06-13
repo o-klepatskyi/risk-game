@@ -1,6 +1,6 @@
 package com.risk.gui.menus;
 
-import com.risk.gui.HintTextField;
+import com.risk.gui.common_elements.HintTextField;
 import com.risk.gui.Main;
 import com.risk.gui.player_menu.PlayerNameField;
 import com.risk.util.resources.Fonts;

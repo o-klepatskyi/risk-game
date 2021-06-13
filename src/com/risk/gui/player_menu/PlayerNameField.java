@@ -1,6 +1,6 @@
 package com.risk.gui.player_menu;
 
-import com.risk.gui.HintTextField;
+import com.risk.gui.common_elements.HintTextField;
 
 public class PlayerNameField extends HintTextField {
 

@@ -1,4 +1,4 @@
-package com.risk.gui.game_window.side_panels;
+package com.risk.gui.common_elements;
 
 import javax.swing.*;
 

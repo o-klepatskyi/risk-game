@@ -1,6 +1,6 @@
 package com.risk.gui.player_menu;
 
-import com.risk.gui.JCheckBoxCustomIcon;
+import com.risk.gui.common_elements.JCheckBoxCustomIcon;
 import com.risk.gui.Main;
 import com.risk.logic.Player;
 import com.risk.util.resources.Fonts;

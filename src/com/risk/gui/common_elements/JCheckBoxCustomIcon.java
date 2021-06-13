@@ -1,4 +1,4 @@
-package com.risk.gui;
+package com.risk.gui.common_elements;
 
 import java.awt.*;
 import static com.risk.util.resources.Images.*;

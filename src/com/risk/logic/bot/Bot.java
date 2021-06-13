@@ -1,14 +1,26 @@
 package com.risk.logic.bot;
 
 import com.risk.logic.*;
+import com.risk.util.exceptions.DstNotStatedException;
+import com.risk.util.exceptions.SrcNotStatedException;
+import com.risk.util.exceptions.WrongTerritoriesPairException;
 
 import javax.swing.*;
+import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Bot {
     private static Game game;
+
+    private static ArrayList<AttackUnit> attackUnits = new ArrayList<>();
+    private static int numberOfAttacks = -1;
+
+    private static boolean fortified = true;
 
     /**
      * DO NOT call from this class. Will definitely cause problems.
@@ -36,18 +48,50 @@ public abstract class Bot {
 
         switch (phase) {
             case REINFORCEMENT:
-                // todo algorithm
-                if (player.getBonus() != 0) {
-                    move =  new BotMove(BotMoveType.REINFORCEMENT, getRandomTerritoryOfPlayer(gameGraph,player), 1);
+                if(player.getBonus() > 0) {
+                    Territory territoryToIncrement = getRandomTerritoryOfPlayer(game.gameGraph, player);
+                    move =  new BotMove(BotMoveType.REINFORCEMENT, territoryToIncrement, 1);
                 }
                 break;
             case ATTACK:
-                // todo algorithm
-                move = new BotMove(BotMoveType.END_ATTACK);
+                attackUnits = possibleAttacks();
+
+                if(numberOfAttacks == -1)
+                    numberOfAttacks = getNumberOfAttacks();
+
+                if(numberOfAttacks > 0) {
+                    if(attackUnits.size() > 0) {
+                        AttackUnit attackUnit = attackUnits.remove(0);
+                        move = new BotMove(BotMoveType.ATTACK, attackUnit.getSrc(), attackUnit.getDst());
+                        numberOfAttacks--;
+                    }
+                    else {
+                        numberOfAttacks = -1;
+                        move = new BotMove(BotMoveType.END_ATTACK);
+                    }
+                }
+                else {
+                    numberOfAttacks = -1;
+                    move = new BotMove(BotMoveType.END_ATTACK);
+                }
                 break;
             case FORTIFY:
-                // todo algorithm
-                move = new BotMove(BotMoveType.END_FORTIFY);
+                if(!fortified) {
+                    FortifyUnit fortifyUnit = getFortifyUnit();
+                    if(fortifyUnit == null) {
+                        move = new BotMove(BotMoveType.END_FORTIFY);
+                        fortified = false;
+                    }
+                    else {
+                        move = new BotMove(BotMoveType.FORTIFY,
+                                fortifyUnit.getSrc(), fortifyUnit.getDst(), fortifyUnit.getTroops());
+                        fortified = true;
+                    }
+                }
+                else {
+                    move = new BotMove(BotMoveType.END_FORTIFY);
+                    fortified = false;
+                }
                 break;
         }
 
@@ -55,7 +99,7 @@ public abstract class Bot {
         final BotMove botMove = move;
         int delay;
         if (move.type == BotMoveType.REINFORCEMENT) {
-            delay = 50;
+            delay = 100;
         } else {
             delay = 1000;
         }
@@ -64,6 +108,80 @@ public abstract class Bot {
         });
         timer.setRepeats(false);
         timer.start();
+    }
+
+    private static ArrayList<AttackUnit> possibleAttacks() {
+        Player player = game.getCurrentPlayer();
+        ArrayList<AttackUnit> attackUnits = new ArrayList<>();
+
+        ArrayList<Territory> playerTerritories = game.gameGraph.getTerritories(player);
+        for(Territory src : playerTerritories) {
+            for(Territory dst : game.gameGraph.getAdjacentTerritories(src)) {
+                if(src.getTroops() > 1) {
+                    try {
+                        AttackUnit attackUnit = new AttackUnit(src, dst, game.calculateProbability(src, dst));
+                        attackUnits.add(attackUnit);
+                    } catch (SrcNotStatedException | DstNotStatedException | WrongTerritoriesPairException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        attackUnits.sort(new AttackUnitComparator());
+        Collections.reverse(attackUnits);
+        return attackUnits;
+    }
+
+    private static int getNumberOfAttacks() {
+        int highProbabilityCount = 0, mediumProbabilityCount = 0;
+        for(AttackUnit attackUnit : attackUnits) {
+            if(attackUnit.getProbability() >= 50)
+                highProbabilityCount++;
+            else if(attackUnit.getProbability() >= 25) {
+                mediumProbabilityCount++;
+            }
+        }
+
+        if(highProbabilityCount > 0) {
+            return ThreadLocalRandom.current().nextInt(0, highProbabilityCount+1);
+        }
+        else {
+            if(mediumProbabilityCount > 0)
+                return ThreadLocalRandom.current().nextInt(0, 2);
+            else {
+                return 0;
+            }
+        }
+    }
+
+    private static FortifyUnit getFortifyUnit() {
+        Player player = game.getCurrentPlayer();
+        Graph graph = game.gameGraph;
+        ArrayList<Territory> territories = graph.getTerritories(player);
+        territories.removeIf(territory -> territory.getTroops() == 1);
+        territories.removeIf(territory -> graph.getConnectedTerritories(territory).size() == 0);
+
+        // check for smart fortification
+        // if territory is inside - fortify
+        for(Territory src : territories) {
+            ArrayList<Territory> connected = graph.getConnectedTerritories(src);
+            if(Graph.samePlayerTerritories(connected)) {
+                Territory dst = connected.get(new Random().nextInt(connected.size()));
+                return new FortifyUnit(src, dst, src.getTroops()-1);
+            }
+        }
+
+        // if no smart fortification -> choose random territories to fortify
+
+        // 50/50 fortify or not
+        if(Math.random() >= 0.5) {
+            Territory src = territories.get(new Random().nextInt(territories.size()));
+            ArrayList<Territory> connected = graph.getConnectedTerritories(src);
+            Territory dst = connected.get(new Random().nextInt(connected.size()));
+            return new FortifyUnit(src, dst, src.getTroops()-1);
+        }
+
+        return null;
     }
 
     // todo: maybe move this to Graph class?

@@ -1,7 +1,7 @@
 package com.risk.logic;
 
 import com.risk.gui.Main;
-import com.risk.gui.game_window.sidePanels.ReinforcementsPanel;
+import com.risk.gui.game_window.side_panels.ReinforcementsPanel;
 import com.risk.gui.game_window.GameMap;
 import com.risk.gui.game_window.GameWindow;
 import com.risk.logic.bot.Bot;

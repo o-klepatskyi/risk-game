@@ -1,4 +1,4 @@
-package com.risk.gui.game_window.sidePanels;
+package com.risk.gui.game_window.side_panels;
 
 import com.risk.gui.Main;
 import com.risk.logic.Territory;

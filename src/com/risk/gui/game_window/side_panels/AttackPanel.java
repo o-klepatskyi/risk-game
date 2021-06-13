@@ -1,4 +1,4 @@
-package com.risk.gui.game_window.sidePanels;
+package com.risk.gui.game_window.side_panels;
 
 import com.risk.gui.game_window.GameWindow;
 import com.risk.logic.Territory;
@@ -130,7 +130,11 @@ public class AttackPanel extends SidePanel {
 
         if (src != null && dst != null && src.getTroops() > 1) {
             attackButton.setEnabled(true);
-            victoryChance.setValue(gameWindow.calculateProbability() + "%");
+            try {
+                victoryChance.setValue(gameWindow.game.calculateProbability() + "%");
+            } catch (SrcNotStatedException | DstNotStatedException | WrongTerritoriesPairException e) {
+                e.printStackTrace();
+            }
         } else {
             attackButton.setEnabled(false);
             victoryChance.setValue("0%");

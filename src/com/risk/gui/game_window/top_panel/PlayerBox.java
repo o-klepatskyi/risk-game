@@ -1,6 +1,6 @@
-package com.risk.gui.game_window.topPanel;
+package com.risk.gui.game_window.top_panel;
 
-import com.risk.gui.game_window.sidePanels.ValueJLabel;
+import com.risk.gui.game_window.side_panels.ValueJLabel;
 import com.risk.logic.Player;
 import com.risk.util.resources.Fonts;
 

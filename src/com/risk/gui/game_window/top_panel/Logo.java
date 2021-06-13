@@ -1,4 +1,4 @@
-package com.risk.gui.game_window.topPanel;
+package com.risk.gui.game_window.top_panel;
 
 import com.risk.gui.game_window.GameWindow;
 import com.risk.util.resources.Images;

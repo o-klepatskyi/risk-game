@@ -1,4 +1,4 @@
-package com.risk.gui.game_window.topPanel;
+package com.risk.gui.game_window.top_panel;
 
 import com.risk.logic.Game;
 import com.risk.logic.Player;

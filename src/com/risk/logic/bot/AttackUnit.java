@@ -2,13 +2,11 @@ package com.risk.logic.bot;
 
 import com.risk.logic.Territory;
 
-import java.util.Comparator;
-
-public class TerritoriesUnit {
+public class AttackUnit {
     private int probability;
     private Territory src, dst;
 
-    public TerritoriesUnit(Territory src, Territory dst, int probability) {
+    public AttackUnit(Territory src, Territory dst, int probability) {
         this.src = src;
         this.dst = dst;
         this.probability = probability;

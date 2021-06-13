@@ -108,6 +108,19 @@ public class Graph implements Serializable {
         }
     }
 
+    public static boolean samePlayerTerritories(ArrayList<Territory> territories) {
+        if(territories.size() == 0)
+            return true;
+
+        Player player = territories.get(0).getOwner();
+        for(Territory t : territories) {
+            if(!t.getOwner().equals(player))
+                return false;
+        }
+
+        return true;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

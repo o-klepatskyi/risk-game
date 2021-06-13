@@ -505,6 +505,40 @@ public class Game {
         return (int) Math.round(probability);
     }
 
+    /**
+     * for bot purposes
+     * @param srcTerritory
+     * @param dstTerritory
+     * @return
+     * @throws SrcNotStatedException
+     * @throws DstNotStatedException
+     * @throws WrongTerritoriesPairException
+     */
+    public int calculateProbability(Territory srcTerritory, Territory dstTerritory) throws SrcNotStatedException, DstNotStatedException, WrongTerritoriesPairException {
+
+        if(srcTerritory == null)
+            throw new SrcNotStatedException("Source territory was not stated!");
+
+        if(dstTerritory == null)
+            throw new DstNotStatedException("Destination territory was not stated!");
+
+        if(!gameGraph.hasEdge(srcTerritory, dstTerritory))
+            throw new WrongTerritoriesPairException("These territories are not adjacent");
+
+        int attackTroops = srcTerritory.getTroops();
+        int defendTroops = dstTerritory.getTroops();
+
+        int attackerWinsCount = 0;
+        final double COUNT_OF_DICE_ROLLS = 10000;
+        for(int i = 0; i < COUNT_OF_DICE_ROLLS; i++) {
+            if(Dice.attackerWins(Dice.dice_rolls(attackTroops, defendTroops)))
+                attackerWinsCount++;
+        }
+        double probability = attackerWinsCount / COUNT_OF_DICE_ROLLS;
+        probability *= 100;
+        return (int) Math.round(probability);
+    }
+
 
     private void pickFirstPlayer() {
         gamePhase = GamePhase.FORTIFY;

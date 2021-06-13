@@ -1,6 +1,6 @@
 package com.risk.gui.menus;
 
-import com.risk.util.res.Fonts;
+import com.risk.util.resources.Fonts;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package com.risk.util.res;
+package com.risk.util.resources;
 
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
@@ -61,6 +61,12 @@ public abstract class SoundPlayer {
 
     public static void explosionSound() {
         currentClip = SoundPlayer.play(getInputStream("sounds/explosion.wav"));
+        if(currentClip != null)
+            currentClip.start();
+    }
+
+    public static void reinforceSound() {
+        currentClip = SoundPlayer.play(getInputStream("sounds/reinforce.wav"));
         if(currentClip != null)
             currentClip.start();
     }

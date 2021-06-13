@@ -2,7 +2,7 @@ package com.risk.gui.game_window.topPanel;
 
 import com.risk.logic.GamePhase;
 import com.risk.logic.Player;
-import com.risk.util.res.Fonts;
+import com.risk.util.resources.Fonts;
 
 import javax.swing.*;
 import java.awt.*;

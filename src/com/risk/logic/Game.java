@@ -12,6 +12,7 @@ import com.risk.logic.network.MessageType;
 import com.risk.logic.network.MultiplayerManager;
 import com.risk.logic.network.NetworkMode;
 import com.risk.util.exceptions.*;
+import com.risk.util.resources.SoundPlayer;
 
 import javax.swing.*;
 import java.security.InvalidParameterException;
@@ -96,6 +97,7 @@ public class Game {
         srcTerritory.setTroops(srcTerritory.getTroops() + numberOfTroops);
         currentPlayer.setBonus(currentPlayer.getBonus() - numberOfTroops);
 
+        SoundPlayer.reinforceSound();
         Log.write(srcTerritory.getName() + " reinforced (" + numberOfTroops + ")");
 
         if (currentPlayer.getBonus() == 0) {

@@ -1,7 +1,7 @@
 package com.risk.gui;
 
 import java.awt.*;
-import static com.risk.util.res.Images.*;
+import static com.risk.util.resources.Images.*;
 
 import javax.swing.*;
 

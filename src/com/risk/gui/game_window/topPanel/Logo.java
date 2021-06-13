@@ -1,7 +1,7 @@
 package com.risk.gui.game_window.topPanel;
 
 import com.risk.gui.game_window.GameWindow;
-import com.risk.util.res.Images;
+import com.risk.util.resources.Images;
 
 import javax.swing.*;
 import java.awt.*;

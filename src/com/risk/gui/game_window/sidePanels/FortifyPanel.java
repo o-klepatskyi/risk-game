@@ -6,8 +6,8 @@ import com.risk.util.exceptions.DstNotStatedException;
 import com.risk.util.exceptions.IllegalNumberOfFortifyTroopsException;
 import com.risk.util.exceptions.SrcNotStatedException;
 import com.risk.util.exceptions.WrongTerritoriesPairException;
-import com.risk.util.res.Fonts;
-import com.risk.util.res.SoundPlayer;
+import com.risk.util.resources.Fonts;
+import com.risk.util.resources.SoundPlayer;
 
 
 import javax.swing.*;

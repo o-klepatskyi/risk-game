@@ -1,4 +1,4 @@
-package com.risk.util.res;
+package com.risk.util.resources;
 
 import com.risk.logic.maps.MapType;
 
@@ -23,7 +23,7 @@ public abstract class Images {
                 path = "images/main-menu-logo.jpg";
                 break;
             default:
-                path = "images/slides/slide" + slide + ".jpg";
+                path = "images/slides/" + slide + ".jpg";
         }
         return new ImageIcon(Images.class.getResource(path)).getImage();
     }

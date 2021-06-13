@@ -2,7 +2,7 @@ package com.risk.gui.menus;
 
 import com.risk.gui.Main;
 import com.risk.logic.Player;
-import com.risk.util.res.*;
+import com.risk.util.resources.*;
 
 import javax.swing.*;
 import java.awt.*;

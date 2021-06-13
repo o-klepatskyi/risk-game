@@ -2,7 +2,7 @@ package com.risk.gui.game_window.sidePanels;
 
 import com.risk.gui.game_window.GameWindow;
 import com.risk.logic.Territory;
-import com.risk.util.res.SoundPlayer;
+import com.risk.util.resources.SoundPlayer;
 
 import com.risk.util.exceptions.DstNotStatedException;
 import com.risk.util.exceptions.IllegalNumberOfAttackTroopsException;

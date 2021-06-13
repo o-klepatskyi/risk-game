@@ -13,7 +13,7 @@ import com.risk.logic.Player;
 import com.risk.logic.maps.Map;
 import com.risk.logic.maps.MapType;
 import com.risk.logic.network.*;
-import com.risk.util.res.Images;
+import com.risk.util.resources.Images;
 
 public class PlayerMenu extends JPanel {
 

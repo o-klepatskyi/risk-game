@@ -4,10 +4,10 @@ import com.risk.gui.Main;
 import com.risk.logic.Territory;
 import com.risk.logic.network.MultiplayerManager;
 import com.risk.logic.network.NetworkMode;
-import com.risk.util.res.Fonts;
+import com.risk.util.resources.Fonts;
 import com.risk.gui.game_window.GameWindow;
-import com.risk.util.res.Images;
-import com.risk.util.res.SoundPlayer;
+import com.risk.util.resources.Images;
+import com.risk.util.resources.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;

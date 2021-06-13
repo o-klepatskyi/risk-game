@@ -1,6 +1,6 @@
 package com.risk.gui.player_menu;
 
-import com.risk.util.res.Fonts;
+import com.risk.util.resources.Fonts;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;

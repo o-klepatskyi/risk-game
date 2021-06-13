@@ -1,4 +1,4 @@
-package com.risk.util.res;
+package com.risk.util.resources;
 
 import java.awt.*;
 import java.io.*;

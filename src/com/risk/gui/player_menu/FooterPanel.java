@@ -2,8 +2,8 @@ package com.risk.gui.player_menu;
 
 import com.risk.gui.Main;
 import com.risk.logic.maps.MapType;
-import com.risk.util.res.Fonts;
-import com.risk.util.res.SoundPlayer;
+import com.risk.util.resources.Fonts;
+import com.risk.util.resources.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;

@@ -33,8 +33,7 @@ public abstract class Images {
 
         try {
             new ImageIcon(Images.class.getResource(path)).getImage();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
             return GAME_MAP_BG;
         }
 
@@ -46,8 +45,7 @@ public abstract class Images {
 
         try {
             new ImageIcon(Images.class.getResource(path)).getImage();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
             return GAME_MAP_BG;
         }
 

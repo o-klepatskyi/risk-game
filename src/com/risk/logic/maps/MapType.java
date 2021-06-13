@@ -7,7 +7,8 @@ public enum MapType implements Serializable {
     EUROPE("Europe"),
     USA("USA"),
     GOT("Westeros"),
-    TAMRIEL("Tamriel");
+    TAMRIEL("Tamriel"),
+    TEST("Test");
 
 
     public final String name;
@@ -33,6 +34,7 @@ public enum MapType implements Serializable {
             case USA: return new USAMap();
             case GOT: return new GoTMap();
             case TAMRIEL: return new TamrielMap();
+            case TEST: return new TestMap();
             default: return null;
         }
     }

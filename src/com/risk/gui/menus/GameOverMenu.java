@@ -6,15 +6,14 @@ import com.risk.util.res.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameOverMenu extends Menu {
     private final Player player;
-    private JButton menu, exit;
+    private JButton menu, log, exit;
     private GridBagConstraints gbc;
     private static final Font LABEL_FONT = Fonts.LABEL_FONT.deriveFont(35f);
 
@@ -26,7 +25,6 @@ public class GameOverMenu extends Menu {
 
         initWindow();
         initButtons();
-        setKeyListener();
 
         menuOptionChosen = 1;
         highlightOption(menuOptionChosen);
@@ -46,6 +44,9 @@ public class GameOverMenu extends Menu {
         menu.setForeground(Color.WHITE);
         menu.setText("Menu");
 
+        log.setForeground(Color.WHITE);
+        log.setText("Open logs");
+
         exit.setForeground(Color.WHITE);
         exit.setText("Exit");
     }
@@ -58,8 +59,12 @@ public class GameOverMenu extends Menu {
                 menu.setText("< Menu >");
                 SoundPlayer.optionChosenSound();
                 break;
-
             case 2:
+                log.setForeground(Color.YELLOW);
+                log.setText("< Open logs >");
+                SoundPlayer.optionChosenSound();
+                break;
+            case 3:
                 exit.setForeground(Color.YELLOW);
                 exit.setText("< Exit >");
                 SoundPlayer.optionChosenSound();
@@ -90,6 +95,21 @@ public class GameOverMenu extends Menu {
         });
         buttons.add(menu);
 
+        log = new JButton("Open logs");
+        log.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                SoundPlayer.buttonClickedSound();
+                openLog();
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                SoundPlayer.optionChosenSound();
+                menuOptionChosen = 2;
+                highlightOption(menuOptionChosen);
+            }
+        });
+        buttons.add(log);
+
         exit = new JButton("Exit");
         exit.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -99,7 +119,7 @@ public class GameOverMenu extends Menu {
 
             public void mouseEntered(MouseEvent e) {
                 SoundPlayer.optionChosenSound();
-                menuOptionChosen = 2;
+                menuOptionChosen = 3;
                 highlightOption(menuOptionChosen);
             }
         });
@@ -121,37 +141,15 @@ public class GameOverMenu extends Menu {
         }
     }
 
-    private void setKeyListener() {
-        addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent e) {
-                int key = e.getKeyCode();
-                if(key == KeyEvent.VK_UP) {
-                    if(menuOptionChosen == 1)
-                        menuOptionChosen = 2;
-                    else
-                        menuOptionChosen--;
-                    highlightOption(menuOptionChosen);
-                }
-                else if(key == KeyEvent.VK_DOWN) {
-                    if(menuOptionChosen == 2)
-                        menuOptionChosen = 1;
-                    else
-                        menuOptionChosen++;
-                    highlightOption(menuOptionChosen);
-                }
-                else if(key == KeyEvent.VK_ENTER) {
-                    switch(menuOptionChosen){
-                        case 1:
-                            SoundPlayer.buttonClickedSound();
-                            Main.openMainMenu();
-                            break;
-                        case 2:
-                            SoundPlayer.buttonClickedSound();
-                            System.exit(0);
-                            break;
-                    }
-                }
-            }
-        });
+    private void openLog() {
+        try {
+            new ProcessBuilder("Notepad.exe", "logs.txt").start();
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Could not open logs.txt file",
+                    "Error opening logs.txt",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 }
